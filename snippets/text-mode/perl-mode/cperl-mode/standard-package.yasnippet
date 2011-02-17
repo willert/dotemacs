@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: Standard perl package
+# key: ppackage
+# expand-env: ((package-name (sbw/default-perl-package-name)))
+# --
+package `package-name`;
+
+use strict;
+use warnings;
+
+use Carp;
+use Scalar::Util qw/looks_like_number blessed/;
+
+$0
+
+1;

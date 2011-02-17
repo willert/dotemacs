@@ -1,0 +1,9 @@
+.bzr
+.git
+/auto-save-list/
+/conf/private.el
+/old/
+/local/
+
+; just too bulky
+/lib/nxhtml

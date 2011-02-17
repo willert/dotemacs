@@ -1,0 +1,2 @@
+transpose-window.el is a small shim around windmove.el that
+transposes buffers instead of changing windows
