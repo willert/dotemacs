@@ -5,5 +5,9 @@
 /old/
 /local/
 
-; just too bulky
-/lib/nxhtml
+; ignore some really bulky nxhtml stuff not needed to run
+/lib/nxhtml/tests/
+/lib/nxhtml/nxhtml/ChangeLog
+/lib/nxhtml/nxhtml/doc/
+/lib/nxhtml/etc/viper-tut/
+
