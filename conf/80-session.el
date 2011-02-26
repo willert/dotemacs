@@ -12,3 +12,5 @@
 ;         (file-name-history 200 t)))
 ;
 ; (add-hook 'after-init-hook 'session-initialize)
+
+(setq debug-on-error nil)

@@ -20,6 +20,7 @@
 ;;; safer exit command
 (setq sbw/safer-exit-map (make-sparse-keymap))
 (define-key sbw/safer-exit-map "\C-c" 'save-buffers-kill-terminal)
+(define-key sbw/safer-exit-map "\C-k" 'sbw/shutdown-emacs-server)
 (global-set-key (kbd "\C-x\C-c") sbw/safer-exit-map)
 
 (defun sbw/remove-conflicting-keys (mode-map)
@@ -30,6 +31,8 @@
 )
 ;;; windmove mappings
 (windmove-default-keybindings 'meta)
+(transpose-window-default-keybindings)
+
 (sbw/remove-conflicting-keys magit-mode-map)
 
 ;;; eval commands for lisp

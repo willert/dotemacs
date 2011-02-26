@@ -43,3 +43,5 @@
 
 (require 'smooth-scrolling)
 (setq smooth-scroll-margin 8)
+
+(require 'transpose-window)

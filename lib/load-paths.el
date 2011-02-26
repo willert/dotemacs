@@ -30,15 +30,14 @@
 ;;; Code:
 
 
-(add-to-list 'load-path "~/.emacs.d/lib/yaml-mode")
-(add-to-list 'load-path "~/.emacs.d/lib/yasnippet")
-(add-to-list 'load-path "~/.emacs.d/lib/magit")
-(add-to-list 'load-path "~/.emacs.d/lib/espect")
-(add-to-list 'load-path "~/.emacs.d/lib/catalyst-server")
-
-
-
-
-
+(mapcar (lambda (el) (add-to-list 'load-path (concat emacs-lib-path el)))
+        (list
+         "yaml-mode"
+         "yasnippet"
+         "magit"
+         "espect"
+         "catalyst-server"
+         "transpose-window"
+        ))
 
 ;;; load-paths.el ends here

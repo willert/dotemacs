@@ -115,3 +115,11 @@
       t nil)
      ))
 )
+
+(defun sbw/shutdown-emacs-server () (interactive)
+  (let ((last-nonmenu-event nil)
+        (kill-emacs-query-functions
+         (lambda () (dolist (cl server-clients)
+                      (server-delete-client cl)) t)
+         ))
+    (save-buffers-kill-emacs)))

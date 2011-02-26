@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: catalyst-controller
+# key: cctrl
+# expand-env: ((package-name (sbw/default-perl-package-name)))
+# --
+package `package-name`;
+
+use 5.010;
+use Moose;
+use namespace::autoclean;
+use utf8;
+
+BEGIN { extends 'Catalyst::Controller'; }
+
+$0
+
+__PACKAGE__->meta->make_immutable;
+
+1;
