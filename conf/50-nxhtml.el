@@ -27,14 +27,15 @@
 (add-hook 'mumamo-turn-on-hook 'sbw/remove-mumamo-backgrounds)
 (add-hook 'mumamo-after-change-major-mode-hook 'flymake-mode-off)
 ;; Mason submode config
+; mason-nxhtml-mumamo-mode is to buggy
 
 (setq
  auto-mode-alist
- (cons '("\\/root/"         . mason-nxhtml-mumamo-mode)
- (cons '("\\/htdocs/"       . mason-nxhtml-mumamo-mode)
- (cons '("\\/widgets/"      . mason-nxhtml-mumamo-mode)
- (cons '("\\/dhandler$"     . mason-nxhtml-mumamo-mode)
- (cons '("\\/autohandler$"  . mason-nxhtml-mumamo-mode)
- (cons '("\\.mc$"           . mason-nxhtml-mumamo-mode)
+ (cons '("\\/root/"         . nxhtml-mode)
+ (cons '("\\/htdocs/"       . nxhtml-mode)
+ (cons '("\\/widgets/"      . nxhtml-mode)
+ (cons '("\\/dhandler$"     . nxhtml-mode)
+ (cons '("\\/autohandler$"  . nxhtml-mode)
+ (cons '("\\.mc$"           . nxhtml-mode)
        auto-mode-alist)))))))
 
