@@ -13,6 +13,8 @@
 
 (global-set-key (kbd "\C-xx") 'repeat)
 
+(global-set-key [pause] 'toggle-window-dedicated)
+
 ; register handling
 (global-set-key (kbd "\C-x\C-p") 'copy-to-register)
 (global-set-key (kbd "\C-x\C-y")  'insert-register)
@@ -101,3 +103,4 @@
   (define-key cperl-mode-map (kbd "\C-osh") 'cperl-here-doc-spell))
 
 (add-hook 'cperl-mode-hook 'my-cperl-key-bindings)
+
