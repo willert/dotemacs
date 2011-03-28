@@ -64,6 +64,8 @@
 
 (winner-mode)
 
+;; as suggested by http://www.method-combination.net/blog/archives/2011/03/11/speeding-up-emacs-saves.html
+(setq vc-handled-backends nil)
 
 ;; If the *scratch* buffer is killed, recreate it automatically
 ;; FROM: Morten Welind
@@ -86,3 +88,5 @@
   (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer)
   ;; Since we killed it, don't let caller do that.
   nil)
+
+
