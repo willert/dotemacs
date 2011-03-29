@@ -2,6 +2,9 @@
 ;; Emacs behavior
 ;; ---------------------------------------------------------------------------
 
+; Warning behavior:
+; http://www.gnu.org/s/emacs/manual/html_node/elisp/Warning-Options.html
+
 (setq inhibit-splash-screen t)
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
