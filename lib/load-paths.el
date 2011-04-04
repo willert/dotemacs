@@ -36,6 +36,8 @@
          "yasnippet"
          "magit"
          "espect"
+         "xml-rpc"
+         "blooper"
          "catalyst-server"
          "transpose-window"
         ))

@@ -45,3 +45,5 @@
 (setq smooth-scroll-margin 8)
 
 (require 'transpose-window)
+
+(require 'blooper)
