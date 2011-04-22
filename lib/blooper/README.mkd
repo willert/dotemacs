@@ -1,0 +1,13 @@
+_blooper.el_ is a blogging engine for _emacs_ for use with
+[blogs.perl.org][bpo]. It tries to be as aesthetically pleasing as
+possible and as hassle free to use as possible.
+
+_blooper.el_ works by taking POD source, rendering source code
+portions with _htmlize.el_ in a mode of your choice and submitting the
+end result to [blogs.perl.org][bpo].
+
+Examples of blog posts created with _blooper.el_ can be found at
+[my blog][blog]. 
+
+[bpo]: http://blogs.perl.org/
+[blog]: http://blogs.perl.org/users/sebastian_willert/

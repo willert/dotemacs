@@ -84,14 +84,14 @@ page and it is *DIFFERENT* from your user password."
 
 (defcustom blooper-chunk-style "border: 0.25ex dashed rgb(0, 94, 145);
 color: rgb(187, 187, 187); background-color: rgb(0, 42, 62);
-margin: 1em 0pt; padding: 0.1ex 1ex;overflow: auto;"
+margin: -1em 0 1em 0; padding: 0.1ex 1ex;overflow: auto;"
   "CSS style that will be applied to chunks rendered by blooper."
   :group 'blooper
   :type 'string)
 
 (defcustom blooper-chunk-postamble "<div style=\"text-align: right;
 font-size: x-small; color: #aaa; height:1em; line-height: 1em;
-margin: -2.5ex 1ex 1em;\">
+margin: -2ex 1ex 1em;\">
   Rendered by <em>emacs</em>, <em>blooper.el</em> and <em>htmlize.el</em>
 </div>"
   "HTML that will appended after chunks rendered by blooper."
@@ -167,7 +167,7 @@ _ "\n"
 
         (with-current-buffer (htmlize-buffer)
           (while
-              (re-search-forward "\\(.*\n\\)* *<body style=\"[^\"]*\"" nil t)
+              (re-sear\ch-forward "\\(.*\n\\)* *<body style=\"[^\"]*\"" nil t)
             (replace-match (concat "<div style=\"" div-style "\"") t nil))
           (while
               (re-search-forward "</body>\\(.*\n\\)* *" nil t)
@@ -267,9 +267,13 @@ $p->output_fh( *STDOUT );
 $p->parse_string_document( *STDIN );
 '" nil t)
 
-    (buffer-substring-no-properties (point-min) (point-max))
-      )
-)
+    (goto-char (point-min))
+    (while
+        (re-search-forward "<h2><a " nil t)
+      (replace-match (concat "<h2 style=\"font-size:larger;margin-bottom:1em;\">
+<a style=\"text-decoration: none;color:inherit;\" ") t nil))
+
+    (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun blooper/parse-pod ()
   (interactive)
