@@ -12,3 +12,4 @@
 /lib/nxhtml/etc/viper-tut/
 
 /session.*
+/lib/eproject/.gitignore

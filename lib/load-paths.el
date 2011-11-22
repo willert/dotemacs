@@ -36,6 +36,7 @@
          "yasnippet"
          "magit"
          "espect"
+         "eproject"
          "xml-rpc"
          "blooper"
          "catalyst-server"
