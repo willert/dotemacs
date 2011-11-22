@@ -12,5 +12,7 @@
 (dolist (file (directory-files emacs-conf-path t "^[0-9]+.*\\.el$"))
   (load file))
 
+(load (concat emacs-lib-path "private-conf.el"))
+
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
