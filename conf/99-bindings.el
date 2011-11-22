@@ -79,9 +79,9 @@
 (global-set-key (kbd "\C-cps") 'magit-status)
 (define-key magit-mode-map (kbd "/") 'magit-stash)
 
-(global-set-key "\C-p" 'set-region)
+(global-set-key "\C-p" 'sbw/set-region)
 
-(defun my-cperl-key-bindings ()
+(defun sbw/cperl-key-bindings ()
   (define-key cperl-mode-map (kbd "\C-ca") 'align)
   (define-key cperl-mode-map (kbd "\C-co") 'ps/find-source-for-module-at-point)
 
@@ -99,8 +99,30 @@
 
   (define-key cperl-mode-map (kbd "\C-orc") 'ps/run-file)
 
+  (define-key cperl-mode-map (kbd "\C-omm") 'sbw/metacpan-search)
+
   (define-key cperl-mode-map (kbd "\C-osp") 'cperl-pod-spell)
   (define-key cperl-mode-map (kbd "\C-osh") 'cperl-here-doc-spell))
 
-(add-hook 'cperl-mode-hook 'my-cperl-key-bindings)
+(add-hook 'cperl-mode-hook 'sbw/cperl-key-bindings)
+
+(defun sbw/dired-key-bindings ()
+  ;; make room for our perl related config prefix
+  (define-key dired-mode-map (kbd "\C-o") nil)
+)
+(add-hook 'dired-mode-hook 'sbw/dired-key-bindings)
+
+(defun sbw/help-key-bindings ()
+  ;; make room for our perl related config prefix
+  (define-key help-mode-map (kbd "<backspace>") 'help-go-back)
+  (define-key help-mode-map (kbd "M-p") 'help-go-back)
+  (define-key help-mode-map (kbd "M-n") 'help-go-forward)
+)
+(add-hook 'help-mode-hook 'sbw/help-key-bindings)
+
+(defun sbw/eshell-key-bindings ()
+  (define-key eshell-mode-map (kbd "<up>") nil)
+  (define-key eshell-mode-map (kbd "<down>") nil)
+)
+(add-hook 'eshell-mode-hook 'sbw/eshell-key-bindings)
 
