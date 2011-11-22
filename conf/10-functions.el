@@ -25,7 +25,7 @@
     (deactivate-mark)
     (undo)))
 
-(defun set-region ()
+(defun sbw/set-region ()
   (interactive)
   (cond
    (mark-active (copy-region-as-kill (region-beginning) (region-end)))
@@ -136,3 +136,24 @@
        "Window '%s' is dedicated"
      "Window '%s' is normal")
    (current-buffer)))
+
+(defun sbw/region-or-thing (thing)
+  "Return a vector containing the region and its bounds if there is one
+or the thing at the point and its bounds if there is no region"
+  (if (use-region-p)
+      (vector (buffer-substring-no-properties (region-beginning) (region-end))
+              (region-beginning) (region-end))
+    (let* ((bounds (bounds-of-thing-at-point thing))
+           (beg (car bounds))
+           (end (cdr bounds)))
+      (vector (buffer-substring-no-properties beg end) beg end))))
+
+(defun sbw/metacpan-search ()
+  "Try to open module page on MetaCPAN"
+  (interactive)
+  (let* (
+         (phrase (elt (sbw/region-or-thing 'symbol) 0))
+         (enc (replace-regexp-in-string ":" "%3A"
+                        (replace-regexp-in-string " " "+" phrase)))
+         )
+    (browse-url (format "https://metacpan.org/module/%s?q=%s" enc enc))))
