@@ -126,3 +126,6 @@
 )
 (add-hook 'eshell-mode-hook 'sbw/eshell-key-bindings)
 
+(require 'key-chord)
+(key-chord-define nxhtml-mode-map ",." "<%  %>\C-b\C-b\C-b")
+(key-chord-define nxhtml-mode-map "<>" "<%perl>  </%perl>\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b")
