@@ -74,3 +74,7 @@
 
 ; eshell
 (setq eshell-cmpl-cycle-completions nil)
+
+; edit-server
+(require 'edit-server)
+(edit-server-start)
