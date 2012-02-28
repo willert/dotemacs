@@ -81,6 +81,12 @@
 
 (global-set-key "\C-p" 'sbw/set-region)
 
+(global-set-key (kbd "\C-cyf") 'yas/find-snippets)
+(global-set-key (kbd "\C-cyn") 'yas/new-snippet)
+(global-set-key (kbd "\C-cys") 'yas/insert-snippet)
+(global-set-key (kbd "\C-cyv") 'yas/visit-snippet-file)
+
+
 (defun sbw/cperl-key-bindings ()
   (define-key cperl-mode-map (kbd "\C-ca") 'align)
   (define-key cperl-mode-map (kbd "\C-co") 'ps/find-source-for-module-at-point)
