@@ -95,12 +95,54 @@ This is just for the keyboard, not for the fontification."
 (defun mumamo-define-html-file-wide-keys ()
   "Define keys in multi major mode keymap for html files."
   (let ((map (mumamo-multi-mode-map)))
-    (define-key map [(control ?c) (control ?h) ?b] 'nxhtml-browse-file)
-    ))
+    (when map
+      (define-key map [(control ?c) (control ?h) ?b] 'nxhtml-browse-file)
+      )))
 ;; (defun mumamo-add-html-file-wide-keys (hook)
 ;;   (add-hook hook 'mumamo-define-html-file-wide-keys)
 ;;   )
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; No mumamo?
+
+;; Fix-me: Generalize etc.
+(add-hook 'nxhtml-mumamo-mode-hook 'mumamo-php-if-all-php)
+(add-hook 'html-mumamo-mode-hook 'mumamo-php-if-all-php)
+(defun mumamo-php-if-all-php ()
+  "Switch to php mode if the whole buffer suits `php-mode'.
+These conditions must be fullfilled:
+- The buffer must begin with '<?php'.
+- There should not be any '?>'.
+- There should not be any '<<<'.
+
+This function can be added to `nxhtml-mumamo-mode-hook' and
+`html-mumamo-mode-hook'.
+
+Note: This is in response to bug #610470, see URL
+`https://bugs.launchpad.net/nxhtml/+bug/610470'.  I am not sure
+this is a good thing, but let us test it."
+  (when (and buffer-file-name
+             (string= "php" (file-name-extension buffer-file-name)))
+    (message "Checking if all php...")
+    (let ((here (point))
+          all-php)
+      (save-restriction
+        (widen)
+        (cond
+         ((> 6 (buffer-size))
+          (setq all-php t))
+         ((string= (buffer-substring 1 6)
+                   "<?php")
+          (goto-char (point-min))
+          (unless (or (search-forward "?>" nil t)
+                      (search-forward "<<<" nil t))
+            (setq all-php t)
+            (goto-char here)))))
+      (when all-php
+        (php-mode))
+      (message (if all-php "... switching to php-mode" "... multi major mode")))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -544,6 +586,11 @@ See `mumamo-possible-chunk-forward' for POS and MAX."
   (mumamo-chunk-attr= pos max mumamo-onjs=-attr= t mumamo-onjs=-attr-regex
                       'javascript-mode))
 
+;;;; href=\"javascript:"
+(defun mumamo-chunk-hrefjs=(pos max)
+  "Find href=\"javascript:...\".  Return range and 'javascript-mode."
+  (mumamo-quick-chunk-forward pos max "href=\"javascript:" "\"" 'borders 'javascript-mode))
+
 ;;;; py:somthing=\"python\"
 
 (defconst mumamo-py:=-attr= "py:[a-z]+=")
@@ -662,9 +709,10 @@ just `php-mode' if there is no html code in the file."
               (error "Will not do this because local-write-file-hooks is non-nil"))))
         (remove-hook 'write-contents-functions 'mumamo-alt-php-write-contents t)
         (when write-contents-functions
-          (error "Will not do this because write-contents-functions is non-nil"))
-        (when (delq 'recentf-track-opened-file (copy-sequence write-file-functions))
-          (error "Will not do this because write-file-functions is non-nil"))
+          (error "Will not do this because write-contents-functions is non-nil=%S" write-contents-functions))
+        (let ((wff (delq 'recentf-track-opened-file (copy-sequence write-file-functions))))
+          (when wff
+            (error "Will not do this because write-file-functions is non-nil=%S" wff)))
 
         (add-hook 'write-contents-functions 'mumamo-alt-php-write-contents t t)
         (put 'write-contents-functions 'permanent-local t)
@@ -1111,6 +1159,10 @@ See `mumamo-possible-chunk-forward' for POS and MAX."
 See `mumamo-possible-chunk-forward' for POS and MAX."
   (mumamo-quick-chunk-forward pos max "<%" "%>" 'borders 'java-mode))
 
+(defun mumamo-chunk-jsp-hidden-comment (pos max)
+  "Find <%-- ... --%>.  Return range and 'mumamo-comment-mode.
+See `mumamo-possible-chunk-forward' for POS and MAX."
+  (mumamo-quick-chunk-forward pos max "<%--" "--%>" 'borders 'mumamo-comment-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; eruby

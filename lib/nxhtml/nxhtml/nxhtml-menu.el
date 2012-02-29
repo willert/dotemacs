@@ -147,6 +147,12 @@
           (derived-mode-p 'html-mode)))
       (nxhtml-nxml-in-buffer)))
 
+(defun nxhtml-js-buffer ()
+  (and (or (not (boundp 'mumamo-multi-major-mode))
+           (not mumamo-multi-major-mode))
+       (or (derived-mode-p 'js-mode)
+           (derived-mode-p 'js2-mode))))
+
 (defun buffer-or-dired-file-name ()
   "Return buffer file name or file pointed to in dired."
   (if (derived-mode-p 'dired-mode)
@@ -162,7 +168,10 @@
 
 (defun nxhtml-buffer-possibly-local-viewable (&optional file)
   (unless file
-    (setq file (buffer-or-dired-file-name)))
+    (condition-case err
+        (setq file (buffer-or-dired-file-name))
+      (error
+       (message "%s" (error-message-string err)))))
   (or (and file
            (member (file-name-extension file)
                    '("html" "htm" "gif" "png")))))
@@ -371,6 +380,14 @@
         (list 'menu-item "Last Resort" 'n-back-game))
       (define-key tools-map [nxhtml-pause]
         (list 'menu-item "Life Reminder" 'pause-start-in-new-emacs))
+      (define-key tools-map [nxhtml-bib-separator]
+        (list 'menu-item "--" nil))
+      (define-key tools-map [nxhtml-bibhlp]
+        (list 'menu-item "Bibliographic Tool" 'bibhlp))
+      (define-key tools-map [nxhtml-idxsearch]
+        (list 'menu-item "Indexed Search" 'idxsearch))
+      (define-key tools-map [nxhtml-net-search]
+        (list 'menu-item "Internet Search" 'search-net))
       (define-key tools-map [nxhtml-last-resort-separator]
         (list 'menu-item "--" nil))
       (define-key tools-map [nxhtml-viper-tut]
@@ -386,7 +403,49 @@
         (list 'menu-item "Resize Windows"
               'resize-windows))
 
+      (define-key tools-map [nxhtml-js-separator] (list 'menu-item "--" nil))
 
+      (let ((js-map (make-sparse-keymap)))
+        (define-key tools-map [nxhtml-js-map]
+          (list 'menu-item "JavaScript Helpers" js-map))
+        ;;;;;;;;;;
+        (let ((bm-map (make-sparse-keymap)))
+          (define-key js-map [nxhtml-bm-map]
+            (list 'menu-item "Bookmarklets" bm-map))
+          (define-key bm-map [nxhtml-css-to-jquery]
+            (list 'menu-item "Convert CSS to jQuery Code"
+                  'jsut-jquery-css-to-js
+                  :enable '(derived-mode-p 'css-mode 'js-mode 'js2-mode)))
+          (define-key bm-map [nxhtml-js--bm-css-separator] (list 'menu-item "--" nil))
+          (define-key bm-map [nxhtml-js-bookmarkletify]
+            (list 'menu-item "Bookmarkletify js Code"
+                  'jsut-bookmarkletify
+                  :enable '(nxhtml-js-buffer)))
+          (define-key bm-map [nxhtml-jquery-separator] (list 'menu-item "--" nil))
+          (define-key bm-map [nxhtml-js-mk-bookmarklet]
+            (list 'menu-item "Make Bookmarklet JavaScript Template"
+                  'jsut-jquery-mk-bookmarklet
+                  :enable '(nxhtml-js-buffer)))
+          (define-key bm-map [nxhtml-js-create-bookmarklet]
+            (list 'menu-item "Create jQuery Bookmarklet JavaScript File Template"
+                  'jsut-jquery-create-bookmarklet-file
+                  ))
+          )
+        ;;;;;;;;;;
+        (define-key js-map [nxhtml-bm-separator] (list 'menu-item "--" nil))
+        (define-key js-map [nxhtml-plovr-dev-info]
+          (list 'menu-item "Start plovr in Development Mode"
+               'jsut-plovr-dev-info
+               :enable '(nxhtml-js-buffer)))
+        (define-key js-map [nxhtml-plovr-compile]
+          (list 'menu-item "Compile js with plovr"
+               'jsut-plovr-compile
+               :enable '(nxhtml-js-buffer)))
+        (define-key js-map [nxhtml-plovr-edit]
+          (list 'menu-item "Edit plovr Configuration File"
+               'jsut-plovr-edit-conf
+               :enable '(nxhtml-js-buffer)))
+        )
 
       (define-key tools-map [nxhtml-ecb-separator]
         (list 'menu-item "--" nil))
@@ -540,9 +599,14 @@
                                        flymake-mode))
               :enable '(and buffer-file-name
                             (require 'flymake)
-                            (fboundp 'flymake-get-init-function)
-                            (flymake-get-init-function buffer-file-name)
+                            (or (flymake-get-init-function buffer-file-name)
+                                (require 'flymake-files)
+                                (flymake-get-init-function buffer-file-name))
                             )))
+      (define-key tools-map [nxhtml-flymake-global]
+        (list 'menu-item "Flymake Global Mode" 'flymake-global-mode
+              :button '(:toggle . flymake-global-mode)))
+
       (let ((flyspell-map (make-sparse-keymap)))
         (define-key tools-map [nxhtml-flyspell-map]
           (list 'menu-item "Flyspell" flyspell-map))
@@ -1121,6 +1185,14 @@
       (define-key edit-map [nxhtml-ldir-replace]
         (list 'menu-item "Replace in Files in Directory" 'ldir-query-replace))
 
+      (define-key edit-map [nxhtml-edit-sepgrep] (list 'menu-item "--"))
+      (define-key edit-map [nxhtml-lgrep]
+        (list 'menu-item "Search in Files in Directory" 'lgrep))
+      (define-key edit-map [nxhtml-rgrep]
+        (list 'menu-item "Search in Files in Tree" 'rgrep))
+
+      ;; (define-key edit-map [nxhtml-edit-sepidx] (list 'menu-item "--"))
+
       (define-key edit-map [nxhtml-edit-sep2] (list 'menu-item "--"))
       (define-key edit-map [nxhtml-multi-occur]
         (list 'menu-item "Occur in File Buffers" 'multi-occur-in-matching-buffers))
@@ -1130,6 +1202,8 @@
       (define-key edit-map [nxhtml-re-builder]
         (list 'menu-item "Re-Builder" 're-builder))
       (define-key edit-map [nxhtml-edit-sep4] (list 'menu-item "--"))
+      (define-key edit-map [nxhtml-paste-as-new-buffer]
+        (list 'menu-item "Paste as New Buffer" 'paste-as-new-buffer))
       (let ((copy+paste-map (make-sparse-keymap "copy+paste")))
         (define-key edit-map [nxhtml-copy+paste-map]
           (list 'menu-item "Copy+Paste" copy+paste-map))

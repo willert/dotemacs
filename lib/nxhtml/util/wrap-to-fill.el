@@ -44,7 +44,7 @@
 ;;
 ;;; Code:
 
-(eval-when-compile (require 'mumamo))
+;; (eval-when-compile (require 'mumamo))
 (eval-when-compile (require 'org))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -455,8 +455,8 @@ See `visual-indent-use-adaptive-fill' for more information."
                 (beg-pos (point))
                 (end-pos (point-at-eol)))
             (unless (= beg-pos (point-at-bol))
-              (message "visual-indent-fontify internal err: beg-pos /= point-at-bol")
-              (gdb-deb-print "visual-indent-fontify internal err: beg-pos /= point-at-bol")
+              (message "visual-indent-jit-lock-fun internal err: beg-pos /= point-at-bol")
+              (gdb-deb-print "visual-indent-jit-lock-fun internal err: beg-pos /= point-at-bol")
               )
             ;; Fix-me: Why did I check this? Step aside from org-mode or?
             (when (equal (get-text-property beg-pos 'wrap-prefix)
@@ -465,46 +465,47 @@ See `visual-indent-use-adaptive-fill' for more information."
                     (visual-indent-fill-context-prefix beg-pos end-pos))
               ;;(msgtrc "visual-indent-jit-lock-fun:ind-str-fill=%S" ind-str-fill)
               ;; Fix-me: ind-str-fill could be nil.
-              (with-silent-modifications
-                (put-text-property beg-pos end-pos 'wrap-prefix ind-str-fill)
-                (put-text-property beg-pos end-pos 'visual-indent-wrap-prefix ind-str-fill))))
+              (when (< 0 (length ind-str-fill))
+                (with-silent-modifications
+                  (put-text-property beg-pos end-pos 'wrap-prefix ind-str-fill)
+                  (put-text-property beg-pos end-pos 'visual-indent-wrap-prefix ind-str-fill)))))
           ;; This moves to the end of line if there is no more lines. That
           ;; means we will not get stuck here.
           (unless (eobp) (forward-line 1))
           (unless (< last-point (point))
-            (message "visual-indent-fontify: display engine error")
-            (gdb-deb-print "visual-indent-fontify: display engine error"))
+            (message "visual-indent-jit-lock-fun display engine error")
+            (gdb-deb-print "visual-indent-jit-lock-fun display engine error"))
           )))))
 
 
 ;;; Code below is obsolete.
 
-(defun visual-indent-fontify (bound)
-  "During fontification mark lines for indentation.
-This is called as a matcher in `font-lock-keywords' in
-`visual-indent-mode'.  BOUND is the limit of fontification.
+;; (defun visual-indent-fontify (bound)
+;;   "During fontification mark lines for indentation.
+;; This is called as a matcher in `font-lock-keywords' in
+;; `visual-indent-mode'.  BOUND is the limit of fontification.
 
-Put the property 'wrap-prefix on lines whose continuation lines
-\(see `visual-line-mode') should be indented.  Only do this if
-`visual-line-mode' and `word-wrap' is on.
+;; Put the property 'wrap-prefix on lines whose continuation lines
+;; \(see `visual-line-mode') should be indented.  Only do this if
+;; `visual-line-mode' and `word-wrap' is on.
 
-Return nil."
-  ;; Fix-me: break up for `jit-lock-register': two args, beg end, no rules for return value.
-  ;; See (require 'glasses)
-  (visual-indent-jit-lock-fun (point) bound)
-  ;; Do not set match-data, there is none, just return nil.
-  nil)
+;; Return nil."
+;;   ;; Fix-me: break up for `jit-lock-register': two args, beg end, no rules for return value.
+;;   ;; See (require 'glasses)
+;;   (visual-indent-jit-lock-fun (point) bound)
+;;   ;; Do not set match-data, there is none, just return nil.
+;;   nil)
 
-(defun visual-indent-font-lock (on)
-  ;; See mlinks.el
-  (let* ((add-or-remove (if on 'font-lock-add-keywords 'font-lock-remove-keywords))
-         (fontify-fun 'visual-indent-fontify)
-         (args (list nil `(( ,fontify-fun ( 0 'font-lock-warning-face t ))))))
-    (when fontify-fun
-      (when on (setq args (append args (list t))))
-      (apply add-or-remove args)
-      (font-lock-mode -1)
-      (font-lock-mode 1))))
+;; (defun visual-indent-font-lock (on)
+;;   ;; See mlinks.el
+;;   (let* ((add-or-remove (if on 'font-lock-add-keywords 'font-lock-remove-keywords))
+;;          (fontify-fun 'visual-indent-fontify)
+;;          (args (list nil `(( ,fontify-fun ( 0 'font-lock-warning-face t ))))))
+;;     (when fontify-fun
+;;       (when on (setq args (append args (list t))))
+;;       (apply add-or-remove args)
+;;       (font-lock-mode -1)
+;;       (font-lock-mode 1))))
 
 (provide 'wrap-to-fill)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

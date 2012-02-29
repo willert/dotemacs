@@ -1156,6 +1156,40 @@ display it."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Misc.
 
+;;;###autoload
+(defun ourcomments-browse-bug (emacs-bug)
+  "Display emacs bug number EMACS-BUG in browser."
+  (interactive "nEmacs bug number: ")
+  (browse-url (format "http://debbugs.gnu.org/cgi/bugreport.cgi?bug=%d" emacs-bug)))
+
+;; (ourcomments-tr "i öa ä e å" "åäö" "aa")
+;;;###autoload
+(defun ourcomments-tr (str from to)
+  "Replace all characters in STR listed in FROM
+with characters listed in TO. If1 FROM is longer
+than TO, then the excess characters are deleted.
+
+\(tr \"abcdefg\" \"abcd\" \"ABC\"\) => \"ABCefg\""
+  (dotimes (i (length from))
+    (let* ((c1 (char-to-string (aref from i)))
+	   (c2 (if (< i (length to))
+                   (char-to-string (aref to i))
+                 "")))
+      (setq str (replace-regexp-in-string c1 c2 str t t))))
+  str)
+
+;;;###autoload
+(defun ourcomments-is-obsolete (symbol)
+  "Return non-nil if SYMBOL is obsolete in current Emacs."
+  )
+
+;;;###autoload
+(defun paste-as-new-buffer ()
+  "Paste from clipboard to a new buffer."
+  (interactive)
+  (switch-to-buffer (generate-new-buffer "*Pasted from clipboard*"))
+  (yank))
+
 (defun pling ()
   "A friendly reminder message.
 Whatever it may mean."
@@ -1760,12 +1794,12 @@ additions are:
   key \(i.e. probably C-TAB).
 
 - Left and right arrow keys can be used during switching.
-- C-b will call `buffer-menu' with the currently selected
-  alternatives.
 * Note: The above bindings interfere a bit with editing the
   currently entered match string.  However you can still use
   <home> and <end> to move in that string \(which is probably
-  short)."
+  short).
+- TAB will call `buffer-menu' with the currently selected
+  alternatives."
   (interactive)
   (if (active-minibuffer-window)
       (ido-next-match)
@@ -1773,6 +1807,7 @@ additions are:
 
 ;; (ourcomments-ido-list-matching-buffers ".el")
 (defvar ourcomments-ido-list-matching-buffers-re nil)
+(defvar fallback)
 (defun ourcomments-ido-list-matching-buffers (regexp)
   "List buffers with name matching regexp REGEXP.
 If called from within ido it takes the current match string as
@@ -1805,7 +1840,8 @@ REGEXP."
             (switch-to-buffer (list-buffers-noselect nil bufs))
             )))
     (setq ido-exit 'fallback)
-    (setq ourcomments-ido-list-matching-buffers-re ido-text)
+    (setq ourcomments-ido-list-matching-buffers-re (regexp-quote ido-text))
+    ;; Fix-me:
     (setq fallback 'ourcomments-ido-list-matching-buffers)
     (throw 'ido nil)))
 
@@ -1823,7 +1859,9 @@ REGEXP."
           (define-key map [(shift return)]   'ourcomments-ido-buffer-other-window)
           (define-key map [(control return)] 'ourcomments-ido-buffer-other-frame)
           (define-key map [(meta return)]   'ourcomments-ido-buffer-raise-frame)
-          (define-key map [(control ?b)]   'ourcomments-ido-list-matching-buffers)
+          ;; Override TAB, buffer menu is a better completion:
+          (define-key map [tab]   'ourcomments-ido-list-matching-buffers)
+          (define-key map "\t"   'ourcomments-ido-list-matching-buffers)
           )))))
 
 ;; (defun ourcomments-ido-setup-completion-map ()
@@ -2131,28 +2169,27 @@ This calls the function `emacs' with added arguments ARGS."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Searching
 
+(defun grep-grepped-file (pt)
+  "Return grepped file at PT in a `grep-mode' buffer.
+The returned file name is relative."
+  (let* ((msg (get-text-property (point) 'compilation-message))
+         (loc (when msg (compilation--message->loc msg)))
+         (file (when loc (caar (compilation--loc->file-struct loc)))))
+    file))
+
 (defun grep-get-buffer-files ()
   "Return list of files in a `grep-mode' buffer."
   (or (and (compilation-buffer-p (current-buffer))
            (derived-mode-p 'grep-mode))
       (error "Not in a grep buffer"))
   (let ((here (point))
-        files
-        loc)
+        files)
     (font-lock-fontify-buffer)
     (goto-char (point-min))
-    (while (setq loc
-                 (condition-case err
-                     (compilation-next-error 1)
-                   (error
-                    ;; This should be the end, but give a message for
-                    ;; easier debugging.
-                    (message "%s" err)
-                         nil)))
-      ;;(message "here =%s, loc=%s" (point) loc)
-      (let ((file (caar (nth 2 (car loc)))))
-        (setq file (expand-file-name file))
-        (add-to-list 'files file)))
+    (while (not (eobp))
+      (let ((file (grep-grepped-file (point))))
+        (when file (add-to-list 'files file)))
+      (forward-line))
     (goto-char here)
     ;;(message "files=%s" files)
     files))
@@ -2168,18 +2205,22 @@ no default value.")
   "Do `query-replace-regexp' of FROM with TO, on all files in *grep*.
 Third arg DELIMITED (prefix arg) means replace only word-delimited matches.
 If you exit (\\[keyboard-quit], RET or q), you can resume the query replace
-with the command \\[tags-loop-continue]."
+with the command \\[tags-loop-continue].
+
+Must be called from a `grep-mode' buffer."
   (interactive
    (let ((common
           ;; Use the regexps that have been used in grep
           (let ((query-replace-from-history-variable 'grep-regexp-history)
                 (query-replace-defaults (or grep-query-replace-defaults
                                             query-replace-defaults)))
+            (unless (derived-mode-p 'grep-mode) (error "This command must be used in a grep output buffer"))
             (query-replace-read-args
-             "Query replace regexp in files in *grep*" t t))))
+             "Query replace regexp in grepped files" t t))))
      (setq grep-query-replace-defaults (cons (nth 0 common)
                                              (nth 1 common)))
      (list (nth 0 common) (nth 1 common) (nth 2 common))))
+  (unless (derived-mode-p 'grep-mode) (error "This command must be used in a grep output buffer"))
   (dolist (file (grep-get-buffer-files))
     (let ((buffer (get-file-buffer file)))
       (if (and buffer (with-current-buffer buffer
@@ -2539,7 +2580,19 @@ This function is used for `end-of-defun-function'."
 ;;       html-link)))
 
 (defconst ourcomments-org-paste-html-link-regexp
-  "\\`\\(?:<a [^>]*?href=\"\\(.*?\\)\"[^>]*?>\\([^<]*\\)</a>\\)\\'")
+;;  "\\`\\(?:<a\\(?:[[:space:]]\\|$\\)+[^>]*?href=\"\\(.*?\\)\"[^>]*?>\\([^<]*\\)</a>\\)\\'")
+  (rx (and "<a"
+           (or whitespace
+               line-end)
+           (*? anything)
+           "href=\""
+           (submatch (* (not (any "\""))))
+           "\""
+           (* (not (any ">")))
+           ">"
+           (submatch (* (not (any "<"))))
+           "</a>"
+           )))
 
 ;;(string-match-p ourcomments-org-paste-html-link-regexp "<a href=\"link\">text</a>")
 
@@ -2567,9 +2620,15 @@ variant of such blocks then leave the link as it is."
       (let ((here (copy-marker (point)))
             url str converted
             lit-beg lit-end)
-        (goto-char beg)
         (save-restriction
           (widen)
+
+          ;; Fix-me: Remove soft hyphens since Emacs can not handle them yet
+          (goto-char beg) (while (search-forward "­" nil t) (replace-match ""))
+          ;; Thin space, 8201
+          (goto-char beg) (while (search-forward (char-to-string 8201) nil t) (replace-match " "))
+
+          (goto-char beg)
           (setq lit-beg (search-backward "#+BEGIN" nil t))
           (when lit-beg
             (goto-char lit-beg)
@@ -2594,12 +2653,16 @@ variant of such blocks then leave the link as it is."
                 (setq str (mm-url-decode-entities-string str)))
               ;; Check for []
               (setq str (replace-regexp-in-string "\\[" "(" str t t))
-              (setq str (replace-regexp-in-string "\\]" ")" str t t)))
+              (setq str (replace-regexp-in-string "\\]" ")" str t t))
+              )
             ;; Check if the URL is to a local file and absolute. And we
             ;; have a buffer.
-            (when (and (buffer-file-name)
-                       (> (length url) 5)
-                       (string= (substring url 0 6) "file:/"))
+            (if (not (and (buffer-file-name)
+                          (> (length url) 5)
+                          (string= (substring url 0 6) "file:/")))
+                (save-match-data
+                  (require 'browse-url)
+                  (setq url (browse-url-url-encode-chars url "[\]\[]")))
               (let ((abs-file-url
                      (if (not (memq system-type '(windows-nt ms-dos)))
                          (substring url 8)
@@ -2705,6 +2768,7 @@ Note: This minor mode will defadvice the paste commands."
 
 (defvar ourcomments-M-x-menu-timer nil)
 (defvar ourcomments-M-x-menu-this-command nil)
+;; Fix-me: split adding and message
 (defun ourcomments-M-x-menu-pre ()
   "Add menu command to M-x history."
   (let ((is-menu-command (equal '(menu-bar)
@@ -2734,10 +2798,12 @@ Note: This minor mode will defadvice the paste commands."
     ;;(message "maybe-command=%s, %s" maybe-command (commandp maybe-command))
     ;; this-command could have been let bound so check it:
     (when (commandp maybe-command)
-      (let ((pre-len (length extended-command-history)))
+      (let ((pre-len (length extended-command-history))
+            (maybe-str (symbol-name maybe-command)))
         (if ourcomments-M-x-menu-always-add
-            (push (symbol-name maybe-command) extended-command-history)
-          (pushnew (symbol-name maybe-command) extended-command-history))
+            (unless (equal maybe-str (car extended-command-history))
+              (push maybe-str extended-command-history))
+          (pushnew maybe-str extended-command-history))
         (when (< pre-len (length extended-command-history))
           ;; Give a temporary message
           (let ((msg
@@ -2876,6 +2942,8 @@ This minor mode therefore instead defines them in a minor mode."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Freemind
+
+(eval-when-compile (require 'nxhtml-base nil t))
 
 ;;;###autoload
 (defun org-freemind-copy-new-marktree.js (output-dir)

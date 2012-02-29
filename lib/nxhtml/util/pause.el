@@ -268,7 +268,11 @@ Start main timer with delay `pause-1-minute-delay'."
     (define-key map [(meta tab)]  'backward-button)
     (define-key map [(shift tab)] 'backward-button)
     (define-key map [backtab]     'backward-button)
+    ;; Fix-me:
+    ;;(define-key map [double-down-mouse-1] (lambda () (interactive) "double-down"))
     map))
+;; (local-set-key [double-mouse-1] (lambda () (interactive) "double-down"))
+;; (local-set-key [double-down-mouse-1] (lambda () (interactive) "double-down"))
 
 (defvar pause-buffer nil)
 (defvar pause-image-buffer nil)
@@ -527,6 +531,8 @@ Please note that it is run in a timer.")
                           (* 2 (frame-parameter f 'internal-border-width))))
          (cols (/ avail-width (frame-char-width)))
          (rows (- (/ avail-height (frame-char-height)) 2)))
+    ;; Fix-me: bug in Emacs, remove 3 rows
+    (setq rows (- rows 3))
     ;;(set-frame-parameter (selected-frame) 'fullscreen 'fullboth)
     ;;(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
     (setq pause-break-last-wcfg-change (float-time))
@@ -535,9 +541,9 @@ Please note that it is run in a timer.")
       (with-selected-window (frame-first-window)
         (switch-to-buffer pause-buffer)
         (setq cols 55)
-        (with-current-buffer pause-buffer
-          (setq rows (+ 5 (line-number-at-pos (point-max))))
-          )
+        ;; (with-current-buffer pause-buffer
+        ;;   (setq rows (+ 5 (line-number-at-pos (point-max))))
+        ;;   )
         (set-frame-size f cols rows)
         ))))
 
@@ -723,7 +729,7 @@ This is to prevent multiple Emacs with `pause-mode'."
 (defvar pause-is-deleting-pause-frame nil)
 (defun pause-delete-pause-frame ()
   (let ((pause-is-deleting-pause-frame t))
-    (delete-frame pause-frame))
+    (when (frame-live-p pause-frame) (delete-frame pause-frame)))
   (setq pause-frame nil))
 
 (defun pause-stop-on-frame-delete (frame)
@@ -1001,14 +1007,21 @@ connection fails or you have set `pause-yoga-poses-use-dir' on."
 
 (defvar pause-collected-yoga-poses nil)
 
+(defun pause-make-file-title (file)
+  (let ((tit (file-name-nondirectory (file-name-sans-extension file))))
+    (setq tit (replace-regexp-in-string "-" " " tit t t))
+    (setq tit (capitalize tit))
+    tit))
+
 ;;(setq x (pause-get-pose-from-yoga-poses-dir))
 (defun pause-get-pose-from-yoga-poses-dir ()
   "Get a random file name from `pause-yoga-poses-dir'."
   (let* ((poses-dir (substitute-in-file-name pause-yoga-poses-dir))
          (files (directory-files poses-dir nil "[^.]$"))
          (num (length files))
-         (file (pause-random-yoga-pose files)))
-    (cons (expand-file-name file poses-dir) file)))
+         (file (pause-random-yoga-pose files))
+         (title (pause-make-file-title file)))
+    (cons (expand-file-name file poses-dir) title)))
 
 (defun pause-callback-get-yoga-poses (status)
   ;;(message "pause get-yoga-poses: status=%S" status) (message nil)
@@ -1035,7 +1048,8 @@ connection fails or you have set `pause-yoga-poses-use-dir' on."
                                (error (message "pause-callback-get-yoga-poses: %s" (error-message-string err))))))
                   (insert (format ": %S" (cdr err)))))))
         (setq pose (pause-random-yoga-pose (pause-get-yoga-poses-1 (current-buffer))))
-        (setq pose (cons (concat pause-yoga-poses-host-url (car pose)) (cdr pose))))
+        (when pose
+          (setq pose (cons (concat pause-yoga-poses-host-url (car pose)) (cdr pose)))))
       (when pose
         (pause-tell-about-yoga-link pose)))))
 
@@ -1075,7 +1089,9 @@ connection fails or you have set `pause-yoga-poses-use-dir' on."
                         (pause-cancel-tell-again-timer)
                         (browse-url ,pose-url)
                         (run-with-idle-timer 1 nil 'pause-break-exit-from-button))
-                    (error (message "pause-tell-about-yoga-link a: %s" (error-message-string err))))))
+                    (error (message "pause-tell-about-yoga-link a: %s, %s"
+                                    (error-message-string err)
+                                    ,pose-url)))))
       (insert " (")
       (insert-text-button
        "Do it later"
@@ -1119,10 +1135,14 @@ connection fails or you have set `pause-yoga-poses-use-dir' on."
                   (insert ")\n"))
                 (when pose
                   (setq n-pose 1)
-                  (setq prev-point (point))
+                  (setq prev-point (point-marker))
                   (insert "  ")
                   (insert-text-button
-                   (cdr pose)
+                   (let ((tit (cdr pose)))
+                     (save-match-data
+                       (when (string-match "\\(.*\\)\\.[a-z0-9]+$" tit)
+                         (setq tit (match-string 1 tit))))
+                     tit)
                    'mouse-face 'pause-mouse-face
                    'action `(lambda (button)
                               (condition-case err
@@ -1130,10 +1150,12 @@ connection fails or you have set `pause-yoga-poses-use-dir' on."
                                     (pause-cancel-tell-again-timer)
                                     (browse-url ,(car pose))
                                     (pause-remove-from-later ',pose)
-                                    (pause-remove-1-from-line ,(point))
+                                    (pause-remove-1-from-line ,(1- (point)))
                                     ;;(run-with-idle-timer 1 nil 'pause-break-exit-from-button)
                                     )
-                                (error (message "pause-tell-about-yoga-link c: %s" (error-message-string err))))))
+                                (error (message "pause-tell-about-yoga-link c: %s, %s"
+                                                (error-message-string err)
+                                                ,(car pose))))))
                   (setq prev-pose pose))))
             )))))
   (dolist (win (get-buffer-window-list pause-buffer nil t))
@@ -1165,7 +1187,7 @@ connection fails or you have set `pause-yoga-poses-use-dir' on."
          (later (car later-buf))
          (buf   (cdr later-buf)))
     ;;(msgtrc "pause-modify-later pose=%S add=%s later=%S" pose add later)
-    (msgtrc "pause-modify-later 1: (length later)=%d" (length later))
+    ;;(msgtrc "pause-modify-later 1: (length later)=%d" (length later))
     (setq later
           (if add
               (cons pose later)
@@ -1181,7 +1203,7 @@ connection fails or you have set `pause-yoga-poses-use-dir' on."
             ))
     ;;(msgtrc "pause-modify-later 2: (length later)=%d" (length later))
     (setq later (sort later (lambda (a b)
-                              (string< (cdr a) (cdr b)))))
+                              (string< (upcase (cdr a)) (upcase (cdr b))))))
     (when buf
       (with-current-buffer buf
         (erase-buffer)

@@ -47,7 +47,9 @@
 (eval-when-compile (require 'cl))
 (eval-when-compile (require 'nxhtml-base nil t))
 ;;(eval-when-compile (require 'nxhtmlmaint nil t))
+(declare-function nxhtmlmaint-byte-recompile "nxhtmlmaint")
 (eval-when-compile (require 'web-vcs nil t))
+
 
 (defvar nxhtml-web-vcs-file (or load-file-name
                                 (when (boundp 'bytecomp-filename) bytecomp-filename)
@@ -68,6 +70,7 @@
 
 ;;(nxhtml-default-download-directory)
 (defun nxhtml-default-download-directory ()
+  (require 'web-vcs)
   (let* ((ur (expand-file-name "" "~"))
          (ur-len (length ur))
          (full (if (and (boundp 'nxhtml-install-dir)
@@ -326,7 +329,7 @@ For more information about auto download of nXhtml files see
         (error "Aborted by user"))))
   (make-directory dl-dir t)
   (let ((msg (concat "Downloading nXhtml through Launchpad web interface will take rather long\n"
-                     "time (5-15 minutes) so you may want to do it in a separate Emacs session.\n\n"
+                     "time (10-25 minutes) so you may want to do it in a separate Emacs session.\n\n"
                      "Do you want to download using this Emacs session? "
                      )))
     (if (not (y-or-n-p msg))
@@ -402,6 +405,7 @@ command `nxhtml-setup-install'."
   (interactive)
   (when (y-or-n-p "Do you want to update your nXhtml files? ")
     (message "")
+    (require 'web-vcs)
     (web-vcs-display-messages t)
     (web-vcs-message-with-face 'web-vcs-yellow "*\nStarting updating your nXhtml files.\n*\n")
     (message nil)
@@ -423,13 +427,18 @@ command `nxhtml-setup-install'."
 ;;(nxhtml-maybe-download-files (expand-file-name "nxhtml/doc/img/" nxhtml-install-dir) nil)
 ;;;###autoload
 (defun nxhtml-get-missing-files (sub-dir file-name-list)
+  "Download to SUB-DIR missing files matching FILE-NAME-LIST.
+If FILE-NAME-LIST is nil download all missing files.
+If it is a list download all missing files in the list.
+If it is a regexp download all missing matching files."
   (let (file-mask
         (root-url (nxhtml-download-root-url nil))
         files-regexp
         (full-dir (expand-file-name sub-dir nxhtml-install-dir))
         miss-names)
     (if file-name-list
-        (progn
+        (if (not (listp file-name-list))
+	    (setq files-regexp file-name-list)
           (dolist (f file-name-list)
             (let ((full-f (expand-file-name f full-dir)))
               (unless (file-exists-p full-f)
@@ -593,8 +602,9 @@ Loading is done if recompiled and LOAD is t."
           (basic-save-buffer))
         (unless old-buf (kill-buffer old-buf))))))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;; Start Testing function
+;;;;;; Start Testing functions
 (defun emacs-Q-no-nxhtml (&rest args)
   (let* ((old-env-load-path (getenv "EMACSLOADPATH"))
          sub-env-load-path

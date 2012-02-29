@@ -74,6 +74,7 @@ This covers inlined style and javascript and PHP."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 (add-hook 'html-mumamo-mode-hook 'mumamo-define-html-file-wide-keys)
 (mumamo-inherit-sub-chunk-family 'html-mumamo-mode)
@@ -96,6 +97,7 @@ See also `mumamo-alt-php-tags-mode'."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 (add-hook 'nxml-mumamo-mode-hook 'mumamo-define-html-file-wide-keys)
 
@@ -126,6 +128,7 @@ This covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 (add-hook 'mason-html-mumamo-mode-hook 'mumamo-define-html-file-wide-keys)
 (mumamo-inherit-sub-chunk-family-locally 'mason-html-mumamo-mode 'mason-html-mumamo-mode)
@@ -137,16 +140,17 @@ This covers inlined style and javascript."
 (define-mumamo-multi-major-mode embperl-html-mumamo-mode
   "Turn on multiple major modes for Embperl files with main mode `html-mode'.
 This also covers inlined style and javascript."
-    ("Embperl HTML Family" html-mode
-     (mumamo-chunk-embperl-<-
-      mumamo-chunk-embperl-<+
-      mumamo-chunk-embperl-<!
-      mumamo-chunk-embperl-<$
-      mumamo-chunk-inlined-style
-      mumamo-chunk-inlined-script
-      mumamo-chunk-style=
-      mumamo-chunk-onjs=
-     )))
+  ("Embperl HTML Family" html-mode
+   (mumamo-chunk-embperl-<-
+    mumamo-chunk-embperl-<+
+    mumamo-chunk-embperl-<!
+    mumamo-chunk-embperl-<$
+    mumamo-chunk-inlined-style
+    mumamo-chunk-inlined-script
+    mumamo-chunk-style=
+    mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
+    )))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -165,6 +169,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 
@@ -186,6 +191,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -203,6 +209,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 
@@ -217,6 +224,7 @@ This also covers inlined style and javascript."
    (mumamo-chunk-xml-pi
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     ;;mumamo-chunk-inlined-style
     ;;mumamo-chunk-inlined-script
     mumamo-chunk-smarty-literal
@@ -246,6 +254,7 @@ This covers inlined style and javascript."
     mumamo-chunk-ssjs-%
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 (add-hook 'html-mumamo-mode-hook 'mumamo-define-html-file-wide-keys)
 (mumamo-inherit-sub-chunk-family 'ssjs-html-mumamo-mode)
@@ -257,13 +266,14 @@ This covers inlined style and javascript."
 (define-mumamo-multi-major-mode gsp-html-mumamo-mode
   "Turn on multiple major modes for GSP with main mode `html-mode'.
 This also covers inlined style and javascript."
-    ("GSP HTML Family" html-mode
-     (mumamo-chunk-gsp
-      mumamo-chunk-inlined-style
-      mumamo-chunk-inlined-script
-      mumamo-chunk-style=
-      mumamo-chunk-onjs=
-      )))
+  ("GSP HTML Family" html-mode
+   (mumamo-chunk-gsp
+    mumamo-chunk-inlined-style
+    mumamo-chunk-inlined-script
+    mumamo-chunk-style=
+    mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
+    )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; jsp - Java Server Pages
@@ -272,13 +282,15 @@ This also covers inlined style and javascript."
 (define-mumamo-multi-major-mode jsp-html-mumamo-mode
   "Turn on multiple major modes for JSP with main mode `html-mode'.
 This also covers inlined style and javascript."
-    ("JSP HTML Family" html-mode
-     (mumamo-chunk-jsp
-      mumamo-chunk-inlined-style
-      mumamo-chunk-inlined-script
-      mumamo-chunk-style=
-      mumamo-chunk-onjs=
-      )))
+  ("JSP HTML Family" html-mode
+   (mumamo-chunk-jsp-hidden-comment
+    mumamo-chunk-jsp
+    mumamo-chunk-inlined-style
+    mumamo-chunk-inlined-script
+    mumamo-chunk-style=
+    mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
+    )))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -318,6 +330,7 @@ information about <%% ... %%>, % and %%."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 ;;;###autoload
@@ -448,18 +461,20 @@ See `mumamo-heredoc-modes' for how to specify heredoc major modes."
 ;;       (append '(("\\.tt2?$" . tt-mode))  auto-mode-alist ))
 ;;(require 'tt-mode)
 
+;;;###autoload
 (define-mumamo-multi-major-mode tt-html-mumamo-mode
   "Turn on multiple major modes for TT files with main mode `nxhtml-mode'.
 TT = Template-Toolkit.
 
 This also covers inlined style and javascript."
-    ("TT HTML Family" html-mode
-     (mumamo-chunk-tt
-      mumamo-chunk-inlined-style
-      mumamo-chunk-inlined-script
-      mumamo-chunk-style=
-      mumamo-chunk-onjs=
-     )))
+  ("TT HTML Family" html-mode
+   (mumamo-chunk-tt
+    mumamo-chunk-inlined-style
+    mumamo-chunk-inlined-script
+    mumamo-chunk-style=
+    mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
+    )))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -475,6 +490,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 
@@ -487,10 +503,10 @@ This also covers inlined style and javascript."
 ** Note about HTML subchunks:
 Unfortunately this only allows `html-mode' (not `nxhtml-mode') in
 sub chunks."
-    ("Org Mode + Html" org-mode
-     (mumamo-chunk-org-html
-      mumamo-chunk-org-src
-      )))
+  ("Org Mode + Html" org-mode
+   (mumamo-chunk-org-html
+    mumamo-chunk-org-src
+    )))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -502,12 +518,12 @@ sub chunks."
 (define-mumamo-multi-major-mode mako-html-mumamo-mode
   "Turn on multiple major modes for Mako with main mode `html-mode'.
 This also covers inlined style and javascript."
-;; Fix-me: test case
-;;
-;; Fix-me: Add chunks for the tags, but make sure these are made
-;; invisible to nxml-mode parser.
-;;
-;; Fix-me: Maybe finally add that indentation support for one-line chunks?
+  ;; Fix-me: test case
+  ;;
+  ;; Fix-me: Add chunks for the tags, but make sure these are made
+  ;; invisible to nxml-mode parser.
+  ;;
+  ;; Fix-me: Maybe finally add that indentation support for one-line chunks?
   ("Mako HTML Family" html-mode
    (
     mumamo-chunk-mako-one-line-comment
@@ -531,6 +547,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 (mumamo-inherit-sub-chunk-family-locally 'mako-html-mumamo-mode 'mako-html-mumamo-mode)
 
@@ -612,11 +629,11 @@ You will need `haskell-mode' which you can download from URL
 
 ;;;###autoload
 (define-mumamo-multi-major-mode python-rst-mumamo-mode
- "Turn on multiple major modes for Python with RestructuredText docstrings."
- ("Python ReST Family" python-mode
-  (
-   mumamo-python-rst-long-string-chunk
-   )))
+  "Turn on multiple major modes for Python with RestructuredText docstrings."
+  ("Python ReST Family" python-mode
+   (
+    mumamo-python-rst-long-string-chunk
+    )))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -624,12 +641,12 @@ You will need `haskell-mode' which you can download from URL
 
 ;;;###autoload
 (define-mumamo-multi-major-mode amrita-mumamo-mode
- "Turn on multiple major modes for Amrita.
+  "Turn on multiple major modes for Amrita.
 Fix-me: This does not yet take care of inner chunks."
- ("Amrita Family" amrita-mode
-  (
-   mumamo-chunk-amrita-fold
-   )))
+  ("Amrita Family" amrita-mode
+   (
+    mumamo-chunk-amrita-fold
+    )))
 
 (provide 'mumamo-fun)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

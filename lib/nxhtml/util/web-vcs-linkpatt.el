@@ -3,14 +3,27 @@
 ;; Author: Lennart Borgman (lennart O borgman A gmail O com)
 ;; Created: 2010-05-18 Tue
 ;; Version:
-;; Last-Updated:
+;; Last-Updated: 2011-03-12 Sat
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
 ;;
 ;; Features that might be required by this library:
 ;;
-;;   None
+;;   `advice', `advice-preload', `assoc', `auth-source', `backquote',
+;;   `bytecomp', `cal-menu', `calendar', `comint', `cus-edit',
+;;   `cus-face', `cus-load', `cus-start', `easymenu', `eieio',
+;;   `font-lock', `gnus-util', `help-fns', `ietf-drums', `json',
+;;   `mail-parse', `mail-prsvr', `mm-bodies', `mm-decode',
+;;   `mm-encode', `mm-util', `moz', `mozadd', `netrc', `noutline',
+;;   `ob', `ob-comint', `ob-emacs-lisp', `ob-eval', `ob-keys',
+;;   `ob-lob', `ob-ref', `ob-table', `ob-tangle', `org',
+;;   `org-compat', `org-complete', `org-entities', `org-faces',
+;;   `org-footnote', `org-list', `org-macs', `org-src', `outline',
+;;   `overlay', `password-cache', `pcomplete', `re-builder',
+;;   `rfc2045', `rfc2047', `rfc2231', `ring', `rx', `rxx', `subword',
+;;   `syntax', `time-date', `timer', `url-parse', `url-util',
+;;   `url-vars', `warnings', `web-autoload', `web-vcs', `wid-edit'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -152,8 +165,8 @@ This will be part of the pattern as
       (progn
         (web-vcs-message-with-face 'font-lock-warning-face "Please find a link first with `web-vcs-linkpatt-find'")
         nil)
-    (let ((beg (if (region-active-p) (region-beginning) (overlay-start web-vcs-hit-ovl)))
-          (end (if (region-active-p) (region-end) (overlay-end web-vcs-hit-ovl)))
+    (let ((beg (if (use-region-p) (region-beginning) (overlay-start web-vcs-hit-ovl)))
+          (end (if (use-region-p) (region-end) (overlay-end web-vcs-hit-ovl)))
           (link-beg (overlay-start web-vcs-link-ovl))
           (link-end (overlay-end   web-vcs-link-ovl))
           (label-beg (overlay-start web-vcs-label-ovl))
@@ -274,7 +287,7 @@ You can select a region to include more or less in the patterns."
                mozadd-mirror-mode)
     (mozadd-mirror-mode 1))
   (message "Sending to mozilla...")
-  (mozadd-update-mozilla))
+  (mozadd-update-mozilla 0))
 
 (provide 'web-vcs-linkpatt)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

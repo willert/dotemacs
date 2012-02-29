@@ -4,7 +4,7 @@
 ;; Maintainer:
 ;; Created: Fri Mar 09 2007
 (defconst mumamo:version "0.91") ;;Version:
-;; Last-Updated: 2009-10-19 Mon
+;; Last-Updated: 2011-11-03T00:18:05+0100
 ;; URL: http://OurComments.org/Emacs/Emacs.html
 ;; Keywords:
 ;; Compatibility:
@@ -491,7 +491,9 @@ See also `mumamo-chunk-value-set-min'."
          (major   (mumamo-chunk-major-mode chunk)))
     ;;(msgtrc "keyboard-major-mode cmin=%s pos=%s cmax=%s" cmin pos cmax)
     (unless (and (<= cmin pos)
-                 (< pos cmax))
+                 ;; Fix-me: patch for bug 885465. Test!
+                 ;;(< pos cmax))
+                 (<= pos cmax))
       (setq major 'mumamo-border-mode))
     major))
 
@@ -499,24 +501,48 @@ See also `mumamo-chunk-value-set-min'."
 ;;;; Macros
 
 ;; Borrowed from font-lock.el
-(defmacro mumamo-save-buffer-state (varlist &rest body)
-  "Bind variables according to VARLIST and eval BODY restoring buffer state.
-Do not record undo information during evaluation of BODY."
-  (declare (indent 1) (debug let))
+;; (defmacro mumamo-save-buffer-state (varlist &rest body)
+;;   "Bind variables according to VARLIST and eval BODY restoring buffer state.
+;; Do not record undo information during evaluation of BODY."
+;;   (declare (indent 1) (debug let))
+;;   (let ((modified (make-symbol "modified")))
+;;     `(let* ,(append varlist
+;;                     `((,modified (buffer-modified-p))
+;;                       (buffer-undo-list t)
+;;                       (inhibit-read-only t)
+;;                       (inhibit-point-motion-hooks t)
+;;                       (inhibit-modification-hooks t)
+;;                       deactivate-mark
+;;                       buffer-file-name
+;;                       buffer-file-truename))
+;;        (progn
+;;          ,@body)
+;;        (unless ,modified
+;;          (restore-buffer-modified-p nil)))))
+
+;; Fix-me: This macro was added to Emacs trunk 2009-09-08 by Stefan
+(defmacro with-silent-modifications (&rest body)
+  "Execute BODY, pretending it does not modify the buffer.
+If BODY performs real modifications to the buffer's text, other
+than cosmetic ones, undo data may become corrupted.
+Typically used around modifications of text-properties which do not really
+affect the buffer's content."
+  (declare (debug t) (indent 0))
   (let ((modified (make-symbol "modified")))
-    `(let* ,(append varlist
-                    `((,modified (buffer-modified-p))
-                      (buffer-undo-list t)
-                      (inhibit-read-only t)
-                      (inhibit-point-motion-hooks t)
-                      (inhibit-modification-hooks t)
-                      deactivate-mark
-                      buffer-file-name
-                      buffer-file-truename))
-       (progn
-         ,@body)
-       (unless ,modified
-         (restore-buffer-modified-p nil)))))
+    `(let* ((,modified (buffer-modified-p))
+            (buffer-undo-list t)
+            (inhibit-read-only t)
+            (inhibit-modification-hooks t)
+            deactivate-mark
+            ;; Avoid setting and removing file locks and checking
+            ;; buffer's uptodate-ness w.r.t the underlying file.
+            buffer-file-name
+            buffer-file-truename)
+       (unwind-protect
+           (progn
+             ,@body)
+         (unless ,modified
+           (restore-buffer-modified-p nil))))))
 
 ;; From jit-lock.el:
 ;; (defmacro mumamo-jit-with-buffer-unmodified (&rest body)
@@ -1911,7 +1937,7 @@ correct but we want to check those after.  Put those in
                 mumamo-last-chunk
                 first-check-from
                 (< first-check-from (overlay-end mumamo-last-chunk)))
-      (unless mumamo-old-tail (msgtrc "move-to-old-tail: put mumamo-last-chunk nil, %s" mumamo-last-chunk))
+      ;;(unless mumamo-old-tail (msgtrc "move-to-old-tail: put mumamo-last-chunk nil, %s" mumamo-last-chunk))
       (overlay-put mumamo-last-chunk 'mumamo-next-chunk mumamo-old-tail)
       (setq mumamo-old-tail mumamo-last-chunk)
       (overlay-put mumamo-old-tail 'mumamo-is-new nil)
@@ -1921,20 +1947,28 @@ correct but we want to check those after.  Put those in
                      (list :background
                            (format "red%d" (overlay-get mumamo-old-tail 'mumamo-depth)))))
       (setq mumamo-last-chunk
-            (overlay-get mumamo-last-chunk 'mumamo-prev-chunk)))))
+            (overlay-get mumamo-last-chunk 'mumamo-prev-chunk))))
+  ;;(msgtrc "move-to-old-tail exit: mumamo-old-tail=%S, mumamo-last-chunk=%S" mumamo-old-tail mumamo-last-chunk)
+  (let ((ch mumamo-old-tail))
+    (while ch
+      ;;(msgtrc "   old-tail ch=%S" ch)
+      (setq ch (overlay-get ch 'mumamo-next-chunk))))
+  )
 
 (defun mumamo-delete-empty-chunks-at-end ()
   ;; fix-me: later? Delete empty chunks at end, will be recreated if really needed
-  (let ((n1-while 0))
-    (while (and (mumamo-while 500 'n1-while "mumamo-last-chunk del empty chunks")
-                mumamo-last-chunk
-                (= (point-max) (overlay-end mumamo-last-chunk))
-                (= (overlay-end mumamo-last-chunk) (overlay-start mumamo-last-chunk)))
-      ;;(msgtrc "delete-overlay at end")
-      (delete-overlay mumamo-last-chunk)
-      (setq mumamo-last-chunk (overlay-get mumamo-last-chunk 'mumamo-prev-chunk))
-      (when mumamo-last-chunk (msgtrc "delete-empty-chunk-at-end: put mumamo-last-chunk nil, %s" mumamo-last-chunk))
-      (when mumamo-last-chunk (overlay-put mumamo-last-chunk 'mumamo-next-chunk nil)))))
+  (save-restriction
+    (widen)
+    (let ((n1-while 0))
+      (while (and (mumamo-while 500 'n1-while "mumamo-last-chunk del empty chunks")
+                  mumamo-last-chunk
+                  (= (point-max) (overlay-end mumamo-last-chunk))
+                  (= (overlay-end mumamo-last-chunk) (overlay-start mumamo-last-chunk)))
+        ;;(msgtrc "delete-empty-chunks-at-end: deleting mumamo-last-chunk=%S" mumamo-last-chunk)
+        (delete-overlay mumamo-last-chunk)
+        (setq mumamo-last-chunk (overlay-get mumamo-last-chunk 'mumamo-prev-chunk))
+        (when mumamo-last-chunk (msgtrc "delete-empty-chunk-at-end: put mumamo-last-chunk nil, %s" mumamo-last-chunk))
+        (when mumamo-last-chunk (overlay-put mumamo-last-chunk 'mumamo-next-chunk nil))))))
 
 
 (defun mumamo-delete-chunks-upto (ok-pos)
@@ -2041,7 +2075,8 @@ correct but we want to check those after.  Put those in
             (unless  mumamo-find-chunk-is-active
               ;;(setq  mumamo-find-chunk-is-active t)
               (mumamo-stop-find-chunks-timer)
-              (mumamo-save-buffer-state nil
+              ;;(mumamo-save-buffer-state nil
+              (with-silent-modifications
                 (progn
 
                   ;; Loop forward until end or buffer end ...
@@ -2052,6 +2087,7 @@ correct but we want to check those after.  Put those in
                               (< ok-pos (point-max))
                               (not (setq interrupted (and (not end)
                                                           (input-pending-p)))))
+                    ;;(msgtrc "-- A mumamo-old-tail=%S" mumamo-old-tail)
                     ;; Narrow to speed up. However the chunk divider may be
                     ;; before ok-pos here. Assume that the marker is not
                     ;; longer than 200 chars. fix-me.
@@ -2090,8 +2126,10 @@ correct but we want to check those after.  Put those in
                       ;; With the new organization all chunks are created here.
                       (if (mumamo-old-tail-fits this-new-values)
                           (progn
-                            ;;(msgtrc "old tail fitted")
-                            (mumamo-reuse-old-tail-head))
+                            (mumamo-reuse-old-tail-head)
+                            ;;(msgtrc "fitted mumamo-old-tail=%S" mumamo-old-tail)
+                            )
+                        ;;(msgtrc "delete-chunks-upto %s" ok-pos)
                         (mumamo-delete-chunks-upto ok-pos)
                         ;; Create chunk and chunk links
                         (setq mumamo-last-chunk (mumamo-new-create-chunk this-new-values))
@@ -2128,17 +2166,21 @@ correct but we want to check those after.  Put those in
                      (overlay-buffer prev-chunk)
                      (= (overlay-start this-new-chunk) (overlay-end this-new-chunk))
                      (= (overlay-start prev-chunk) (overlay-end prev-chunk)))
-            (msgtrc "find-chunks-1: put mumamo-last-chunk nil, %s" prev-chunk)
+            ;;(msgtrc "find-chunks-1: put mumamo-last-chunk nil, %s" prev-chunk)
             (overlay-put prev-chunk 'mumamo-next-chunk nil)
             (overlay-put prev-chunk 'mumamo-prev-chunk nil)
             ;;(msgtrc "find-chunks:deleting this-new-chunk %s" this-new-chunk)
             (delete-overlay this-new-chunk)
             (setq this-new-chunk prev-chunk)
             )
+          ;; fix-me: This is not used now, I believe it just belonged
+          ;; to the old chunk dividing. Found when checking bug
+          ;; 685749.
           (let ((n0-while 0))
             (while (and (mumamo-while 1000 'n0-while "old-tail")
                         mumamo-old-tail
                         (overlay-buffer mumamo-old-tail)
+                        nil ;; Fix-me
                         (= (overlay-start mumamo-old-tail) (overlay-end mumamo-old-tail)))
               (assert (not (eq mumamo-old-tail (overlay-get mumamo-old-tail 'mumamo-next-chunk))) t)
               (setq prev-chunk mumamo-old-tail)
@@ -2352,7 +2394,8 @@ With a prefix mark whole chunk."
       (widen)
       (mumamo-msgfntfy "mumamo-mark-for-refontification B min,max=%s,%s point-min,max=%s,%s modified=%s" min max (point-min) (point-max) (buffer-modified-p) )
       ;;(mumamo-with-buffer-prepared-for-jit-lock
-      (mumamo-save-buffer-state nil
+      ;;(mumamo-save-buffer-state nil
+      (with-silent-modifications
         (put-text-property min max 'fontified nil)
         ))))
 
@@ -2566,7 +2609,7 @@ fontification."
      (mumamo-display-error 'mumamo-fontify-region-with "%s"
                            (error-message-string err))))
   ;;(msgtrc "mumamo-fontify-region-with exit: font-lock-keywords-only def=%s" (default-value 'font-lock-keywords-only))
-  )
+  nil)
 
 (defun mumamo-unfontify-region-with (start end major)
   "Unfontify from START to END as in major mode MAJOR."
@@ -2708,7 +2751,8 @@ CHUNK-MIN and CHUNK-MAX."
   (overlay-put chunk 'syntax-ppss-last  nil)
   (overlay-put chunk 'syntax-ppss-cache nil)
   (overlay-put chunk 'syntax-ppss-stats nil)
-  (mumamo-save-buffer-state nil
+  ;;(mumamo-save-buffer-state nil
+  (with-silent-modifications
     (remove-list-of-text-properties chunk-min chunk-max '(syntax-table))))
 
 ;; Fix-me: If I open nxhtml-changes.html and then go to the bottom of
@@ -3107,22 +3151,26 @@ The main reasons for doing it this way is:
   ;; (info "(elisp) Other Font Lock Variables")
   ;; (info "(elisp) Syntactic Font Lock)
   ;;(msgtrc "fetch-major 1: font-lock-keywords-only =%s" font-lock-keywords-only)
-  (let ((func-sym (intern (concat "mumamo-eval-in-" (symbol-name major))))
-        (func-def-sym (intern (concat "mumamo-def-eval-in-" (symbol-name major))))
-        (func-kw-sym (intern (concat "mumamo-kw-eval-in-" (symbol-name major))))
-        ;;(add-keywords-hook (mumamo-font-lock-keyword-hook-symbol major))
-        byte-compiled-fun
-        (fetch-func-definition `(lambda  (body))) ;;`(defun ,func-sym (body)))
-        temp-buf-name
-        temp-buf)
+  (let* ((major-name (symbol-name major))
+         (func-sym (intern (concat "mumamo-eval-in-" major-name)))
+	 (func-def-sym (intern (concat "mumamo-def-eval-in-" major-name)))
+	 (func-kw-sym (intern (concat "mumamo-kw-eval-in-" major-name)))
+	 ;;(add-keywords-hook (mumamo-font-lock-keyword-hook-symbol major))
+	 byte-compiled-fun
+	 ;; (fetch-fun-name (intern (concat "mumamo-fetching-" (symbol-name major))))
+	 (fetch-func-definition `(lambda  (body))) ;;`(defun ,func-sym (body)))
+	 ;; (fetch-func-definition `(defun ,fetch-fun-name  (body))) ;;`(defun ,func-sym (body)))
+         (syntax-tables nil)
+	 temp-buf-name
+	 temp-buf)
     ;; font-lock-mode can't be turned on in buffers whose names start
     ;; with a char with white space syntax.  Temp buffer names are
     ;; such and it is not possible to change name of a temp buffer.
-    (setq temp-buf-name (concat "mumamo-fetch-major-mode-setup-" (symbol-name major)))
+    (setq temp-buf-name (generate-new-buffer-name
+                         (concat "mumamo-fetch-major-mode-setup-" major-name)))
     (setq temp-buf (get-buffer temp-buf-name))
     (when temp-buf (kill-buffer temp-buf))
     (setq temp-buf (get-buffer-create temp-buf-name))
-    ;;(msgtrc "fetch-major-mode-setup in buffer %s, after-chunk=%s, before with-current-buffer" (current-buffer) (when (boundp 'after-chunk) after-chunk))
     (with-current-buffer temp-buf
 
       (mumamo-msgfntfy "mumamo-fetch-major-mode-setup %s" major)
@@ -3213,7 +3261,16 @@ The main reasons for doing it this way is:
                (list 'font-lock-extend-region-functions (custom-quote font-lock-extend-region-functions))
                (list 'font-lock-comment-start-skip (custom-quote font-lock-comment-start-skip))
                (list 'font-lock-comment-end-skip (custom-quote font-lock-comment-end-skip))
-               (list 'font-lock-syntactic-keywords (custom-quote font-lock-syntactic-keywords))
+
+               (if (version<= emacs-version "24.0")
+                   (list 'font-lock-syntactic-keywords
+                         (custom-quote (symbol-value 'font-lock-syntactic-keywords)))
+                 (list 'obsolete-font-lock-syntactic-face-function nil))
+               ;; Replaced by `syntax-propertize-function':
+               (if (boundp 'syntax-propertize-function)
+                   (list 'syntax-propertize-function
+                         (custom-quote (symbol-value 'syntax-propertize-function)))
+                 (list 'future-syntax-propertize-function nil))
 
                (list 'font-lock-keywords (custom-quote font-lock-keywords))
                ;;(list 'font-lock-keywords-alist (custom-quote font-lock-keywords-alist))
@@ -3231,7 +3288,11 @@ The main reasons for doing it this way is:
                (list 'font-lock-defaults (custom-quote (copy-tree font-lock-defaults)))
                ;; Syntactic Font Lock
                (list 'font-lock-syntax-table (custom-quote font-lock-syntax-table)) ;; See nXhtml bug 400415
-               (list 'font-lock-beginning-of-syntax-function (custom-quote font-lock-beginning-of-syntax-function))
+               (if (version< emacs-version "23.3")
+                   (list 'font-lock-beginning-of-syntax-function
+                         ;;(msgtrc "font-lock-beginning-of-syntax-function A")
+                         (custom-quote (symbol-value 'font-lock-beginning-of-syntax-function)))
+                 (list 'obsolete-font-lock-beginning-of-syntax-function nil))
                (list 'font-lock-syntactic-face-function (custom-quote font-lock-syntactic-face-function))
 
                ;; Other Font Lock Variables
@@ -3272,9 +3333,31 @@ The main reasons for doing it this way is:
         (dolist (fetched fetch-func-definition-let)
           (let ((fvar (car fetched)))
             (setq relevant-buffer-locals (assq-delete-all fvar relevant-buffer-locals))))
+        ;; Handle syntax tables separately since they are so big:
+        ;; fix-me
+        (let ((new-rbl nil))
+          (dolist (bl relevant-buffer-locals)
+            (let* ((var (car bl))
+                   (sym-name (symbol-name var)))
+              (if (string-match-p "-syntax-table$" sym-name)
+                  (let* ((syn-tbl-name (concat "mumamo-" sym-name "-" sym-name))
+                         (syn-tbl-sym (intern syn-tbl-name))
+                         (val (cadadr bl))
+                         (new-bl (list var syn-tbl-sym)))
+                    ;; Make the syntax tables global with these names
+                    ;; and test if this works reasonably well:
+                    (when val
+                      (set syn-tbl-sym (copy-syntax-table val))
+                      ;;(setq syntax-tables (cons bl syntax-tables))
+                      (setq nre-rbl (cons new-bl new-rbl)))
+                    )
+                (setq new-rbl (cons bl new-rbl)))))
+          (setq relevant-buffer-locals new-rbl))
         (setq fetch-func-definition
               (append fetch-func-definition
-                      `((let ,(append fetch-func-definition-let
+                      `(
+                        (make-local-variable 'parse-sexp-lookup-properties)
+                        (let ,(append fetch-func-definition-let
                                       relevant-buffer-locals)
                           (with-syntax-table ,(if syntax-sym
                                                   syntax-sym
@@ -3294,7 +3377,9 @@ The main reasons for doing it this way is:
                         )))
 
         (setq byte-compiled-fun (let ((major-syntax-table))
-                                  (byte-compile fetch-func-definition)))
+                                  (byte-compile fetch-func-definition)
+				  ;; (symbol-function fetch-fun-name)
+				  ))
         (assert (functionp byte-compiled-fun))
         (unless (boundp func-sym)
           (eval `(defvar ,func-sym nil))
@@ -3309,7 +3394,14 @@ The main reasons for doing it this way is:
           (set-default func-def-sym fetch-func-definition) ;; Will be used as default
           (assert (functionp (symbol-value func-sym)) t)
           (funcall (symbol-value func-sym) nil)
-          )))
+          ))
+      ;; Fix-me: Trying to get rid of the strange error with a
+      ;; backtrace saying (error "Selecting deleted buffer") which is
+      ;; maybe related to set-syntax-table which occurs in the
+      ;; backtrace.
+      (fundamental-mode)
+      (font-lock-mode -1)
+      )
     (kill-buffer temp-buf)
     ;; Use the new value in current buffer.
     (when  mu-keywords
@@ -3487,6 +3579,8 @@ fontification and speeds up fontification significantly."
     (setq fun-var-sym (nth 0 fun-list))
     (setq fun-var-def-sym (nth 1 fun-list))
     (setq fun-var-kw-sym (nth 2 fun-list))
+    (unless (functionp (symbol-value fun-var-sym))
+      (error "fun-var-sym=%S, use-major-entry=%S" fun-var-sym use-major-entry))
     (assert (functionp (symbol-value fun-var-sym)) t)
     (assert (eq 'lambda (car (symbol-value fun-var-def-sym))) t)
     (assert (boundp fun-var-kw-sym) t)
@@ -3656,7 +3750,8 @@ This just considers existing chunks."
   "Return major mode used when there are no chunks."
   (let ((mm (cadr mumamo-current-chunk-family)))
     (if mm mm
-      (msgtrc "main-major-mode => nil, mumamo-current-chunk-family=%s" mumamo-current-chunk-family))))
+      (msgtrc "main-major-mode => nil, mumamo-current-chunk-family=%s" mumamo-current-chunk-family)
+      nil)))
 ;;;   (let ((main (cadr mumamo-current-chunk-family)))
 ;;;     (if main
 ;;;         main
@@ -3954,9 +4049,17 @@ CHUNK-END-FUN should return the end of the chunk.
       (setq chunk-major  (nth 1 start-rec))
       (setq parseable-by (nth 2 start-rec))
       (goto-char start)
+      (when borders-fun
+        (let ((start-border (when start (unless (and (= 1 start)
+                                                     (not chunk-major))
+                                          start))))
+          ;;(msgtrc "poss-fw: %s %s %s %s" borders-fun start-border end-border chunk-major)
+          (setq borders (funcall borders-fun start-border nil chunk-major))
+          (goto-char (nth 0 borders))
+          ))
       ;; Fix-me: There should mabye be a check here, calling
       ;; mumamo-end-in-code, but that is a bit of job.
-      (setq end (funcall chunk-end-fun start max))
+      (setq end (when (< (point) max) (funcall chunk-end-fun (point) max)))
       (when borders-fun
         (let ((start-border (when start (unless (and (= 1 start)
                                                      (not chunk-major))
@@ -3984,24 +4087,27 @@ CHUNK-END-FUN should return the end of the chunk.
                                    fw-exc-start-fun
                                    fw-exc-end-fun
                                    &optional find-borders-fun)
-  (mumamo-find-possible-chunk-new pos
-                                  ;;min
-                                  max
-                                  bw-exc-start-fun
-                                  ;;bw-exc-end-fun
-                                  fw-exc-start-fun
-                                  fw-exc-end-fun
-                                  find-borders-fun))
+  (mumamo-find-possible-chunk-new-1 pos
+                                    max
+                                    bw-exc-start-fun
+                                    fw-exc-start-fun
+                                    fw-exc-end-fun
+                                    find-borders-fun))
 
 (make-obsolete 'mumamo-find-possible-chunk-new 'mumamo-possible-chunk-forward "nXhtml ver 2.09")
 (defun mumamo-find-possible-chunk-new (pos
-                                       ;;min
                                        max
                                        bw-exc-start-fun
-                                       ;;bw-exc-end-fun
                                        fw-exc-start-fun
                                        fw-exc-end-fun
                                        &optional find-borders-fun)
+  (mumamo-find-possible-chunk-new-1 pos max bw-exc-start-fun fw-exc-start-fun fw-exc-end-fun find-borders-fun))
+(defun mumamo-find-possible-chunk-new-1 (pos
+                                         max
+                                         bw-exc-start-fun
+                                         fw-exc-start-fun
+                                         fw-exc-end-fun
+                                         &optional find-borders-fun)
   ;; This should return no end value!
   "Return list describing a possible chunk that starts after POS.
 No notice is taken about existing chunks and no chunks are
@@ -4372,11 +4478,10 @@ after this in the properties below of the now created chunk:
                   '(if syntax-begin-function
                        (progn
                          syntax-begin-function)
-                     (when (and (not syntax-begin-function)
-                                ;; fix-me: How to handle boundp here?
-                                (boundp 'font-lock-beginning-of-syntax-function)
-                                font-lock-beginning-of-syntax-function)
-                       font-lock-beginning-of-syntax-function)))))
+                     (and (not syntax-begin-function)
+                          (version< emacs-version "23.3")
+                          ;; (progn (msgtrc "font-lock-beginning-of-syntax-function B") t)
+                          font-lock-beginning-of-syntax-function)))))
           (mumamo-msgfntfy "Got syntax-begin-function, modified=%s" (buffer-modified-p))
           (overlay-put this-chunk 'syntax-begin-function syntax-begin-function))
         )
@@ -4472,7 +4577,7 @@ after this in the properties below of the now created chunk:
                (need-update nil))
           (if (not mumamo-margin-info-mode)
               (when old-margin-used
-                (msgtrc "update-buffer-margin-use: old-margin-used => need-update t")
+                ;;(msgtrc "update-buffer-margin-use: old-margin-used => need-update t")
                 (setq need-update t)
                 (setq old-margin-used nil)
                 (if old-is-left
@@ -4480,7 +4585,7 @@ after this in the properties below of the now created chunk:
                   (setq right-margin-width 0)))
             (unless (and (eq old-margin-used margin-used)
                          (= width (if old-is-left left-margin-width right-margin-width)))
-              (msgtrc "update-buffer-margin-use: other => need-update t, old-margin-used=%s margin-used=%s width=%s left-margin-width=%s" old-margin-used margin-used width left-margin-width)
+              ;;(msgtrc "update-buffer-margin-use: other => need-update t, old-margin-used=%s margin-used=%s width=%s left-margin-width=%s" old-margin-used margin-used width left-margin-width)
               (setq need-update t)
               (if is-left
                   (setq left-margin-width width)
@@ -6274,6 +6379,7 @@ non-nil."
     font-lock-multiline
     font-lock-set-defaults
     font-lock-syntactic-keywords
+    syntax-propertize-function ;; replaces the above function in Emacs 24.1
     font-lock-syntactically-fontified
     font-lock-syntax-table
     font-lock-unfontify-buffer-function
@@ -6748,7 +6854,8 @@ Buffer must be narrowed to chunk when this function is called."
         (setq mumamo-just-changed-major t)
       (mumamo-msgfntfy "mumamo-set-major: ----- removing 'fontified")
       ;; Set up to fontify buffer
-      (mumamo-save-buffer-state nil
+      ;;(mumamo-save-buffer-state nil
+      (with-silent-modifications
         (remove-list-of-text-properties (point-min) (point-max) '(fontified)))
       (setq mumamo-done-first-set-major t))
 
@@ -6895,7 +7002,8 @@ mode in the chunk family is nil."
       ;; Init fontification
       (mumamo-initialize-state)
       (mumamo-set-fontification-functions)
-      (mumamo-save-buffer-state nil
+      ;;(mumamo-save-buffer-state nil
+      (with-silent-modifications
         (remove-list-of-text-properties (point-min) (point-max)
                                         (list 'fontified)))
       ;; For validation header etc:
@@ -7001,7 +7109,8 @@ mode in the chunk family is nil."
   (when (fboundp 'mumamo-clear-all-regions) (mumamo-clear-all-regions))
   (save-restriction
     (widen)
-    (mumamo-save-buffer-state nil
+    ;;(mumamo-save-buffer-state nil
+    (with-silent-modifications
       (set-text-properties (point-min) (point-max) nil)))
   (setq mumamo-current-chunk-family nil)
   (setq mumamo-major-mode nil)
@@ -7473,7 +7582,7 @@ This function returns a cons with these two parts.
             (setq next-ind (current-indentation))
             (when prev-ind (setq shift-in (- this-ind prev-ind)))
             (setq shift-out (- next-ind this-ind))
-            (msgtrc "template-indent-get-shunk-shift => (%s . %s)" shift-in shift-out)
+            ;;(msgtrc "template-indent-get-shunk-shift => (%s . %s)" shift-in shift-out)
             (cons shift-in shift-out)))))))
 
 
@@ -7733,7 +7842,7 @@ This is in the temporary buffer for indentation."
       (widen)
       (goto-char line-beg)
       (back-to-indentation)
-      (msgtrc "copy-i-to-m cb=%S, line-beg=%s point=%s" (current-buffer) line-beg (point))
+      ;;(msgtrc "copy-i-to-m cb=%S, line-beg=%s point=%s" (current-buffer) line-beg (point))
       (delete-region line-beg (point))
       (insert indent-in-src)
       ;; Now we can have erased trailing whitespace, put it back:
@@ -8336,7 +8445,7 @@ this may change."
           (let ((close (and (not (buffer-modified-p))
                             (= 1 (point)))))
             ;;(goto-char pos) (eval-defun nil)
-            (msgtrc "mumamo-funcall-evaled %s" (current-buffer))
+            ;;(msgtrc "mumamo-funcall-evaled %s" (current-buffer))
             (eval-buffer)
             (when close (kill-buffer))))
         (put fun 'mumamo-evaled t))))
@@ -9218,7 +9327,8 @@ Do here also other necessary adjustments for this."
                                     activate
                                     compile)
   (if (not (buffer-live-p buffer))
-      (rng-kill-timers)
+      ;;(rng-kill-timers)
+      (cancel-timer timer-event-last)
     ad-do-it))
 
 (defadvice rng-validate-quick-while-idle (around
@@ -9226,7 +9336,8 @@ Do here also other necessary adjustments for this."
                                           activate
                                           compile)
   (if (not (buffer-live-p buffer))
-      (rng-kill-timers)
+      ;;(rng-kill-timers)
+      (cancel-timer timer-event-last)
     ad-do-it))
 
 (defadvice rng-validate-mode (after

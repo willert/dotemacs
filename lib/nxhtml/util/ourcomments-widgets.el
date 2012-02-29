@@ -45,6 +45,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'mumamo nil t))
+(eval-when-compile (require 'ourcomments-util nil t))
 
 (define-widget 'command 'restricted-sexp
   "A command function."
@@ -65,6 +66,7 @@
   :value 'ignore
   :tag "Command")
 
+;;;###autoload
 (define-widget 'major-mode-function 'function
   "A major mode lisp function."
   :complete-function (lambda ()

@@ -69,6 +69,7 @@ See also `mumamo-alt-php-tags-mode'."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 (add-hook 'nxhtml-mumamo-mode-hook 'mumamo-define-html-file-wide-keys)
 ;;(define-fictive-validation-header-toggle nxhtml-mumamo-mode t)
@@ -86,6 +87,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 ;;;###autoload
@@ -101,6 +103,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 ;;;###autoload
@@ -125,6 +128,7 @@ This covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 (add-hook 'mason-nxhtml-mumamo-mode-hook 'mumamo-define-html-file-wide-keys)
 ;;(mumamo-inherit-sub-chunk-family-locally 'mason-nxhtml-mumamo-mode 'mason-nxhtml-mumamo-mode)
@@ -169,6 +173,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -210,6 +215,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -223,6 +229,7 @@ This also covers inlined style and javascript."
    (mumamo-chunk-xml-pi
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     ;;mumamo-chunk-inlined-style
     ;;mumamo-chunk-inlined-script
     mumamo-chunk-smarty-literal
@@ -244,6 +251,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -254,11 +262,13 @@ This also covers inlined style and javascript."
   "Turn on multiple major modes for JSP with main mode `nxhtml-mode'.
 This also covers inlined style and javascript."
   ("JSP nXhtml Family" nxhtml-mode
-   (mumamo-chunk-jsp
+   (mumamo-chunk-jsp-hidden-comment
+    mumamo-chunk-jsp
     mumamo-chunk-inlined-style
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -276,6 +286,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -291,6 +302,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -328,6 +340,7 @@ This also covers inlined style and javascript."
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
     mumamo-chunk-onjs=
+    mumamo-chunk-hrefjs=
     )))
 
 ;; Fix-me: This caused mumamo to loop during fontification since

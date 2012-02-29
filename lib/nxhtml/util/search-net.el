@@ -54,6 +54,10 @@
      "Google Search"
      ("http://www.google.com/search?q="))
 
+    (google-define
+     "Google define:"
+     ("http://www.google.com/search?q=define:"))
+
     (google-code
      "Google Code Search"
      ("http://www.google.com/codesearch?hl=zh-CN&lr=&q="))
@@ -261,7 +265,7 @@ supposed to enhance the search string if they can.")
 (defun search-net-read-search-string (engine search-default)
   (setq search-default
         (or search-default
-            (if (region-active-p)
+            (if (use-region-p)
                 (concat "\""
                         (buffer-substring-no-properties (region-beginning) (region-end))
                         "\"")
