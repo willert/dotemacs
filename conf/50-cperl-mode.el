@@ -40,3 +40,14 @@
  'cperl-array-face nil
  :background nil)
 
+(set-face-attribute
+ 'mumamo-border-face-in nil
+ :underline nil :slant 'normal :weight 'normal :foreground nil)
+
+(set-face-attribute
+ 'mumamo-border-face-out nil
+ :underline nil :slant 'normal :weight 'normal :foreground nil)
+
+
+(add-to-list 'load-path "~/Devel/ePod/lisp")
+(require 'epod)

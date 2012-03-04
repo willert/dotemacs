@@ -26,8 +26,6 @@
   (or (look-for "Makefile.PL") (look-for "Build.PL") (look-for "dist.ini"))
   :relevant-files ("\.pm$" "\.t$" "\.pl$" "\.PL$")
   :irrelevant-files ("inc/" "blib/" "cover_db/")
-;  :mxdeclare-project-p (lambda (root)
-;                         (file-exists-p (concat root ".mxdeclare_project")))
   :local-lib-exists-p (lambda (root)
                          (file-exists-p (concat root "perl5")))
   :file-name-map (lambda (root)
@@ -40,19 +38,27 @@
                            (t file))))
   :main-file "Makefile.PL")
 
-;(defun cperl-mxdeclare-project-p ()
-;  "Determine if this project should use MooseX::Declare class definitions."
-;  (ignore-errors
-;    (eproject-attribute :is-mxdeclare-project)))
-
+(add-hook
+ 'perl-project-file-visit-hook
+ (lambda ()
+   (if (eproject-attribute :local-lib-exists-p)
+       ; prefill compile command
+       (set
+        (make-local-variable 'compile-command)
+        (format
+         "cd %s; perl -Mlocal::lib=perl5 %s"
+         (eproject-root) (buffer-file-name)))
+     )))
 
 (add-hook
  'perl-project-file-visit-hook
  (lambda ()
    (if (eproject-attribute :local-lib-exists-p)
-       (set
-        (make-local-variable 'compile-command)
-        (format
-         "cd %s; perl -Mlocal::lib=perl5 %s"
-         (eproject-root) (buffer-file-name))
-        ))))
+       ; set local libs for this file
+       (progn
+         (make-local-variable 'epod-local-lib-dirs)
+         (if (not (boundp 'epod-local-lib-dirs)) (setq epod-local-lib-dirs nil))
+         (pushnew
+          (format "%sperl5/" (eproject-root))
+          epod-local-lib-dirs)
+         ))))
