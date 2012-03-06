@@ -4,27 +4,29 @@
 (setq uniquify-ignore-buffers-re "^\\*")
 
 ; ack mode
-(require 'ack)
-(setq
- ack-command
- (concat "ack " "--all --nogroup --no-color --with-filename "
-         "--ignore-dir=blib --ignore-dir=contrib --ignore-dir=perl5 "))
+;(require 'ack)
+;(setq
+; ack-command
+; (concat "ack " "--all --nogroup --no-color --with-filename "
+;         "--ignore-dir=blib --ignore-dir=contrib --ignore-dir=perl5 "))
 
 ; yaml mode
 (require 'yaml-mode)
 
 ; yasnippet minor mode
 (require 'yasnippet)
-(yas/load-directory "~/.emacs.d/snippets")
 (setq yas/trigger-key "C-<tab>")
 (yas/initialize)
 (yas/trigger-key-reload)
 
-; magit mode
-(require 'magit)
+; defer loading of snippets until all else is set up
+(add-hook 'after-init-hook
+          (lambda () (yas/load-directory "~/.emacs.d/snippets")))
 
-; espect mode
+
+(require 'magit)
 (require 'espect)
+(require 'eproject)
 
 ; catalyst-server mode
 (require 'catalyst-server)

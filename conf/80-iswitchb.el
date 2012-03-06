@@ -21,10 +21,21 @@
             (define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
         '(("C-<tab>"    . iswitchb-prev-match)
           ("M-<tab>"    . iswitchb-prev-match)
-          ("<tab>"  . iswitchb-next-match))))
+          ("<backtab>"  . iswitchb-prevj-match))))
 
 (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
 
+(defun iswitchb-exclude-nonmatching()
+   "Make iswitchb work on only the currently matching names."
+   (interactive)
+   (setq iswitchb-buflist iswitchb-matches)
+   (setq iswitchb-rescan t)
+   (delete-minibuffer-contents))
+
+(add-hook 'iswitchb-define-mode-map-hook
+    '(lambda () (define-key
+      iswitchb-mode-map "\C-o"
+      'iswitchb-exclude-nonmatching)))
 
 (setq iswitchb-buffer-ignore
       (quote
@@ -37,5 +48,5 @@
 (setq iswitchb-cannot-complete-hook (quote (iswitchb-next-match)))
 (setq iswitchb-case nil)
 (setq iswitchb-default-method (quote samewindow))
-(setq iswitchb-max-to-show 8)
+(setq iswitchb-max-to-show 6)
 (iswitchb-mode t)

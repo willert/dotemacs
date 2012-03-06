@@ -41,6 +41,7 @@
          "blooper"
          "catalyst-server"
          "transpose-window"
+         "ack-and-a-half"
         ))
 
 ;;; load-paths.el ends here
