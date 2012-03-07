@@ -3,22 +3,16 @@
 (require 'eproject)
 (require 'eproject-extras)
 
-(global-set-key (kbd "C-x p k") 'eproject-kill-project-buffers)
-(global-set-key (kbd "C-x p v") 'eproject-revisit-project)
-(global-set-key (kbd "C-x p b") 'eproject-ibuffer)
-(global-set-key (kbd "C-x p o") 'eproject-open-all-project-files)
-(global-set-key (kbd "C-x p f") 'eproject-find-file)
-
 (define-project-type perl (generic)
   (or (look-for "Makefile.PL") (look-for "Build.PL") (look-for "dist.ini"))
   :relevant-files ("\.pm$" "\.t$" "\.pl$" "\.PL$")
-  :irrelevant-files ("inc/" "blib/" "cover_db/" "perl5/" "mpan-dist/")
+  :irrelevant-files ("inc/" "blib/" "cover_db/" "perl5/" "^mpan-" "Makefile")
   :ack-skip-dirs ("inc" "blib" "cover_db" "perl5" "contrib" "mpan-dist")
   :local-lib-exists-p (lambda (root)
                          (file-exists-p (concat root "perl5")))
   :file-name-map (lambda (root)
                    (lambda (root file)
-                     (cond ((string-match "^lib/56f01f791d23e7cb93f5fbf5fd626cc3881712f[.]pm$" file)
+                     (cond ((string-match "^lib/\\(.*\\)[.]pm$" file)
                             (let ((m (match-string 1 file)))
                               (while (string-match "/" m)
                                 (setf m (replace-match "::" nil nil m)))
@@ -45,7 +39,20 @@
                   ack-and-a-half-arguments
                   :test 'string=))
        (eproject-attribute :ack-skip-dirs)
-       ))
+       )
+
+  (if (eproject-attribute :irrelevant-files)
+      (progn
+        (pushnew "--invert-file-match" ack-and-a-half-arguments
+                 :test 'string=)
+        (pushnew (format "-G '(?:%s)'"
+                         (mapconcat (lambda (e) e)
+                                    (eproject-attribute :irrelevant-files)
+                                    "|"))
+                 ack-and-a-half-arguments
+                 :test 'string=)))
+
+)
 
 
 (defun sbw/perl-project-setup-epod-dirs ()
