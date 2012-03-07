@@ -1,6 +1,8 @@
 # -*- mode: snippet -*-
-# name: mason1-perl-stanza
-# key: perl
+# name: mason-if-statement
+# key: if
 # expand-env: ((yas/indent-line 'fixed)(yas/also-auto-indent-first-line nil))
 # --
-<%perl> $0 </%perl>
+<%perl> if ( $1 ) { </%perl>
+  $0
+<%perl> } </%perl>
