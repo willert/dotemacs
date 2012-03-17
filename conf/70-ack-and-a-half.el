@@ -8,3 +8,13 @@
 (defalias 'ack-same 'ack-and-a-half-same)
 (defalias 'ack-find-file 'ack-and-a-half-find-file)
 (defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
+
+(defun ack-here () (interactive)
+  (let* ((ack-and-a-half-prompt-for-directory t)
+         (ack-and-a-half-root-directory-functions nil)
+         (org-default-directory default-directory)
+         (default-directory (if (buffer-file-name)
+                            (file-name-directory (buffer-file-name))
+                            org-default-directory)))
+    (call-interactively 'ack-and-a-half-same))
+)

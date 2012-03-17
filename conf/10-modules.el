@@ -50,6 +50,8 @@
 
 (require 'blooper)
 
+(require 'browse-kill-ring)
+
 ; dired-single
 (require 'dired-single)
 (defun sbw/dired-init ()

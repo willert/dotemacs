@@ -43,7 +43,7 @@
          "\\*fsm-debug\\*" "\\*Completions\\*" "^ \\*"
          "\\*Shell Command Output\\*"
          "\\*magit-[^d]"
-         "\\*-jabber-\\*")))
+         "\\*-jabber-\\*" " \\[.*-mode\\]")))
 
 (setq iswitchb-cannot-complete-hook (quote (iswitchb-next-match)))
 (setq iswitchb-case nil)

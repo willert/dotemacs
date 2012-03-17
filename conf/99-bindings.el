@@ -5,7 +5,7 @@
 
 (global-set-key "\C-l"  'goto-line)
 
-(global-set-key "\C-x\C-a" 'ack)
+(global-set-key "\C-x\C-a" 'ack-here)
 
 (global-set-key (kbd "\C-xcl") 'goto-last-change)
 (global-set-key (kbd "C-z") 'undo)
@@ -134,4 +134,18 @@
 
 (require 'key-chord)
 (key-chord-define nxhtml-mode-map ",." "<%  %>\C-b\C-b\C-b")
+(key-chord-define nxhtml-mode-map "&&" "<&  &>\C-b\C-b\C-b")
 (key-chord-define nxhtml-mode-map "<>" "<%perl>  </%perl>\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b")
+
+
+(global-set-key (kbd "C-x p k") 'eproject-kill-project-buffers)
+(global-set-key (kbd "C-x p v") 'eproject-revisit-project)
+(global-set-key (kbd "C-x p b") 'eproject-ibuffer)
+(global-set-key (kbd "C-x p o") 'eproject-open-all-project-files)
+(global-set-key (kbd "C-x p f") 'eproject-find-file)
+(global-set-key (kbd "C-x p a") 'ack)
+
+(global-set-key (kbd "C-x F")
+                (lambda () (interactive)
+                  (let ((default-directory (eproject-root)))
+                    (call-interactively 'find-file))))

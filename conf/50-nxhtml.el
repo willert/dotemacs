@@ -33,6 +33,8 @@
 ;; Mason submode config
 ; mason-nxhtml-mumamo-mode is to buggy
 
+(define-key nxhtml-mode-map (kbd "C-c /") 'nxml-finish-element)
+
 (setq
  auto-mode-alist
  (cons '("\\/root/"         . mason-nxhtml-mumamo-mode)
