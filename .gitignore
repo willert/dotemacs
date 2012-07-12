@@ -13,3 +13,6 @@
 
 /session.*
 /lib/eproject/.gitignore
+/tramp
+/url/cache/
+/elpa/archives/
