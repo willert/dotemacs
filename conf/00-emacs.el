@@ -93,3 +93,36 @@
   nil)
 
 
+(defun sbw/th-rename-tramp-buffer ()
+  (when (file-remote-p (buffer-file-name))
+    (rename-buffer
+     (format "%s:%s"
+             (file-remote-p (buffer-file-name) 'method)
+             (buffer-name)))
+))
+
+(defadvice find-file (around th-find-file activate)
+  "Open FILENAME using tramp's sudo method if it can't be recreated as current user."
+
+  (let* ((fn (ad-get-arg 0))
+         (file-owner-uid (nth 2 (file-attributes fn))))
+
+    (if (and (not (file-ownership-preserved-p fn))
+             (y-or-n-p (concat "File " fn " does not belong to you.  Open it as root? ")))
+        (sbw/th-find-file-sudo fn)
+
+      (if (and (= file-owner-uid (user-uid)) (not (file-writable-p fn))
+               (y-or-n-p (concat "File " fn " is read-only. Make buffer writable? ")))
+          (progn ad-do-it (toggle-read-only -1))
+
+        ad-do-it))
+    ))
+
+(defun sbw/th-find-file-sudo (file)
+  "Opens FILE with root privileges."
+  (interactive "F")
+  (set-buffer (find-file (concat "/sudo::" file)))
+)
+
+
+(add-hook 'find-file-hook 'sbw/th-rename-tramp-buffer)
