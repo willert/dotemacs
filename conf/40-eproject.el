@@ -7,7 +7,7 @@
   (or (look-for "Makefile.PL") (look-for "Build.PL") (look-for "dist.ini"))
   :relevant-files ("\.pm$" "\.t$" "\.pl$" "\.PL$")
   :irrelevant-files ("inc/" "blib/" "cover_db/" "perl5/" "^mpan-" "Makefile")
-  :ack-skip-dirs ("inc" "blib" "cover_db" "perl5" "contrib" "mpan-dist")
+  :ack-skip-dirs ("inc" "blib" "cover_db" "perl5" "contrib" "mpan-dist" ".build")
   :local-lib-exists-p (lambda (root)
                          (file-exists-p (concat root "perl5")))
   :file-name-map (lambda (root)
