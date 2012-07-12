@@ -42,6 +42,12 @@
          "catalyst-server"
          "transpose-window"
          "ack-and-a-half"
+         "google-contacts"
+         "wanderlust/apel"
+         "wanderlust/elmo"
+         "wanderlust/flim"
+         "wanderlust/semi"
+         "wanderlust/wl"
         ))
 
 ;;; load-paths.el ends here
