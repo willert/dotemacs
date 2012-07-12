@@ -35,7 +35,7 @@
   (require 'cl))
 
 ; pull in local config if available
-(load "private" t)
+(load (concat emacs-conf-path "private.el") t)
 
 ; auto-create an empty file if not
 (let
