@@ -9,6 +9,9 @@
 (add-to-list 'load-path emacs-lib-path)
 (load (concat emacs-lib-path "load-paths.el"))
 
+(require 'package)
+(package-initialize)
+
 (dolist (file (directory-files emacs-conf-path t "^[0-9]+.*\\.el$"))
   (load file))
 
