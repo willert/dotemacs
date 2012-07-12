@@ -148,6 +148,9 @@ or the thing at the point and its bounds if there is no region"
            (end (cdr bounds)))
       (vector (buffer-substring-no-properties beg end) beg end))))
 
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "google-chrome")
+
 (defun sbw/metacpan-search ()
   "Try to open module page on MetaCPAN"
   (interactive)
