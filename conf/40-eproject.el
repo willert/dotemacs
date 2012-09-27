@@ -65,6 +65,14 @@
        epod-local-lib-dirs :test 'string=)
 ))
 
+
+(defun sbw/perl-project-mist-init ()
+  "Runs mist init for current project"
+  (interactive)
+  (if (string= (eproject-type) "perl")
+      (compile (format "cd %s; mist init" (eproject-root)) t))
+)
+
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-compile-command)
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-ack-arguments)
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-setup-epod-dirs)

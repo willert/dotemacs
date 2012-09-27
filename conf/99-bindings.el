@@ -65,6 +65,13 @@
 (define-key run-and-prove-map (kbd "P") 'sbw/prove-whole-project)
 (global-set-key (kbd "\C-or") run-and-prove-map)
 
+(global-set-key (kbd "\C-c\C-s") (lambda () (interactive) (call-interactively 'shell) ))
+(defun sbw/shell-key-bindings ()
+  (define-key shell-mode-map (kbd "\C-c\C-s") nil)
+  (define-key shell-mode-map (kbd "\C-cl") 'sbw/clear-shell)
+)
+(add-hook 'shell-mode-hook 'sbw/shell-key-bindings)
+
 
 ;;; iswitchb
 (global-set-key (kbd "\C-xb") 'iswitchb-buffer)

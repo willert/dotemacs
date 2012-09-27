@@ -5,6 +5,7 @@
 (setq auto-mode-alist (cons '("\\.t$"      . cperl-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.pl$"     . cperl-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.pm$"     . cperl-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.mp$"     . cperl-mode) auto-mode-alist))
 
 (setq sbw/prove-project-directories "t/")
 

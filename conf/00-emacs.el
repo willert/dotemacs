@@ -17,6 +17,7 @@
 
 (show-paren-mode t)
 
+(setq line-move-visual nil)
 (setq indent-tabs-mode nil)
 (setq backup-inhibited t)
 (setq scroll-step 1 )
@@ -107,16 +108,19 @@
   (let* ((fn (ad-get-arg 0))
          (file-owner-uid (nth 2 (file-attributes fn))))
 
-    (if (and (not (file-ownership-preserved-p fn))
-             (y-or-n-p (concat "File " fn " does not belong to you.  Open it as root? ")))
-        (sbw/th-find-file-sudo fn)
+    (if (file-exists-p fn)
 
-      (if (and (= file-owner-uid (user-uid)) (not (file-writable-p fn))
-               (y-or-n-p (concat "File " fn " is read-only. Make buffer writable? ")))
-          (progn ad-do-it (toggle-read-only -1))
+        (if (and (not (file-ownership-preserved-p fn))
+                 (y-or-n-p (concat "File " fn " does not belong to you.  Open it as root? ")))
+            (sbw/th-find-file-sudo fn)
 
-        ad-do-it))
-    ))
+          (if (and (= file-owner-uid (user-uid)) (not (file-writable-p fn))
+                   (y-or-n-p (concat "File " fn " is read-only. Make buffer writable? ")))
+              (progn ad-do-it (toggle-read-only -1))
+
+            ad-do-it))
+      ad-do-it
+    )))
 
 (defun sbw/th-find-file-sudo (file)
   "Opens FILE with root privileges."
@@ -126,3 +130,33 @@
 
 
 (add-hook 'find-file-hook 'sbw/th-rename-tramp-buffer)
+
+
+(defun byte-compile-current-buffer ()
+  "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
+  (interactive)
+  (when (and (eq major-mode 'emacs-lisp-mode)
+             (file-exists-p (byte-compile-dest-file buffer-file-name)))
+    (byte-compile-file buffer-file-name)))
+
+(add-hook 'after-save-hook 'byte-compile-current-buffer)
+
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+
+;; Treat clipboard input as UTF-8 string first; compound text next, etc.
+(setq-default x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+
+;; PATH, e.g. for compilation-mode
+(setenv "PATH" (concat (getenv "PATH") ":/var/lib/gems/1.8/bin/"))
+
+(setq warning-minimum-level :error)
+(setq warning-minimum-log-level :error)
+
+(setq max-mini-window-height 1)
+(defun sbw/allow-mini-window-expansion ()
+  (set (make-local-variable 'max-mini-window-height) 0.25)
+)
+(add-hook 'minibuffer-setup-hook 'sbw/allow-mini-window-expansion)

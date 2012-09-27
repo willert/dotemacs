@@ -73,6 +73,10 @@
         (append default-frame-alist
                 '((cursor-color . "Black"))))
 
+  (setq ansi-color-names-vector
+        ["black" "red" "green" "yellow" "blue" "magenta" "cyan" "white"])
+  (setq ansi-color-map (ansi-color-make-color-map))
+
   (setq frame-background-mode 'light)
   (sbw/adjust-terminal-colors frame)
 )
@@ -153,6 +157,10 @@
   (setq default-frame-alist
         (append default-frame-alist
                 '((cursor-color . "Orchid"))))
+
+  (setq ansi-color-names-vector
+        ["black" "red" "green" "yellow" "DeepSkyBlue" "magenta" "cyan" "white"])
+  (setq ansi-color-map (ansi-color-make-color-map))
 
   (setq frame-background-mode 'dark)
   (sbw/adjust-terminal-colors frame)
