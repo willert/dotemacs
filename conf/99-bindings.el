@@ -66,11 +66,17 @@
 (global-set-key (kbd "\C-or") run-and-prove-map)
 
 (global-set-key (kbd "\C-c\C-s") (lambda () (interactive) (call-interactively 'shell) ))
+(global-set-key (kbd "\C-c\C-s") (lambda () (interactive) (call-interactively 'shell) ))
 (defun sbw/shell-key-bindings ()
   (define-key shell-mode-map (kbd "\C-c\C-s") nil)
   (define-key shell-mode-map (kbd "\C-cl") 'sbw/clear-shell)
 )
 (add-hook 'shell-mode-hook 'sbw/shell-key-bindings)
+(defun sbw/comint-key-bindings ()
+  (define-key comint-mode-map (kbd "\C-c\C-s") nil)
+  (define-key comint-mode-map (kbd "\C-cl") 'sbw/clear-shell)
+)
+(add-hook 'comint-mode-hook 'sbw/comint-key-bindings)
 
 
 ;;; iswitchb
