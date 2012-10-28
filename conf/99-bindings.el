@@ -3,6 +3,8 @@
 (global-set-key "\C-xk" 'kill-this-buffer)
 (global-set-key "\C-x\C-k" 'kill-buffer)
 
+(global-set-key (kbd "C-x <down>")  'bury-buffer)
+
 (global-set-key "\C-l"  'goto-line)
 
 (global-set-key "\C-x\C-a" 'ack-here)
