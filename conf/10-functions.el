@@ -1,4 +1,4 @@
-s(defun kill-line-to-cursor ()
+(defun kill-line-to-cursor ()
   "Kills the part of the line before the point"
   (interactive)
   (cond ((bolp) (delete-char -1)) (t (kill-line -0))))
