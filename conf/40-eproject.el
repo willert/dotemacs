@@ -9,7 +9,7 @@
   :irrelevant-files ("inc/" "blib/" "cover_db/" "perl5/" "^mpan-" "Makefile")
   :ack-skip-dirs ("inc" "blib" "cover_db" "perl5" "contrib" "mpan-dist" ".build")
   :local-lib-exists-p (lambda (root)
-                         (file-exists-p (concat root "perl5")))
+                        (file-exists-p (concat root "perl5/perl-5.14.2")))
   :file-name-map (lambda (root)
                    (lambda (root file)
                      (cond ((string-match "^lib/\\(.*\\)[.]pm$" file)
@@ -52,7 +52,7 @@
                  ack-and-a-half-arguments
                  :test 'string=)))
 
-)
+  )
 
 
 (defun sbw/perl-project-setup-epod-dirs ()
@@ -63,7 +63,7 @@
       (pushnew
        (format "%sperl5/" (eproject-root))
        epod-local-lib-dirs :test 'string=)
-))
+    ))
 
 
 (defun sbw/perl-project-mist-init ()
@@ -71,8 +71,53 @@
   (interactive)
   (if (string= (eproject-type) "perl")
       (compile (format "cd %s; mist init" (eproject-root)) t))
-)
+  )
+
+(defun sbw/perl-project-execute-local-init ()
+  (message "Root: %s" (eproject-root))
+  (let ((init-file
+         (replace-regexp-in-string
+          "//+" "/"
+          (concat (eproject-root) "/.emacs.d/init.el"))))
+    (if (file-exists-p init-file) (load init-file)))
+  )
+
+(defun sbw/perl-project-execute-local-init ()
+  (message "Root: %s" (eproject-root))
+  (let ((init-file
+         (replace-regexp-in-string
+          "//+" "/"
+          (concat (eproject-root) "/.emacs.d/init.el"))))
+    (if (file-exists-p init-file) (load init-file)))
+  )
+
+(defun sbw/open-shell-in-project-root ()
+  (interactive)
+  (let* ((project-root (eproject-root))
+         (default-directory project-root)
+         (project-name (car (last (split-string project-root "/" t))))
+         (shell-postfix
+          (if current-prefix-arg
+              (read-string "Buffer type (defaults to 'shell'): " nil
+                           'sbw/project-shell-potfixes "shell")
+            "shell"))
+         (buffer-name (concat project-name "-" shell-postfix ))
+         (buffer (switch-to-buffer buffer-name))
+        )
+    (with-current-buffer buffer
+      (shell buffer)
+
+      (let ((process (get-buffer-process (current-buffer)))
+            )
+        (unless process
+          (error "No process in %s" buffer-or-name))
+        (goto-char (process-mark process))
+        (insert "cd " project-root "; source perl5/etc/mist.mistrc")
+        (comint-send-input nil t)
+        ))
+    ))
 
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-compile-command)
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-ack-arguments)
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-setup-epod-dirs)
+(add-hook 'perl-project-file-visit-hook 'sbw/perl-project-execute-local-init)
