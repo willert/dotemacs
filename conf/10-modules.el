@@ -15,9 +15,11 @@
 
 ; yasnippet minor mode
 (require 'yasnippet)
-(setq yas/trigger-key "C-<tab>")
-(yas/initialize)
-(yas/trigger-key-reload)
+(setq yas-snippet-dirs  '("~/.emacs.d/snippets"))
+(yas-global-mode 1)
+(define-key yas-minor-mode-map (kbd "<tab>") nil)
+(define-key yas-minor-mode-map (kbd "C-<tab>") 'yas-expand)
+
 
 ; defer loading of snippets until all else is set up
 (add-hook 'after-init-hook
