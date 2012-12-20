@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: data-dumper-concise
+# key: ddc
+# --
+use Data::Dumper::Concise;
+printf STDERR '${1:$(
+  mapconcat
+  (lambda (e) e)
+  (split-string (substring (capitalize text) 1) "_")
+  " "
+)}: %s%s', Dumper( ${1:$foo} ), "\n";
