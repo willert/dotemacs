@@ -91,7 +91,9 @@
 
 (global-set-key (kbd "\C-cpc") 'catalyst-server-start-or-show-process)
 
-(global-set-key (kbd "\C-cps") 'magit-status)
+(global-set-key (kbd "\C-cpg") 'magit-status)
+(global-set-key (kbd "\C-cps") 'sbw/open-shell-in-project-root)
+
 (define-key magit-mode-map (kbd "/") 'magit-stash)
 
 (global-set-key "\C-p" 'sbw/set-region)
