@@ -94,6 +94,7 @@
 
 (global-set-key (kbd "\C-cpg") 'magit-status)
 (global-set-key (kbd "\C-cps") 'sbw/open-shell-in-project-root)
+(global-set-key (kbd "\C-cpm") 'sbw/perl-project-mist-init)
 
 (define-key magit-mode-map (kbd "/") 'magit-stash)
 
