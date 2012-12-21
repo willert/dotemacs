@@ -32,6 +32,7 @@
 
 ; catalyst-server mode
 (require 'catalyst-server)
+(require 'plackup-server)
 
 ; highlight long lines
 (require 'highlight-beyond-fill-column)
