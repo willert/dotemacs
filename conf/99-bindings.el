@@ -96,7 +96,9 @@
 
 (define-key magit-mode-map (kbd "/") 'magit-stash)
 
-(global-set-key "\C-p" 'sbw/set-region)
+(global-set-key (kbd "\C-ci") 'ielm-for-this-buffer)
+
+(global-set-key (kbd "\C-p") 'sbw/set-region)
 
 (global-set-key (kbd "\C-cyf") 'yas/find-snippets)
 (global-set-key (kbd "\C-cyn") 'yas/new-snippet)
