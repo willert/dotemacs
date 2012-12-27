@@ -90,7 +90,7 @@
 (global-set-key "\C-xrp" 'copy-rectangle-as-kill)
 
 (global-set-key (kbd "\C-cpc") 'catalyst-server-start-or-show-process)
-(global-set-key (kbd "\C-cpp") 'plackup-server-start-or-show-process)
+(global-set-key (kbd "\C-cpp") 'plackup-server/start-or-show-process)
 
 (global-set-key (kbd "\C-cpg") 'magit-status)
 (global-set-key (kbd "\C-cps") 'sbw/open-shell-in-project-root)
