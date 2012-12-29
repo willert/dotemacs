@@ -226,7 +226,7 @@ xargs, kill) are used to to find and kill processes matching
 
   (let*
       ((module-name (plackup-server/guess-server-module))
-       (process-name (concat module-name " Server"))
+       (process-name (concat module-name " Plackup Server"))
        (commands-buffer-name (concat "* " process-name " *"))
        (buf (get-buffer commands-buffer-name))
        (psgi-app
@@ -256,7 +256,7 @@ get rid of any existing processes"
 
     (let*
         ((module-name (plackup-server/guess-server-module))
-         (process-name (concat module-name " Server"))
+         (process-name (concat module-name " Plackup Server"))
          (commands-buffer-name (concat "* " process-name " *"))
          (buf (get-buffer commands-buffer-name))
          (psgi-app (plackup-server/guess-psgi-app))
