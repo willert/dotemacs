@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: mason-perl-expression
 # key: mv
-# binding: "C-c %"
+# binding: C-c %
 # --
 <% $1 %>$0
