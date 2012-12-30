@@ -118,35 +118,39 @@ else advance a line"
     (if (get-buffer-process (current-buffer))
         (message "Switching to pre-existing shell")
       (with-current-buffer buffer
-        (shell buffer)
-        (make-variable-buffer-local 'comint-prompt-read-only)
-        (setq comint-prompt-read-only t)
-        (local-set-key (kbd "<return>") 'sbw/comint-send-input-at-eob)
+        (let ((process-environment process-environment)
+              (histfile (concat project-root "/.bash_history_local")))
+          (setenv "HISTFILE" histfile)
 
-        (let ((process (get-buffer-process (current-buffer))))
-          (unless process
-            (error "No process in %s" buffer-or-name))
+          (shell buffer)
+          (make-variable-buffer-local 'comint-prompt-read-only)
+          (setq comint-prompt-read-only t)
+          (local-set-key (kbd "<return>") 'sbw/comint-send-input-at-eob)
 
-          (set-process-query-on-exit-flag process nil)
-          (set-process-sentinel
-           process
-           (lambda (this-process state)
-             (if (or (string-match "exited abnormally with code.*" state)
-                     (string-match "finished" state))
-                 (kill-buffer (current-buffer)))
-             ))
+          (let ((process (get-buffer-process (current-buffer))))
+            (unless process
+              (error "No process in %s" buffer-or-name))
 
-          (goto-char (process-mark process))
-          (insert
-           "cd " project-root ";"
-           "source perl5/etc/mist.mistrc 2> /dev/null" ";"
-           "export HISTFILE=\"" project-root "/.bash_history_local\"" ";"
-           "history -r" ";"
-           )
-          (let ((comint-process-echoes t))
-            (comint-send-input nil t)
-            (sbw/clear-shell))
-          )
+            (set-process-query-on-exit-flag process nil)
+            (set-process-sentinel
+             process
+             (lambda (this-process state)
+               (if (or (string-match "exited abnormally with code.*" state)
+                       (string-match "finished" state))
+                   (kill-buffer (current-buffer)))
+               ))
+
+            (goto-char (process-mark process))
+            (insert
+             "cd " project-root ";"
+             "source perl5/etc/mist.mistrc 2> /dev/null" ";"
+             "export HISTFILE='" histfile "'" ";"
+             "history -r" ";"
+             )
+            (let ((comint-process-echoes t))
+              (comint-send-input nil t)
+              (sbw/clear-shell))
+            )
 
         (progn ; the guts of (eproject-maybe-turn-on)
           (make-variable-buffer-local 'eproject-root)
@@ -154,11 +158,11 @@ else advance a line"
           (eproject--init-attributes project-root project-type)
           (eproject-mode 1)
 
-                                        ; eproject--setup-local-variables works on file and dired buffers
-                                        ; so lets pretend we are in dired mode instead of shell mode
+          ;; eproject--setup-local-variables works on file and dired buffers
+          ;; so lets pretend we are in dired mode instead of shell mode
           (let ((major-mode 'dired-mode))
             (eproject--setup-local-variables)))
-        ))))
+        )))))
 
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-compile-command)
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-ack-arguments)
