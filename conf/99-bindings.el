@@ -10,6 +10,8 @@
 (global-set-key (kbd "C-x C-a") 'ack-here)
 
 (global-set-key (kbd "C-x c l") 'goto-last-change)
+(global-set-key (kbd "C-x c k") 'delete-current-buffer-file)
+(global-set-key (kbd "C-x c r") 'rename-current-buffer-file)
 
 (global-set-key (kbd "C-z") 'undo)
 
