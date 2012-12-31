@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: Standard perl package
+# name: standard-package
 # key: ppackage
 # expand-env: ((package-name (sbw/default-perl-package-name)))
 # --
