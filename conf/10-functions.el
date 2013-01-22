@@ -221,3 +221,62 @@ See also: `copy-to-register-1', `insert-register'."
         (delete-file filename)
         (kill-buffer buffer)
         (message "File '%s' successfully removed" filename)))))
+
+(defun upward-find-file (filename &optional startdir)
+  "Move up directories until we find a certain filename. If we
+  manage to find it, return the containing directory. Else if we
+  get to the toplevel directory and still can't find it, return
+  nil. Start at startdir or . if startdir not given"
+
+  (let ((dirname (expand-file-name
+      (if startdir startdir ".")))
+  (found nil) ; found is set as a flag to leave loop if we find it
+  (top nil))  ; top is set when we get
+        ; to / so that we only check it once
+
+    ; While we've neither been at the top last time nor have we found
+    ; the file.
+    (while (not (or found top))
+      ; If we're at / set top flag.
+      (if (string= (expand-file-name dirname) "/")
+    (setq top t))
+
+      ; Check for the file
+      (if (file-exists-p (expand-file-name filename dirname))
+    (setq found t)
+  ; If not, move up a directory
+  (setq dirname (expand-file-name ".." dirname))))
+    ; return statement
+    (if found dirname nil)))
+
+
+(defcustom compass-command "compass"
+  "Command used to compile SCSS files, should be sass or the
+  complete path to your sass runnable example:
+  \"~/.gem/ruby/1.8/bin/sass\""
+  :group 'scss)
+
+(defcustom compass-options '()
+  "Command line Options for sass executable, for example:
+'(\"--cache-location\" \"'/tmp/.sass-cache'\")"
+  :group 'scss)
+
+(defun compass-compile()
+  "Compiles the current buffer with 'compass compile [PATH]'"
+  (interactive)
+  (let ((project-root (upward-find-file "config.rb")))
+    (save-window-excursion
+      (async-shell-command
+       (concat
+        compass-command " compile "
+        (mapconcat 'identity compass-options " ") " "
+        "'" project-root "'" )
+       "*Compass*"
+       ))))
+
+(defadvice scss-compile-maybe (before compile-scss-with-compass)
+  "compile Compass project"
+  (message "Foo")
+  (compass-compile)
+)
+(ad-activate 'scss-compile-maybe)
