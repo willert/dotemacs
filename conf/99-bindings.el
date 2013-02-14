@@ -20,6 +20,8 @@
 
 (global-set-key (kbd "<pause>") 'toggle-window-dedicated)
 
+(global-set-key (kbd "M-j") (lambda () (interactive) (join-line -1)))
+
 ;;; register handling
 (global-set-key (kbd "C-x C-p") 'copy-to-register)
 (global-set-key (kbd "C-x C-y")  'insert-register)
