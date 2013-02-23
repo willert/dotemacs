@@ -52,6 +52,11 @@
                  ack-and-a-half-arguments
                  :test 'string=)))
 
+  (if (not (ack-and-a-half-type))
+        (pushnew "--all" ack-and-a-half-arguments
+                 :test 'string=)
+      )
+
   )
 
 
