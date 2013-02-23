@@ -164,7 +164,16 @@ else advance a line"
             (eproject--setup-local-variables)))
         )))))
 
+(defun sbw/activate-poor-mans-indent-for-mason ()
+  "Open a shell in project root directory"
+  (interactive)
+  (if (string-equal major-mode "nxhtml-mode")
+      (progn
+        (make-local-variable 'indent-line-function)
+        (setq indent-line-function 'sbw/mason-indent-line))))
+
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-compile-command)
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-ack-arguments)
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-setup-epod-dirs)
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-execute-local-init)
+(add-hook 'perl-project-file-visit-hook 'sbw/activate-poor-mans-indent-for-mason)
