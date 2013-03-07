@@ -70,12 +70,22 @@
 ; cargo-culted from compile.el
 (defconst plackup-server/filename-regexp-alist-alist
   '((log4perl
-     "\\( +\\|\\[\\)\
-\\([a-zA-Z0-9._/-]*\\.pm\\|[a-zA-Z0-9._/-]*\\.pl\
-\\|[a-zA-Z0-9._/-]*\\.t\\|[a-zA-Z0-9._/-]+\\)\
-\\( \\+\\| line \\|:\\)\
-\\([0-9]+\\)\
-\\( +\\|\\]\\)" 2 4))
+     "\
+\\( +\\|\\[\\)\
+\\(\
+[a-zA-Z0-9._/-]*\\.pm\\|\
+[a-zA-Z0-9._/-]*\\.pl\\|\
+[a-zA-Z0-9._/-]*\\.m.\\|\
+[a-zA-Z0-9._/-]*\\.t\\|\
+[a-zA-Z0-9._/-][a-zA-Z0-9._/-]*\
+\\)\
+\\(\
+ \\+\\|\
+ line \\|\
+:\
+\\)\
+\\([0-9][0-9]*\\)\
+.*" 2 4))
   "Alist of values for `plackup-server/filename-regexp-alist'.")
 
 (defcustom plackup-server/filename-regexp-alist
@@ -96,6 +106,12 @@ Most of the process interaction will fail if this is turned off."
   "Contains the buffer of the last server buffer that was started or visited
 and is used to figure out if we have to start a new server or just switch to
 the existing buffer")
+
+(defvar plackup-server/plackup-args ""
+  "Additional parameter for plackup"
+)
+
+(make-variable-buffer-local 'plackup-server/plackup-args)
 
 (defun plackup-server/find-upwards (file-name)
   "Find a file in the current directory or one of its parents.
@@ -217,6 +233,20 @@ The `file-name' specifies the file name to search for."
           ))
         )))))
 
+(defun plackup-server/clear-comint-buffer ()
+  "Clears plackup buffer"
+  (let*
+      ((module-name (plackup-server/guess-server-module))
+       (process-name (concat module-name " Plackup Server"))
+       (commands-buffer-name (concat "* " process-name " *"))
+       (buf (get-buffer commands-buffer-name))
+       (comint-buffer-maximum-size 0))
+    (if (not buf)
+        (message "No server buffer found")
+      (switch-to-buffer buf t)
+      (let ((comint-buffer-maximum-size 0))
+        (ignore-errors (comint-truncate-buffer))))))
+
 (defun plackup-server/kill-process (&optional force)
   "Tries to kill a running plackup server process.
 If the optional argument `force' is non-nil, GNU tools (ps, grep, awk,
@@ -260,7 +290,8 @@ get rid of any existing processes"
          (commands-buffer-name (concat "* " process-name " *"))
          (buf (get-buffer commands-buffer-name))
          (psgi-app (plackup-server/guess-psgi-app))
-         (commands-window nil))
+         (commands-window nil)
+         (local-args plackup-server/plackup-args))
 
       (assert module-name nil "Failed to guess plackup module name")
       (assert psgi-app  nil "Failed to find plackup server script")
@@ -286,43 +317,67 @@ get rid of any existing processes"
 
       (setq default-directory server-root)
 
-      (if restart (progn (plackup-server/kill-process) (sleep-for 1)))
+      (if restart (progn
+                    (plackup-server/kill-process)
+                    (sleep-for 1)
+                    (plackup-server/clear-comint-buffer)
+                    ))
 
-      (if (file-executable-p (concat server-root "/perl5/bin/mist-run"))
+      (if (file-executable-p (concat server-root "/perl5/bin/wecare-plack"))
           (make-comint-in-buffer
-           process-name buf (concat server-root "/perl5/bin/mist-run") nil
-           "plackup" "-r" "-R" (concat server-root "etc")
+           process-name buf (concat server-root "/perl5/bin/wecare-plack") nil )
+        (if (file-executable-p (concat server-root "/perl5/bin/mist-run"))
+            (make-comint-in-buffer
+             process-name buf (concat server-root "/perl5/bin/mist-run") nil
+             "plackup" "-r" "-R" (concat server-root "etc")
+             "-E" "development"
+             "--access-log" "/dev/null"
+             psgi-app)
+
+          (make-comint-in-buffer
+           process-name buf "perl" nil "-Mlocal::lib=perl5"
+           "plackup" "-r" "-R" "etc"
            "-E" "development"
            "--access-log" "/dev/null"
-           psgi-app)
+           psgi-app)))
 
-        (make-comint-in-buffer
-         process-name buf "perl" nil "-Mlocal::lib=perl5"
-         "plackup" "-r" "-R" "etc"
-         "-E" "development"
-         "--access-log" "/dev/null"
-         psgi-app))
+      (compilation-minor-mode)
+
+      ;; let C-c C-c pass through for comint-mode's abort function
+      (define-key compilation-minor-mode-map (kbd "C-c C-c" ) nil)
 
       (make-local-variable 'comint-output-filter-functions)
-
       (setq comint-output-filter-functions nil )
 
-      (add-hook 'comint-output-filter-functions
-                'comint-truncate-buffer) ;comint gets really slow otherwise
+      (make-local-variable 'comint-buffer-maximum-size)
+      (setq comint-buffer-maximum-size 4096)
 
       (add-hook 'comint-output-filter-functions
-                'comint-postoutput-scroll-to-bottom)
+                'plackup-server/clear-on-restart) ;comint gets really slow otherwise
 
       (add-hook 'comint-output-filter-functions
-                'plackup-server/compilation-scan-buffer)
+                'comint-truncate-buffer t) ;comint gets really slow otherwise
 
       (add-hook 'comint-output-filter-functions
-                'ansi-color-process-output)
+                'ansi-color-process-output t)
+
+      (add-hook 'comint-output-filter-functions
+                'comint-postoutput-scroll-to-bottom t)
 
       (ansi-color-for-comint-mode-on)
 
       (setq plackup-server/last-server-buffer buf)
 )))
+
+(defun plackup-server/clear-on-restart (original-output)
+  (let*
+      ((regex "Successfully killed! Restarting the new server process")
+       (last-match nil))
+
+    (while (string-match regex (buffer-string) (if last-match (+ last-match 1) 10))
+      (setq last-match (match-beginning 0)))
+
+    (if last-match (delete-region 1 (+ last-match 1)))))
 
 (defun plackup-server/compilation-scan-buffer (original-output)
   "A `comint-output-filter-functions' hook to creates buttons
