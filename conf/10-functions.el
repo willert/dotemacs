@@ -280,3 +280,19 @@ See also: `copy-to-register-1', `insert-register'."
   (compass-compile)
 )
 (ad-activate 'scss-compile-maybe)
+
+
+(defun sbw/expand-dir-name (root &rest dirs)
+  "Joins a series of directories together"
+
+   (if (not dirs)
+       (concat root "/")
+     (apply 'sbw/expand-dir-name
+            (expand-file-name (car dirs) root)
+            (cdr dirs))))
+
+(defun sbw/find-file-in (&rest dirs) ()
+  (let ((default-directory
+          (apply 'sbw/expand-dir-name (eproject-root) dirs )))
+    (call-interactively 'find-file))
+)
