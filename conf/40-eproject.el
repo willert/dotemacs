@@ -2,6 +2,7 @@
 
 (require 'eproject)
 (require 'eproject-extras)
+(require 'findr)
 
 (define-project-type perl (generic)
   (or (look-for "Makefile.PL") (look-for "Build.PL") (look-for "dist.ini"))
@@ -18,6 +19,14 @@
                                 (setf m (replace-match "::" nil nil m)))
                               m))
                            (t file))))
+  :lib-base-path (lambda (prj-root)
+                   (message "Foo")
+                   (let* ((root prj-root)
+                         (lib (sbw/expand-dir-name root "lib"))
+                         (env (car (findr "Env.pm" lib))))
+                     (if env (file-name-directory env) lib))
+
+                   )
   :main-file "Makefile.PL")
 
 (defun sbw/perl-project-compile-command ()
