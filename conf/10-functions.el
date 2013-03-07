@@ -291,7 +291,7 @@ See also: `copy-to-register-1', `insert-register'."
             (expand-file-name (car dirs) root)
             (cdr dirs))))
 
-(defun sbw/find-file-in (&rest dirs) ()
+(defun sbw/find-file-in-dir (&rest dirs) ()
   (let ((default-directory
           (apply 'sbw/expand-dir-name (eproject-root) dirs )))
     (call-interactively 'find-file))

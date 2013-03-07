@@ -104,56 +104,47 @@
 
   (define-key eproject-mode-map (kbd "C-c f c")
     (lambda () (interactive)
-      (sbw/find-file-in  (eproject-attribute :lib-base-path) "Controller")
-      ))
+      (sbw/find-file-in-dir  (eproject-attribute :lib-base-path) "Controller")))
+
   (define-key eproject-mode-map (kbd "C-c f m")
     (lambda () (interactive)
-      (sbw/find-file-in  (eproject-attribute :lib-base-path) "Model")
-      ))
+      (sbw/find-file-in-dir  (eproject-attribute :lib-base-path) "Model")))
+
   (define-key eproject-mode-map (kbd "C-c f v")
     (lambda () (interactive)
-      (sbw/find-file-in  (eproject-attribute :lib-base-path) "View")
-      ))
+      (sbw/find-file-in-dir  (eproject-attribute :lib-base-path) "View")))
+
   (define-key eproject-mode-map (kbd "C-c f r")
     (lambda () (interactive)
-      (sbw/find-file-in  (eproject-attribute :lib-base-path) "Schema" "Result")
-      ))
+      (sbw/find-file-in-dir  (eproject-attribute :lib-base-path) "Schema" "Result")))
 
   (define-key eproject-mode-map (kbd "C-c f R")
     (lambda () (interactive)
-      (sbw/find-file-in  (eproject-attribute :lib-base-path) "Schema" "ResultSet")
-      ))
+      (sbw/find-file-in-dir  (eproject-attribute :lib-base-path) "Schema" "ResultSet")))
 
   (define-key eproject-mode-map (kbd "C-c f f")
     (lambda () (interactive)
-      (sbw/find-file-in  (eproject-attribute :lib-base-path "Form"))
-      ))
+      (sbw/find-file-in-dir  (eproject-attribute :lib-base-path "Form"))))
 
   (define-key eproject-mode-map (kbd "C-c f RET")
     (lambda () (interactive)
-      (sbw/find-file-in  (eproject-attribute :lib-base-path))
-      ))
+      (sbw/find-file-in-dir  (eproject-attribute :lib-base-path))))
 
   (define-key eproject-mode-map (kbd "C-c F c")
     (lambda () (interactive)
-      (sbw/find-file-in  (eproject-root) "root" "comps")
-      ))
+      (sbw/find-file-in-dir  (eproject-root) "root" "comps")))
 
   (define-key eproject-mode-map (kbd "C-c F b")
     (lambda () (interactive)
-      (sbw/find-file-in  (eproject-root) "root" "cms")
-      ))
+      (sbw/find-file-in-dir  (eproject-root) "root" "cms")))
 
   (define-key eproject-mode-map (kbd "C-c F l")
     (lambda () (interactive)
-      (sbw/find-file-in  (eproject-root) "share" "layout")
-      ))
+      (sbw/find-file-in-dir  (eproject-root) "share" "layout")))
 
   (define-key eproject-mode-map (kbd "C-c F RET")
     (lambda () (interactive)
-      (sbw/find-file-in  (eproject-root) "root")
-      ))
-
+      (sbw/find-file-in-dir  (eproject-root) "root")))
 )
 
 ;;; iswitchb
