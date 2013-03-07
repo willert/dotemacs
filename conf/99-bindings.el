@@ -78,6 +78,7 @@
   (define-key shell-mode-map (kbd "C-c C-s") nil)
   (define-key shell-mode-map (kbd "C-c l") 'sbw/clear-shell)
   )
+
 (add-hook 'shell-mode-hook 'sbw/shell-key-bindings)
 (defun sbw/comint-key-bindings ()
   (define-key comint-mode-map (kbd "C-c C-s") nil)
@@ -85,6 +86,75 @@
   )
 (add-hook 'comint-mode-hook 'sbw/comint-key-bindings)
 
+
+(add-hook 'eproject-first-buffer-hook 'sbw/eproject-key-bindings)
+
+(defun sbw/eproject-key-bindings ()
+  (define-key eproject-mode-map (kbd "C-c p a") 'ack)
+  (define-key eproject-mode-map (kbd "C-c p b") 'eproject-ibuffer)
+  (define-key eproject-mode-map (kbd "C-c p c") 'catalyst-server-start-or-show-process)
+  (define-key eproject-mode-map (kbd "C-c p f") 'eproject-find-file)
+  (define-key eproject-mode-map (kbd "C-c p g") 'magit-status)
+  (define-key eproject-mode-map (kbd "C-c p k") 'eproject-kill-project-buffers)
+  (define-key eproject-mode-map (kbd "C-c p m") 'sbw/perl-project-mist-init)
+  (define-key eproject-mode-map (kbd "C-c p o") 'eproject-open-all-project-files)
+  (define-key eproject-mode-map (kbd "C-c p p") 'plackup-server/start-or-show-process)
+  (define-key eproject-mode-map (kbd "C-c p s") 'sbw/open-shell-in-project-root)
+  (define-key eproject-mode-map (kbd "C-c p v") 'eproject-revisit-project)
+
+  (define-key eproject-mode-map (kbd "C-c f c")
+    (lambda () (interactive)
+      (sbw/find-file-in  (eproject-attribute :lib-base-path) "Controller")
+      ))
+  (define-key eproject-mode-map (kbd "C-c f m")
+    (lambda () (interactive)
+      (sbw/find-file-in  (eproject-attribute :lib-base-path) "Model")
+      ))
+  (define-key eproject-mode-map (kbd "C-c f v")
+    (lambda () (interactive)
+      (sbw/find-file-in  (eproject-attribute :lib-base-path) "View")
+      ))
+  (define-key eproject-mode-map (kbd "C-c f r")
+    (lambda () (interactive)
+      (sbw/find-file-in  (eproject-attribute :lib-base-path) "Schema" "Result")
+      ))
+
+  (define-key eproject-mode-map (kbd "C-c f R")
+    (lambda () (interactive)
+      (sbw/find-file-in  (eproject-attribute :lib-base-path) "Schema" "ResultSet")
+      ))
+
+  (define-key eproject-mode-map (kbd "C-c f f")
+    (lambda () (interactive)
+      (sbw/find-file-in  (eproject-attribute :lib-base-path "Form"))
+      ))
+
+  (define-key eproject-mode-map (kbd "C-c f RET")
+    (lambda () (interactive)
+      (sbw/find-file-in  (eproject-attribute :lib-base-path))
+      ))
+
+  (define-key eproject-mode-map (kbd "C-c F c")
+    (lambda () (interactive)
+      (sbw/find-file-in  (eproject-root) "root" "comps")
+      ))
+
+  (define-key eproject-mode-map (kbd "C-c F b")
+    (lambda () (interactive)
+      (sbw/find-file-in  (eproject-root) "root" "cms")
+      ))
+
+  (define-key eproject-mode-map (kbd "C-c F l")
+    (lambda () (interactive)
+      (sbw/find-file-in  (eproject-root) "share" "layout")
+      ))
+
+  (define-key eproject-mode-map (kbd "C-c F RET")
+    (lambda () (interactive)
+      (sbw/find-file-in  (eproject-root) "root")
+      ))
+
+)
 
 ;;; iswitchb
 (global-set-key (kbd "C-x b") 'iswitchb-buffer)
@@ -94,23 +164,16 @@
 (global-set-key (kbd "C-x r k") 'string-rectangle-kill)
 (global-set-key (kbd "C-x r p") 'copy-rectangle-as-kill)
 
-(global-set-key (kbd "C-c p c") 'catalyst-server-start-or-show-process)
-(global-set-key (kbd "C-c p p") 'plackup-server/start-or-show-process)
-
-(global-set-key (kbd "C-c p g") 'magit-status)
-(global-set-key (kbd "C-c p s") 'sbw/open-shell-in-project-root)
-(global-set-key (kbd "C-c p m") 'sbw/perl-project-mist-init)
-
 (define-key magit-mode-map (kbd "/") 'magit-stash)
 
 (global-set-key (kbd "C-c i") 'ielm-for-this-buffer)
 
 (global-set-key (kbd "C-p") 'sbw/set-region)
 
-(global-set-key (kbd "C-c y f") 'yas/find-snippets)
-(global-set-key (kbd "C-c y n") 'yas/new-snippet)
-(global-set-key (kbd "C-c y s") 'yas/insert-snippet)
-(global-set-key (kbd "C-c y v") 'yas/visit-snippet-file)
+(global-unset-key (kbd "C-x C-z"))
+(global-set-key (kbd "C-x C-z f") 'yas/visit-snippet-file)
+(global-set-key (kbd "C-x C-z n") 'yas/new-snippet)
+(global-set-key (kbd "C-x C-z v") 'yas/visit-snippet-file)
 
 
 (defun sbw/cperl-key-bindings ()
@@ -162,13 +225,6 @@
 (key-chord-define nxhtml-mode-map ",." "<%  %>\C-b\C-b\C-b")
 (key-chord-define nxhtml-mode-map "&&" "<&  &>\C-b\C-b\C-b")
 (key-chord-define nxhtml-mode-map "<>" "<%perl>  </%perl>\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b")
-
-(global-set-key (kbd "C-x p k") 'eproject-kill-project-buffers)
-(global-set-key (kbd "C-x p v") 'eproject-revisit-project)
-(global-set-key (kbd "C-x p b") 'eproject-ibuffer)
-(global-set-key (kbd "C-x p o") 'eproject-open-all-project-files)
-(global-set-key (kbd "C-x p f") 'eproject-find-file)
-(global-set-key (kbd "C-x p a") 'ack)
 
 (global-set-key
  (kbd "C-x F")
