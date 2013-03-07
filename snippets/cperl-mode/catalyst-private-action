@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: catalyst-private-action
-# key: cpa
-# --
-sub $1 : Private {
-	my ( $self, $ctx ) = @_;
-  $0
-}

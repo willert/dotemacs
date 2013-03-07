@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: ddc (Data::Dumper::Concice)
+# key: ddc
+# expand-env: ((package-name (sbw/default-perl-package-name)))
+# --
+use Data::Dumper::Concise;
+printf STDERR "[Dumper] at `package-name` line `(line-number-at-pos)`: %s\n",
+  Dumper($0);

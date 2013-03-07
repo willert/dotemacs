@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: around (Mason around method)
+# key: around
+# --
+<%around $1>
+$0
+<% $self->$orig() %>
+</%around>

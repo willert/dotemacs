@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: cufa (Catalyst URI for action)
+# key: cufa
+# --
+$ctx->uri_for_action( '$1' => [$0] )

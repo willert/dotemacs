@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: csset (Catalyst stash set )
+# key: csset
+# --
+$ctx->stash( $1 => $0 );

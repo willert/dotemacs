@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: cstpl (Catalyst stash template)
+# key: cstpl
+# --
+$ctx->stash( template => '$0' );

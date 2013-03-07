@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: ca (Catalyst action)
+# key: ca
+# --
+sub $1 : Chained(base) PathPart($2) Args(0) {
+  my ( $self, $ctx ) = @_;
+	$0
+}

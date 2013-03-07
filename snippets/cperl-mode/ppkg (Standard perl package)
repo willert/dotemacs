@@ -1,16 +1,16 @@
 # -*- mode: snippet -*-
-# name: moose-package
-# key: mpackage
+# name: ppkg (Standard perl package)
+# key: ppackage
 # expand-env: ((package-name (sbw/default-perl-package-name)))
 # --
 package `package-name`;
 
 use 5.014;
-use Moose;
-use namespace::autoclean;
+use warnings;
+
+use Carp;
+use Scalar::Util qw/looks_like_number blessed/;
 
 $0
-
-__PACKAGE__->meta->make_immutable;
 
 1;

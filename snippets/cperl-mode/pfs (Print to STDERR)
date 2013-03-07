@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: printf-to-stderr
+# name: pfs (print to STDERR) 
 # key: pfs
 # --
 printf STDERR "$1\n", $2;

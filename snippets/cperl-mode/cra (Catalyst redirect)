@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: cra - Catalyst redirect
+# key: cra
+# --
+$ctx->redirect_to_action( $0 );

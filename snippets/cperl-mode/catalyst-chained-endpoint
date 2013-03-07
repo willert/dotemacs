@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: catalyst-chained-endpoint
-# key: cep
-# --
-sub $1 : Chained('${2:/}') PathPart('$3') Args(${4:0}) {
-	my ( $self, $ctx ) = @_;
-  $0
-}

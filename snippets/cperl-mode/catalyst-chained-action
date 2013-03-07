@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: catalyst-chained-action
-# key: cchain
-# --
-sub $1 : Chained('${2:/}') PathPart('$3') CaptureArgs(${4:0}) {
-	my ( $self, $ctx ) = @_;
-  $0
-}

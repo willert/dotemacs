@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: augment (Mason augment method)
+# key: augment
+# --
+<%augment $1>
+$0
+<% inner() %>
+</%augment>

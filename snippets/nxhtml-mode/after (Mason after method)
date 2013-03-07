@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: after (Mason after method)
+# key: after
+# --
+<%after $1>
+$0
+</%after>

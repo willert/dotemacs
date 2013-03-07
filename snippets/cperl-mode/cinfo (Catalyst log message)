@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: cinfo (Catalyst log message)
+# key: cinfo
+# --
+$ctx->log->info( "$0" );

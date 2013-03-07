@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: around (Moose around modifier)
+# key: around
+# --
+
+around $1 => sub{
+  my ( $orig, $self, @args ) = @_;
+  $0
+  $self->$orig( @args );
+};

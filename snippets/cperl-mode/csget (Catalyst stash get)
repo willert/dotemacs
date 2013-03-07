@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: csget (Catalyst stash get)
+# key: csget
+# --
+$ctx->stash->{$0}
