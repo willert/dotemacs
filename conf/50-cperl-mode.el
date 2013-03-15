@@ -1,5 +1,4 @@
-(load "cperl-mode/cperl-mode")
-
+(require 'cperl-mode)
 (fset 'perl-mode 'cperl-mode)
 
 (setq auto-mode-alist (cons '("\\.t$"      . cperl-mode) auto-mode-alist))
@@ -24,8 +23,6 @@
 
 (add-hook 'cperl-mode-hook 'sbw/cperl-compile-command)
 
-; (load "conf/perly-sense")
-
 (setq
  cperl-font-lock t
  cperl-electric-parens nil
@@ -43,5 +40,10 @@
  'cperl-array-face nil
  :background nil)
 
+
+; plackup server mode
+(require 'plackup-server)
+
+; epod
 (add-to-list 'load-path "~/Devel/ePod/lisp")
 (require 'epod)
