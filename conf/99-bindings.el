@@ -87,19 +87,23 @@
 (add-hook 'comint-mode-hook 'sbw/comint-key-bindings)
 
 
-(add-hook 'eproject-first-buffer-hook 'sbw/eproject-key-bindings)
+;;; "project-like" global keybindings
+(setq project-related-map (make-sparse-keymap))
+(define-key project-related-map (kbd "g") 'magit-status)
+(define-key project-related-map (kbd "a") 'ack)
+(define-key project-related-map (kbd "s") 'sbw/open-shell-in-project-root)
+(global-set-key (kbd "C-c p") project-related-map)
 
+
+(add-hook 'eproject-first-buffer-hook 'sbw/eproject-key-bindings)
 (defun sbw/eproject-key-bindings ()
-  (define-key eproject-mode-map (kbd "C-c p a") 'ack)
   (define-key eproject-mode-map (kbd "C-c p b") 'eproject-ibuffer)
   (define-key eproject-mode-map (kbd "C-c p c") 'catalyst-server-start-or-show-process)
   (define-key eproject-mode-map (kbd "C-c p f") 'eproject-find-file)
-  (define-key eproject-mode-map (kbd "C-c p g") 'magit-status)
   (define-key eproject-mode-map (kbd "C-c p k") 'eproject-kill-project-buffers)
   (define-key eproject-mode-map (kbd "C-c p m") 'sbw/perl-project-mist-init)
   (define-key eproject-mode-map (kbd "C-c p o") 'eproject-open-all-project-files)
   (define-key eproject-mode-map (kbd "C-c p p") 'plackup-server/start-or-show-process)
-  (define-key eproject-mode-map (kbd "C-c p s") 'sbw/open-shell-in-project-root)
   (define-key eproject-mode-map (kbd "C-c p v") 'eproject-revisit-project)
 
   (define-key eproject-mode-map (kbd "C-c f c")
