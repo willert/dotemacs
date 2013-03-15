@@ -124,7 +124,7 @@
 
   (define-key eproject-mode-map (kbd "C-c f f")
     (lambda () (interactive)
-      (sbw/find-file-in-dir  (eproject-attribute :lib-base-path "Form"))))
+      (sbw/find-file-in-dir  (eproject-attribute :lib-base-path) "Form")))
 
   (define-key eproject-mode-map (kbd "C-c f RET")
     (lambda () (interactive)
