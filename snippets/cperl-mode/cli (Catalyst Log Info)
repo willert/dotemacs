@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: cli (Catalyst Log Info)
+# key: cli
+# --
+$ctx->log->info( $0 );
