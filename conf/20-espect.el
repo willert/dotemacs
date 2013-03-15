@@ -1,3 +1,5 @@
+(require 'espect)
+
 (defun sbw/progmodes-write-hooks ()
   "Hooks which run on file write for programming modes"
   (prog1 nil

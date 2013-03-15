@@ -13,52 +13,6 @@
 ; yaml mode
 (require 'yaml-mode)
 
-; yasnippet minor mode
-(require 'yasnippet)
-(setq yas-snippet-dirs  '("~/.emacs.d/snippets"))
-(yas-global-mode 1)
-(define-key yas-minor-mode-map (kbd "<tab>") nil)
-(define-key yas-minor-mode-map (kbd "C-<tab>") 'yas-expand)
-
-; defer loading of snippets until all else is set up
-(add-hook 'after-init-hook
-          (lambda ()
- (yas/load-directory "~/.emacs.d/snippets")
-(defun yas-new-snippet (&optional no-template)
-  "Pops a new buffer for writing a snippet.
-
-Expands a snippet-writing snippet, unless the optional prefix arg
-NO-TEMPLATE is non-nil."
-  (interactive "P")
-  (let ((guessed-directories (yas--guess-snippet-directories))
-        (guessed-name (word-at-point)))
-
-    (switch-to-buffer "*new snippet*")
-    (erase-buffer)
-    (kill-all-local-variables)
-    (snippet-mode)
-    (yas-minor-mode 1)
-    (set (make-local-variable 'yas--guessed-modes) (mapcar #'(lambda (d)
-                                                              (yas--table-mode (car d)))
-                                                          guessed-directories))
-    (unless no-template (yas-expand-snippet "\
-# -*- mode: snippet -*-
-# name: ${1:`guessed-name`} ($2)
-# key: ${1:$(replace-regexp-in-string \"\\\\\\\\(\\\\\\\\w+\\\\\\\\).*\" \"\\\\\\\\1\" yas-text)}
-# --
-$0"))))
-
-))
-
-
-(require 'magit)
-(require 'espect)
-(require 'eproject)
-
-; catalyst-server mode
-(require 'catalyst-server)
-(require 'plackup-server)
-
 ; highlight long lines
 (require 'highlight-beyond-fill-column)
 ; (setq highlight-beyond-fill-column-face (quote flymake-errline))
@@ -93,3 +47,8 @@ $0"))))
 
 ; load wrap-region mode
 (require 'wrap-region)
+
+; magit mode
+(require 'magit)
+(setq magit-repo-dirs (quote ("~/Devel" "~/.emacs.d")))
+(setq magit-repo-dirs-depth 1)

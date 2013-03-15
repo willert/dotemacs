@@ -34,7 +34,6 @@
         (list
          "yaml-mode"
          "yasnippet"
-         "magit"
          "espect"
          "eproject"
          "xml-rpc"
