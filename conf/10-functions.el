@@ -71,8 +71,8 @@
     (setq fpath (cdr fpath)))
 
   (cond ( (not (stringp fpack))
-    (message "Could not find lib path for %s" buffer-file-name )
-    (setq fpath (car (reverse (split-string (buffer-file-name) "[/\\]+" ))))
+    (message "Could not find lib path for %s" buffer-file-name)
+    (setq fpack (car (reverse (split-string (buffer-file-name) "[/\\]+" ))))
     ))
 
   (if (and (stringp fpack) (string-match "\\(.*\\)\\.pm" fpack))
