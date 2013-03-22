@@ -1,4 +1,4 @@
-(require 'espect)
+; "prog-mode" stuff (fromerly done via espect)
 
 (defun sbw/progmodes-write-hooks ()
   "Hooks which run on file write for programming modes"
@@ -7,21 +7,16 @@
     (untabify-buffer)
     (delete-trailing-whitespace)))
 
+(defun sbw/prog-modes-mode-hook ()
+  (flyspell-prog-mode)
+  (setq fill-column 78)
+  (setq whitespace-style '(tabs trailing lines tab-mark))
+  (setq whitespace-line-column 78)
+  (whitespace-mode)
 
-(setq espect-buffer-settings
-      '(
-        ((:mode c-mode)
-         (:mode cperl-mode)
-         (:mode emacs-lisp-mode)
-         (lambda ()
-           (flyspell-prog-mode)
-           (setq fill-column 78)
-           (yas/minor-mode-on)
-           (add-hook 'before-save-hook 'sbw/progmodes-write-hooks nil t)
-           ))
-        ((:mode nxhtml-mode)
-         (lambda ()
-           (yas/minor-mode-on)
-           (add-hook 'before-save-hook 'sbw/progmodes-write-hooks nil t)
-           ))
-        ))
+  (add-hook 'before-save-hook 'sbw/progmodes-write-hooks nil t)
+)
+
+(add-hook 'c-mode-hook 'sbw/prog-modes-mode-hook)
+(add-hook 'cperl-mode-hook 'sbw/prog-modes-mode-hook)
+(add-hook 'emacs-lisp-mode-hook 'sbw/prog-modes-mode-hook)
