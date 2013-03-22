@@ -10,19 +10,6 @@
 
 (setq sbw/prove-project-directories "t/")
 
-; nicer default compile command
-(defun sbw/cperl-compile-command ()
-  (let ((root (catalyst-server-find-root)))
-     (set (make-local-variable 'compile-command)
-          (concat
-           "perl"
-           " -Mlocal::lib=" root "perl5"
-           " -I" root "lib"
-           " " buffer-file-name
-           ))))
-
-(add-hook 'cperl-mode-hook 'sbw/cperl-compile-command)
-
 (setq
  cperl-font-lock t
  cperl-electric-parens nil
