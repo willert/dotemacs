@@ -13,11 +13,6 @@
 ; yaml mode
 (require 'yaml-mode)
 
-; highlight long lines
-(require 'highlight-beyond-fill-column)
-; (setq highlight-beyond-fill-column-face (quote flymake-errline))
-(setq highlight-beyond-fill-column-in-modes (quote ("cperl-mode")))
-
 (require 'goto-last-change)
 
 (require 'template)
