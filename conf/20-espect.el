@@ -10,8 +10,9 @@
 (defun sbw/prog-modes-mode-hook ()
   (flyspell-prog-mode)
   (setq fill-column 78)
-  (setq whitespace-style '(tabs trailing lines tab-mark))
+  (setq whitespace-style '(face tabs trailing lines-trail tab-mark))
   (setq whitespace-line-column 78)
+  (setq indent-tabs-mode nil)
   (whitespace-mode)
 
   (add-hook 'before-save-hook 'sbw/progmodes-write-hooks nil t)
