@@ -138,7 +138,10 @@ else advance a line"
 
           (shell buffer)
           (make-variable-buffer-local 'comint-prompt-read-only)
+
           (setq comint-prompt-read-only t)
+          (setq comint-process-echoes t)
+
           (local-set-key (kbd "<return>") 'sbw/comint-send-input-at-eob)
 
           (let ((process (get-buffer-process (current-buffer))))
