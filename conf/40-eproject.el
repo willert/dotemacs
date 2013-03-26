@@ -140,7 +140,7 @@ else advance a line"
           (make-variable-buffer-local 'comint-prompt-read-only)
 
           (setq comint-prompt-read-only t)
-          (setq comint-process-echoes t)
+          (setq comint-process-echoes nil)
 
           (local-set-key (kbd "<return>") 'sbw/comint-send-input-at-eob)
 
