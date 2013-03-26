@@ -350,7 +350,7 @@ get rid of any existing processes"
       (setq comint-output-filter-functions nil )
 
       (make-local-variable 'comint-buffer-maximum-size)
-      (setq comint-buffer-maximum-size 4096)
+      (setq comint-buffer-maximum-size 1024)
 
       (add-hook 'comint-output-filter-functions
                 'plackup-server/clear-on-restart) ;comint gets really slow otherwise
