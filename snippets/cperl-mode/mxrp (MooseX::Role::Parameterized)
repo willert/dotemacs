@@ -1,0 +1,31 @@
+# -*- mode: snippet -*-
+# name: mxrp (MooseX::Role::Parameterized)
+# key: mxrp
+# expand-env: ((package-name (sbw/default-perl-package-name)))
+# --
+package `package-name`;
+
+use 5.010;
+use MooseX::Role::Parameterized;
+
+parameter ${1:arg} => (
+  isa => 'Str'
+);
+
+role {
+  my $p = shift;
+  my %args = @_;
+
+  my $$1 = $p->$1;
+
+  # could be a Moose::Meta::Class, or the object consuming us
+  my $consumer = $args{consumer};
+  $consumer = $consumer->meta if not $consumer->isa('Moose::Meta::Class');
+
+  method "$1" => sub {
+    $0
+  };
+};
+
+
+1;

@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: catalyst-controller
+# name: cctrl (Catalyst controller)
 # key: cctrl
 # expand-env: ((package-name (sbw/default-perl-package-name)))
 # --
@@ -10,12 +10,7 @@ use Moose;
 use namespace::autoclean;
 use utf8;
 
-BEGIN {
-  extends 'AMG::Controller';
-  with 'Catalyst::Component::ContextClosure';
-}
-
-__PACKAGE__->config( action_roles => [qw/ DetachOnDie /], );
+BEGIN { extends 'AMG::Controller' }
 
 use Carp;
 use Try::Tiny;
@@ -28,7 +23,7 @@ use Sort::Key       qw/ keysort nkeysort/;
 use AMG::Tools      qw/ idsort strip_html /;
 
 
-sub base : Chained('../base') PathPart('`(downcase (substring (file-name-nondirectory (buffer-file-name)) 0 -3))`') CaptureArgs(0) {
+sub base : ChainedParent PathPart('`(downcase (substring (file-name-nondirectory (buffer-file-name)) 0 -3))`') CaptureArgs(0) {
   my ( $self, $ctx ) = @_;
 
 }

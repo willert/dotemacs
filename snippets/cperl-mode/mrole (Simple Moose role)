@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: mrole (Simple Moose role)
+# key: mrole
+# expand-env: ((package-name (sbw/default-perl-package-name)))
+# --
+package `package-name`;
+
+use 5.010;
+use Moose::Role;
+
+$0
+
+no Moose::Role;
+
+1;
+
