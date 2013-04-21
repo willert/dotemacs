@@ -29,6 +29,34 @@
                    )
   :main-file "Makefile.PL")
 
+
+(defun* sbw/eproject--attribute-names (&optional (root (eproject-root)))
+  "Lookup the attribute KEY for the eproject ROOT
+ROOT defaults to the current buffer's project-root."
+  (let ((attr-list (cdr (assoc root eproject-attributes-alist))))
+    (loop for (key value)
+          on attr-list by #'cddr
+          collect key
+          )
+    )
+)
+
+(defun* sbw/eproject-get-project-env-alist (&optional (root (eproject-root)))
+  (let* ((attr-list (sbw/eproject--attribute-names root)))
+    (mapcar (lambda (key)
+              (let* ((name (upcase
+                          (replace-regexp-in-string
+                           "-" "_"
+                           (replace-regexp-in-string
+                            "^:" "eproject-" (format "%S" key)))))
+                    (avalue (eproject-attribute key root))
+                    (value (if (stringp avalue) avalue (format "%S" avalue)
+                               )))
+                  `(,name . ,value)
+              ))
+            attr-list
+            )))
+
 (defun sbw/perl-project-compile-command ()
   "prefill compile command for perl project files"
   (if (eproject-attribute :local-lib-exists-p)
@@ -113,6 +141,29 @@ else advance a line"
       (call-interactively 'comint-send-input)
     (call-interactively 'next-line)))
 
+(defun* sbw/force-eproject-on-buffer (&optional (project-root default-directory))
+  ;; eproject--setup-local-variables works on file and dired buffers
+  ;; so lets pretend we are in dired mode instead of shell mode
+  (let ((major-mode 'dired-mode))
+
+    (let (bestroot besttype (set-before (mapcar #'car eproject-attributes-alist)))
+      (loop for type in (eproject--all-types)
+            do (let ((root (eproject--run-project-selector type project-root)))
+                 (when (and project-root
+                            (or (not bestroot)
+                                ;; longest filename == best match (XXX:
+                                ;; need to canonicalize?)
+                                (> (length project-root) (length bestroot))))
+                   (setq bestroot project-root)
+                   (setq besttype type))))
+      (progn ; the guts of (eproject-maybe-turn-on)
+        (make-variable-buffer-local 'eproject-root)
+        (setq eproject-root project-root)
+        (eproject--init-attributes project-root besttype)
+        (eproject-mode 1)
+
+        ; (eproject--setup-local-variables)
+))))
 
 (defun sbw/open-shell-in-project-root ()
   "Open a shell in project root directory"
@@ -135,6 +186,9 @@ else advance a line"
         (let ((process-environment process-environment)
               (histfile (concat project-root "/.bash_history_local")))
           (setenv "HISTFILE" histfile)
+          (loop for (key . value) in (sbw/eproject-get-project-env-alist project-root)
+                do (setenv key value))
+          (setenv "EPROJECT_ROOT" project-root)
 
           (shell buffer)
           (make-variable-buffer-local 'comint-prompt-read-only)
@@ -156,29 +210,9 @@ else advance a line"
                        (string-match "finished" state))
                    (kill-buffer (current-buffer)))
                ))
-
-            (goto-char (process-mark process))
-            (insert
-             "cd " project-root ";"
-             "source perl5/etc/mist.mistrc 2> /dev/null" ";"
-             "export HISTFILE='" histfile "'" ";"
-             "history -r" ";"
-             )
-            (let ((comint-process-echoes t))
-              (comint-send-input nil t)
-              (sbw/clear-shell))
             )
 
-        (progn ; the guts of (eproject-maybe-turn-on)
-          (make-variable-buffer-local 'eproject-root)
-          (setq eproject-root project-root)
-          (eproject--init-attributes project-root project-type)
-          (eproject-mode 1)
-
-          ;; eproject--setup-local-variables works on file and dired buffers
-          ;; so lets pretend we are in dired mode instead of shell mode
-          (let ((major-mode 'dired-mode))
-            (eproject--setup-local-variables)))
+          (sbw/force-eproject-on-buffer project-root)
         )))))
 
 (defun sbw/activate-poor-mans-indent-for-mason ()
@@ -194,3 +228,5 @@ else advance a line"
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-setup-epod-dirs)
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-execute-local-init)
 (add-hook 'perl-project-file-visit-hook 'sbw/activate-poor-mans-indent-for-mason)
+
+(add-hook 'magit-status-mode-hook 'sbw/force-eproject-on-buffer)
