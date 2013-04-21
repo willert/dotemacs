@@ -18,6 +18,19 @@
   (add-hook 'before-save-hook 'sbw/progmodes-write-hooks nil t)
 )
 
+(defun sbw/nxhtml-mode-hook ()
+  (setq fill-column 112)
+  (setq whitespace-style '(face tabs trailing lines-trail tab-mark))
+  (setq whitespace-line-column 112)
+  (setq indent-tabs-mode nil)
+  (whitespace-mode)
+
+  (add-hook 'before-save-hook 'sbw/progmodes-write-hooks nil t)
+)
+
 (add-hook 'c-mode-hook 'sbw/prog-modes-mode-hook)
 (add-hook 'cperl-mode-hook 'sbw/prog-modes-mode-hook)
 (add-hook 'emacs-lisp-mode-hook 'sbw/prog-modes-mode-hook)
+(add-hook 'js-mode-hook 'sbw/prog-modes-mode-hook)
+
+(add-hook 'nxhtml-mode-hook 'sbw/nxhtml-mode-hook)
