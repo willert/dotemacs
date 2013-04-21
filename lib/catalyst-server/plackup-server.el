@@ -350,7 +350,7 @@ get rid of any existing processes"
       (setq comint-output-filter-functions nil )
 
       (make-local-variable 'comint-buffer-maximum-size)
-      (setq comint-buffer-maximum-size 1024)
+      (setq comint-buffer-maximum-size 2048)
 
       (add-hook 'comint-output-filter-functions
                 'plackup-server/clear-on-restart) ;comint gets really slow otherwise
@@ -367,6 +367,21 @@ get rid of any existing processes"
       (ansi-color-for-comint-mode-on)
 
       (setq plackup-server/last-server-buffer buf)
+
+      ;; eproject--setup-local-variables works on file and dired buffers
+      ;; so lets pretend we are in dired mode instead of shell mode
+      (progn ; the guts of (eproject-maybe-turn-on)
+        (make-variable-buffer-local 'eproject-root)
+        (setq eproject-root project-root)
+        (eproject--init-attributes project-root project-type)
+        (eproject-mode 1)
+
+        ;; eproject--setup-local-variables works on file and dired buffers
+        ;; so lets pretend we are in dired mode instead of shell mode
+        (let ((major-mode 'dired-mode))
+          (eproject--setup-local-variables)))
+      )
+
 )))
 
 (defun plackup-server/clear-on-restart (original-output)
