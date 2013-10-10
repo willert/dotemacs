@@ -1,7 +1,7 @@
 OLD_PS1=$PS1;PS1='';OLD_PS2=$PS2;PS2='';
-if [[ "x$EPROJECT_ROOT" == "x" ]] ; then
+if [[ "x$EPROJECT_ROOT" != "x" ]] ; then
     cd $EPROJECT_ROOT 
-    source perl5/etc/mist.mistrc 2> /dev/null 
+    source ./perl5/etc/mist.mistrc
     history -r
 fi
 
