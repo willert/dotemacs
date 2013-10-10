@@ -256,6 +256,12 @@ See also: `copy-to-register-1', `insert-register'."
   \"~/.gem/ruby/1.8/bin/sass\""
   :group 'scss)
 
+(defcustom compass-task "compile"
+  "Command used to compile SCSS files, should be sass or the
+  complete path to your sass runnable example:
+  \"~/.gem/ruby/1.8/bin/sass\""
+  :group 'scss)
+
 (defcustom compass-options '()
   "Command line Options for sass executable, for example:
 '(\"--cache-location\" \"'/tmp/.sass-cache'\")"
@@ -270,7 +276,7 @@ See also: `copy-to-register-1', `insert-register'."
       (async-shell-command
        (concat
         "cd " compass-root-dir "; "
-        compass-command " compile "
+        compass-command " " compass-task " "
         (mapconcat 'identity compass-options " ")
         " ")
        "*compass: compile*")
