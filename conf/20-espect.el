@@ -28,9 +28,23 @@
   (add-hook 'before-save-hook 'sbw/progmodes-write-hooks nil t)
 )
 
+(defun sbw/grunt-file-write-hooks ()
+  "Hooks which run on file write for programming modes"
+  (prog1 nil
+    (if (upward-find-file "Gruntfile.js")
+        (let ((compass-command "grunt")
+              (compass-task "default"))
+          (compass-compile)))))
+
+(defun sbw/grunt-hook ()
+  (add-hook 'before-save-hook 'sbw/grunt-file-write-hooks nil t)
+)
+
+
 (add-hook 'c-mode-hook 'sbw/prog-modes-mode-hook)
 (add-hook 'cperl-mode-hook 'sbw/prog-modes-mode-hook)
 (add-hook 'emacs-lisp-mode-hook 'sbw/prog-modes-mode-hook)
 (add-hook 'js-mode-hook 'sbw/prog-modes-mode-hook)
+(add-hook 'js-mode-hook 'sbw/grunt-hook)
 
 (add-hook 'nxhtml-mode-hook 'sbw/nxhtml-mode-hook)
