@@ -382,7 +382,7 @@ get rid of any existing processes"
           (eproject--setup-local-variables)))
       )
 
-)))
+))
 
 (defun plackup-server/clear-on-restart (original-output)
   (let*
