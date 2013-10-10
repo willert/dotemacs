@@ -7,7 +7,7 @@
 
 (global-set-key (kbd "C-l")  'goto-line)
 
-(global-set-key (kbd "C-x C-a") 'ack-here)
+(global-set-key (kbd "C-x C-a") 'ack)
 
 (global-set-key (kbd "C-x c l") 'goto-last-change)
 (global-set-key (kbd "C-x c k") 'delete-current-buffer-file)
