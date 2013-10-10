@@ -264,19 +264,20 @@ See also: `copy-to-register-1', `insert-register'."
 (defun compass-compile()
   "Compiles the current buffer with 'compass compile [PATH]'"
   (interactive)
-  (let ((project-root (upward-find-file "config.rb")))
+  (let* ((compass-root-dir (upward-find-file "config.rb"))
+         (default-directory compass-root-dir))
     (save-window-excursion
       (async-shell-command
        (concat
+        "cd " compass-root-dir "; "
         compass-command " compile "
-        (mapconcat 'identity compass-options " ") " "
-        "'" project-root "'" )
-       "*Compass*"
-       ))))
+        (mapconcat 'identity compass-options " ")
+        " ")
+       "*compass: compile*")
+      )))
 
 (defadvice scss-compile-maybe (before compile-scss-with-compass)
   "compile Compass project"
-  (message "Foo")
   (compass-compile)
 )
 (ad-activate 'scss-compile-maybe)
