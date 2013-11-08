@@ -68,7 +68,7 @@ ROOT defaults to the current buffer's project-root."
 
 (defun sbw/perl-project-ack-arguments ()
   "ack-and-a-half arguments for perl project files"
-  (require 'ack-and-a-half)
+  ; (require 'ack-and-a-half)
   (make-local-variable 'ack-and-a-half-arguments)
   (map 'list
        (lambda (e)
@@ -224,7 +224,7 @@ else advance a line"
         (setq indent-line-function 'sbw/mason-indent-line))))
 
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-compile-command)
-(add-hook 'perl-project-file-visit-hook 'sbw/perl-project-ack-arguments)
+; (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-ack-arguments)
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-setup-epod-dirs)
 (add-hook 'perl-project-file-visit-hook 'sbw/perl-project-execute-local-init)
 (add-hook 'perl-project-file-visit-hook 'sbw/activate-poor-mans-indent-for-mason)
