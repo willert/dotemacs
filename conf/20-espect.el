@@ -46,5 +46,6 @@
 (add-hook 'emacs-lisp-mode-hook 'sbw/prog-modes-mode-hook)
 (add-hook 'js-mode-hook 'sbw/prog-modes-mode-hook)
 (add-hook 'js-mode-hook 'sbw/grunt-hook)
+(add-hook 'scss-mode-hook 'sbw/prog-modes-mode-hook)
 
 (add-hook 'nxhtml-mode-hook 'sbw/nxhtml-mode-hook)

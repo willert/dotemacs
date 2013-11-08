@@ -270,7 +270,7 @@ See also: `copy-to-register-1', `insert-register'."
 (defun compass-compile()
   "Compiles the current buffer with 'compass compile [PATH]'"
   (interactive)
-  (let* ((compass-root-dir (upward-find-file "config.rb"))
+  (let* ((compass-root-dir (or (upward-find-file "config.rb") default-directory))
          (default-directory compass-root-dir))
     (save-window-excursion
       (async-shell-command
