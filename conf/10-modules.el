@@ -47,3 +47,6 @@
 (require 'magit)
 (setq magit-repo-dirs (quote ("~/Devel" "~/.emacs.d")))
 (setq magit-repo-dirs-depth 1)
+
+; yagist
+(setq yagist-encrypt-risky-config t)
