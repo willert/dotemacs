@@ -107,13 +107,20 @@ ROOT defaults to the current buffer's project-root."
        epod-local-lib-dirs :test 'string=)
     ))
 
-
 (defun sbw/perl-project-mist-init ()
   "Runs mist init for current project"
   (interactive)
-  (if (string= (eproject-type) "perl")
-      (compile (format "cd %s; mist init" (eproject-root)) t))
-  )
+  (compile (format "cd %s; mist init" (eproject-root)) t))
+
+(defun sbw/perl-project-minilla-release ()
+  "Runs minila release for current project"
+  (interactive)
+  (compile (format "cd %s; minil release --notest" (eproject-root)) t))
+
+(defun sbw/perl-project-minilla-dist ()
+  "Runs minila release for current project"
+  (interactive)
+  (compile (format "cd %s; minil dist --notest" (eproject-root)) t))
 
 (defun sbw/perl-project-execute-local-init ()
   (message "Root: %s" (eproject-root))
