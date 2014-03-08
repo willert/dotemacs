@@ -1,0 +1,20 @@
+# -*- mode: snippet -*-
+# name: arrayattr (Moose array attribute)
+# key: arrayattr
+# --
+
+has ${1:attribute} => (
+  is         => 'bare',
+  isa        => 'ArrayRef',
+  traits     => [qw/ Array /],
+  lazy_build => 1,
+  handles    => {
+    $1        => 'elements',
+    add_to_$1 => 'push',
+    $0
+  },
+);
+
+sub _build_$1 {
+  my $self = shift;
+}

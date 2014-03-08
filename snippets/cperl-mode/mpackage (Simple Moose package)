@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: mpackage (Simple Moose package)
+# key: mpackage
+# expand-env: ((package-name (sbw/default-perl-package-name)))
+# --
+package `package-name`;
+use 5.014;
+use utf8;
+
+use Moose;
+use namespace::autoclean;
+
+$0
+
+__PACKAGE__->meta->make_immutable;
+
+1;

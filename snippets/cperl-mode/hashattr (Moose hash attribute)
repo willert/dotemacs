@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: hashattr (Moose hash attribute)
+# key: hashattr
+# --
+
+has ${1:attribute} => (
+  is         => 'bare',
+  isa        => 'HashRef',
+  traits     => [qw/ Hash /],
+  lazy_build => 1,
+  handles    => {
+    $1 => 'accessor',
+    $0
+  },
+);
+
+sub _build_$1 {
+  my $self = shift;
+}

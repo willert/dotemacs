@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: lazyattr (Moose lazy attribute)
+# key: lazyattr
+# --
+
+has ${1:attribute} => (
+  is         => 'ro',
+  isa        => '${2:Str}',
+  lazy_build => 1,
+);
+
+sub _build_$1 {
+  my $self = shift;
+  $0
+}
