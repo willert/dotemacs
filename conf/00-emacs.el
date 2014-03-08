@@ -34,6 +34,9 @@
       (append completion-ignored-extensions
               '(".bak" ".BAK" ".ps" ".pdf")))
 
+;; don't let shell use any pagers
+(setenv "PAGER" "cat")
+
 (put 'set-goal-column  'disabled nil)
 (put 'eval-expression  'disabled nil)
 (put 'downcase-region  'disabled nil)
