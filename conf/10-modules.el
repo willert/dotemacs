@@ -36,10 +36,6 @@
 (require 'edit-server)
 (edit-server-start)
 
-; eimp for image mode
-(autoload 'eimp-mode "eimp" "Emacs Image Manipulation Package." t)
-(add-hook 'image-mode-hook 'eimp-mode)
-
 ; load wrap-region mode
 (require 'wrap-region)
 
@@ -50,3 +46,6 @@
 
 ; yagist
 (setq yagist-encrypt-risky-config t)
+
+(require 'git-gutter+)
+(global-git-gutter+-mode t)
