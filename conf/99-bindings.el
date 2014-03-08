@@ -229,3 +229,8 @@
  (lambda () (interactive)
    (let ((default-directory (eproject-root)))
      (call-interactively 'find-file))))
+
+(global-set-key
+ (kbd "C-x RET RET")
+ (lambda () (interactive)
+     (call-interactively 'find-file-at-point)))
