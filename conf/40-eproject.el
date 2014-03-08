@@ -5,7 +5,7 @@
 (require 'findr)
 
 (define-project-type perl (generic)
-  (or (look-for "Makefile.PL") (look-for "Build.PL") (look-for "dist.ini"))
+  (or (look-for "Makefile.PL") (look-for "Build.PL") (look-for "dist.ini") (look-for "cpanfile"))
   :relevant-files ("\.pm$" "\.t$" "\.pl$" "\.PL$")
   :irrelevant-files ("inc/" "blib/" "cover_db/" "perl5/" "^mpan-" "Makefile")
   :ack-skip-dirs ("inc" "blib" "cover_db" "perl5" "contrib" "mpan-dist" ".build")
