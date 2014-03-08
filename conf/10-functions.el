@@ -37,7 +37,7 @@
   (interactive "P")
   (sbw/run-file-run-command
    (concat
-    (if verbose "./perl5/bin/mist-run prove -l -v" "./perl5/bin/mist-run prove -l")
+    (if verbose "mist run prove -l -v" "mist run prove -l")
     " " sbw/prove-project-directories )
   (ps/project-dir)))
 
@@ -45,7 +45,7 @@
   "Run prove on this PerlySense project"
   (interactive "P")
   (sbw/run-file-run-command
-   (if verbose "prove  -Mlocal::lib=perl5 -lrv t/" "prove -Mlocal::lib=perl5 -lr t/" ) (ps/project-dir)))
+   (if verbose "mist run prove -lrv t/" "mist run prove -lr t/" ) (ps/project-dir)))
 
 (defun sbw/run-file-run-command (command dir-run-from)
   "Run command from dir-run-from using the compiler function"
