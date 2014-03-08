@@ -6,6 +6,10 @@
 (setq auto-mode-alist (cons '("\\.pm$"     . cperl-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.mp$"     . cperl-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.psgi$"   . cperl-mode) auto-mode-alist))
+
+(setq auto-mode-alist (cons '("cpanfile$"   . cperl-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("mistfile$"   . cperl-mode) auto-mode-alist))
+
 (setq auto-mode-alist (cons '("\\.yml$"    . yaml-mode) auto-mode-alist))
 
 (setq sbw/prove-project-directories "t/")
