@@ -40,12 +40,9 @@
 (require 'wrap-region)
 
 ; magit mode
-(require 'magit)
+; (require 'magit) ;; handled by ELPA
 (setq magit-repo-dirs (quote ("~/Devel" "~/.emacs.d")))
 (setq magit-repo-dirs-depth 1)
 
 ; yagist
 (setq yagist-encrypt-risky-config t)
-
-(require 'git-gutter+)
-(global-git-gutter+-mode t)
