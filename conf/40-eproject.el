@@ -139,14 +139,10 @@ ROOT defaults to the current buffer's project-root."
           (concat (eproject-root) "/.emacs.d/init.el"))))
     (if (file-exists-p init-file) (load init-file))))
 
-
-(defun sbw/comint-send-input-at-eob ()
-  "Send input to shell if cursor is after the prompt,
-else advance a line"
+(defun sbw/find-project-root ()
   (interactive)
-  (if (comint-after-pmark-p)
-      (call-interactively 'comint-send-input)
-    (call-interactively 'next-line)))
+   (let ((default-directory (eproject-root)))
+     (call-interactively 'find-file)))
 
 (defun* sbw/force-eproject-on-buffer (&optional (project-root default-directory))
   ;; eproject--setup-local-variables works on file and dired buffers

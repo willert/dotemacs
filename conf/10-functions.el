@@ -25,13 +25,6 @@
     (deactivate-mark)
     (undo)))
 
-(defun sbw/set-region ()
-  (interactive)
-  (cond
-   (mark-active (copy-region-as-kill (region-beginning) (region-end)))
-   (t (push-mark (point) nil t))
-   ))
-
 (defun sbw/prove-project (verbose)
   "Run prove on this PerlySense project"
   (interactive "P")
@@ -303,3 +296,36 @@ See also: `copy-to-register-1', `insert-register'."
           (apply 'sbw/expand-dir-name (eproject-root) dirs )))
     (call-interactively 'find-file))
 )
+
+(defun sbw/comint-send-input-at-eob ()
+  "Send input to shell if cursor is after the prompt,
+else advance a line"
+  (interactive)
+  (if (comint-after-pmark-p)
+      (call-interactively 'comint-send-input)
+    (call-interactively 'next-line)))
+
+(defun sbw/open-shell-in-dir ()
+  (interactive)
+  (let ((shell-name (format "*shell: %s*" default-directory)))
+    (shell shell-name))
+  (make-variable-buffer-local 'comint-prompt-read-only)
+
+  (setq comint-prompt-read-only t)
+  (setq comint-process-echoes nil)
+
+  (local-set-key (kbd "<return>") 'sbw/comint-send-input-at-eob)
+
+  (let ((process (get-buffer-process (current-buffer))))
+    (unless process
+      (error "No process in %s" buffer-or-name))
+
+    (set-process-query-on-exit-flag process nil)
+    (set-process-sentinel
+     process
+     (lambda (this-process state)
+       (if (or (string-match "exited abnormally with code.*" state)
+               (string-match "finished" state))
+           (kill-buffer (current-buffer)))
+       ))
+    ))

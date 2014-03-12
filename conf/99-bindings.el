@@ -1,6 +1,8 @@
 (global-set-key (kbd "C-p")     'kill-ring-save )
 (global-set-key (kbd "C-x u")   'kill-line-to-cursor )
 
+(global-unset-key (kbd "C-x C-z"))
+
 (global-set-key (kbd "C-x k")   'kill-this-buffer)
 (global-set-key (kbd "C-x C-k") 'kill-buffer)
 
@@ -18,12 +20,14 @@
 
 (global-set-key (kbd "C-z") 'undo)
 
-
 (global-set-key (kbd "C-x x") 'repeat)
 
 (global-set-key (kbd "<pause>") 'toggle-window-dedicated)
 
 (global-set-key (kbd "M-j") (lambda () (interactive) (join-line -1)))
+
+(global-set-key (kbd "C-x j RET") 'jabber-activity-switch-to)
+(global-set-key (kbd "C-x C-j RET") 'jabber-activity-switch-to)
 
 ;;; register handling
 (global-set-key (kbd "C-x C-p") 'copy-to-register)
@@ -104,14 +108,16 @@
 (global-set-key (kbd "C-x r k") 'string-rectangle-kill)
 (global-set-key (kbd "C-x r p") 'copy-rectangle-as-kill)
 
-(defun sbw/find-project-root ()
-  (interactive)
-   (let ((default-directory (eproject-root)))
-     (call-interactively 'find-file)))
-
 (global-set-key (kbd "C-x RET RET") 'find-file-at-point)
 (global-set-key (kbd "C-x RET b"  ) 'browse-url-at-point)
 (global-set-key (kbd "C-x RET p"  ) 'sbw/find-project-root)
+(global-set-key (kbd "C-x RET s"  ) 'sbw/open-shell-in-dir)
+
+(global-set-key (kbd "C-c i") 'ielm-for-this-buffer)
+
+(global-set-key (kbd "C-x C-z f") 'yas/visit-snippet-file)
+(global-set-key (kbd "C-x C-z n") 'yas/new-snippet)
+(global-set-key (kbd "C-x C-z v") 'yas/visit-snippet-file)
 
 ;;; --- mode specific hooks ------------------------------------------------
 
@@ -173,25 +179,14 @@
       (sbw/find-file-in-dir  (eproject-root) "root")))
 )
 
+(add-hook 'magit-mode-hook 'sbw/magit-key-bindings)
 (defun sbw/magit-key-bindings ()
   (sbw/remove-conflicting-keys magit-mode-map)
-  (define-key magit-mode-map (kbd "/") 'magit-stash)
-)
+  (define-key magit-mode-map (kbd "/") 'magit-stash))
 
-(add-hook 'magit-mode-hook 'sbw/magit-key-bindings)
-
+(add-hook 'markdown-mode-hook 'sbw/markdown-key-bindings)
 (defun sbw/markdown-key-bindings ()
-  (sbw/remove-conflicting-keys markdown-mode-map)
-)
-
-(global-set-key (kbd "C-c i") 'ielm-for-this-buffer)
-
-(global-set-key (kbd "C-p") 'sbw/set-region)
-
-(global-unset-key (kbd "C-x C-z"))
-(global-set-key (kbd "C-x C-z f") 'yas/visit-snippet-file)
-(global-set-key (kbd "C-x C-z n") 'yas/new-snippet)
-(global-set-key (kbd "C-x C-z v") 'yas/visit-snippet-file)
+  (sbw/remove-conflicting-keys markdown-mode-map))
 
 
 (defun sbw/cperl-key-bindings ()
