@@ -1,3 +1,4 @@
+(global-set-key (kbd "C-p")     'kill-ring-save )
 (global-set-key (kbd "C-x u")   'kill-line-to-cursor )
 
 (global-set-key (kbd "C-x k")   'kill-this-buffer)
@@ -13,6 +14,7 @@
 (global-set-key (kbd "C-x c k") 'delete-current-buffer-file)
 (global-set-key (kbd "C-x c R") 'rename-current-buffer-file)
 (global-set-key (kbd "C-x c r") 'revert-buffer)
+(global-set-key (kbd "C-x c t") 'toggle-truncate-lines)
 
 (global-set-key (kbd "C-z") 'undo)
 
@@ -42,8 +44,6 @@
 ;;; windmove mappings
 (windmove-default-keybindings 'meta)
 (transpose-window-default-keybindings)
-
-(sbw/remove-conflicting-keys magit-mode-map)
 
 ;;; eval commands for lisp
 (setq lisp-evaluation-map (make-sparse-keymap))
@@ -95,6 +95,25 @@
 (define-key project-related-map (kbd "s") 'sbw/open-shell-in-project-root)
 (global-set-key (kbd "C-c p") project-related-map)
 
+
+;;; iswitchb
+(global-set-key (kbd "C-x b") 'iswitchb-buffer)
+
+
+(global-set-key (kbd "C-x r t") 'string-rectangle)
+(global-set-key (kbd "C-x r k") 'string-rectangle-kill)
+(global-set-key (kbd "C-x r p") 'copy-rectangle-as-kill)
+
+(defun sbw/find-project-root ()
+  (interactive)
+   (let ((default-directory (eproject-root)))
+     (call-interactively 'find-file)))
+
+(global-set-key (kbd "C-x RET RET") 'find-file-at-point)
+(global-set-key (kbd "C-x RET b"  ) 'browse-url-at-point)
+(global-set-key (kbd "C-x RET p"  ) 'sbw/find-project-root)
+
+;;; --- mode specific hooks ------------------------------------------------
 
 (add-hook 'eproject-first-buffer-hook 'sbw/eproject-key-bindings)
 (defun sbw/eproject-key-bindings ()
@@ -154,15 +173,16 @@
       (sbw/find-file-in-dir  (eproject-root) "root")))
 )
 
-;;; iswitchb
-(global-set-key (kbd "C-x b") 'iswitchb-buffer)
+(defun sbw/magit-key-bindings ()
+  (sbw/remove-conflicting-keys magit-mode-map)
+  (define-key magit-mode-map (kbd "/") 'magit-stash)
+)
 
+(add-hook 'magit-mode-hook 'sbw/magit-key-bindings)
 
-(global-set-key (kbd "C-x r t") 'string-rectangle)
-(global-set-key (kbd "C-x r k") 'string-rectangle-kill)
-(global-set-key (kbd "C-x r p") 'copy-rectangle-as-kill)
-
-(define-key magit-mode-map (kbd "/") 'magit-stash)
+(defun sbw/markdown-key-bindings ()
+  (sbw/remove-conflicting-keys markdown-mode-map)
+)
 
 (global-set-key (kbd "C-c i") 'ielm-for-this-buffer)
 
@@ -223,14 +243,3 @@
 (key-chord-define nxhtml-mode-map ",." "<%  %>\C-b\C-b\C-b")
 (key-chord-define nxhtml-mode-map "&&" "<&  &>\C-b\C-b\C-b")
 (key-chord-define nxhtml-mode-map "<>" "<%perl>  </%perl>\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b")
-
-(global-set-key
- (kbd "C-x F")
- (lambda () (interactive)
-   (let ((default-directory (eproject-root)))
-     (call-interactively 'find-file))))
-
-(global-set-key
- (kbd "C-x RET RET")
- (lambda () (interactive)
-     (call-interactively 'find-file-at-point)))
