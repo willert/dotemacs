@@ -323,9 +323,16 @@ get rid of any existing processes"
                     (plackup-server/clear-comint-buffer)
                     ))
 
+
+      (if (file-executable-p (concat server-root "mist-run"))
+          (make-comint-in-buffer
+           process-name buf (concat server-root "mist-run") nil "wecare-plack" )
+
       (if (file-executable-p (concat server-root "/perl5/bin/wecare-plack"))
           (make-comint-in-buffer
            process-name buf (concat server-root "/perl5/bin/wecare-plack") nil )
+
+        ; fall back to original mist-run
         (if (file-executable-p (concat server-root "/perl5/bin/mist-run"))
             (make-comint-in-buffer
              process-name buf (concat server-root "/perl5/bin/mist-run") nil
@@ -334,12 +341,13 @@ get rid of any existing processes"
              "--access-log" "/dev/null"
              psgi-app)
 
+          ; .. or even plackup
           (make-comint-in-buffer
            process-name buf "perl" nil "-Mlocal::lib=perl5"
            "plackup" "-r" "-R" "etc"
            "-E" "development"
            "--access-log" "/dev/null"
-           psgi-app)))
+           psgi-app))))
 
       (compilation-minor-mode)
 
