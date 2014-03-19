@@ -14,3 +14,6 @@
 ; (add-hook 'after-init-hook 'session-initialize)
 
 (setq debug-on-error nil)
+
+(desktop-save-mode 1) ; 0 for off
+(setq desktop-save-mode t)
