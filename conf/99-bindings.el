@@ -188,6 +188,7 @@
 (defun sbw/markdown-key-bindings ()
   (sbw/remove-conflicting-keys markdown-mode-map))
 
+(global-set-key (kbd "C-o m m") 'sbw/metacpan-search)
 
 (defun sbw/cperl-key-bindings ()
   (define-key cperl-mode-map (kbd "C-c a") 'align)
@@ -206,8 +207,6 @@
   (define-key cperl-mode-map (kbd "C-o e n") 'flymake-goto-and-show-next-error)
 
   (define-key cperl-mode-map (kbd "C-o r c") 'ps/run-file)
-
-  (define-key cperl-mode-map (kbd "C-o m m") 'sbw/metacpan-search)
 
   (define-key cperl-mode-map (kbd "C-o s p") 'cperl-pod-spell)
   (define-key cperl-mode-map (kbd "C-o s h") 'cperl-here-doc-spell))
