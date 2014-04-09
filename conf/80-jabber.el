@@ -1,13 +1,32 @@
 (jabber-activity-mode t) ; also autoloads jabber
 
-(setq jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll)))
-(setq jabber-alert-presence-hooks nil)
-(setq jabber-chat-buffer-format "%n|%j")
-(setq jabber-chat-fill-long-lines nil)
-(setq jabber-connection-ssl-program (quote gnutls))
-(setq jabber-invalid-certificate-servers (quote ("inaptitu.de")))
-(setq jabber-connection-ssl-program (quote gnutls))
+(setq
+ jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
+ jabber-alert-presence-hooks nil
+ jabber-chat-buffer-format "*Chat with %n*"
+ jabber-chat-fill-long-lines nil
+ jabber-connection-ssl-program (quote gnutls)
+ jabber-invalid-certificate-servers (quote ("inaptitu.de"))
+ jabber-chat-foreign-prompt-format "%n "
+ jabber-chat-local-prompt-format "[%t] "
+ jabber-history-enabled t
+ jabber-use-global-history nil
+ jabber-backlog-number 40
+ jabber-backlog-days 30
+ jabber-chat-buffer-show-avatar nil
+ jabber-vcard-avatars-retrieve nil
+ )
 
 (set-face-attribute 'jabber-chat-prompt-foreign t :foreground "gold" :weight 'bold)
 (set-face-attribute 'jabber-chat-prompt-local   t :foreground "deep sky blue" :weight 'bold)
 (set-face-attribute 'jabber-rare-time-face      t :foreground "light green" :underline t)
+
+;; Message alert hooks
+(define-jabber-alert echo "Show a message in the echo area"
+  (lambda (msg)
+    (unless (minibuffer-prompt)
+      (message "%s" msg))))
+
+(define-key jabber-chat-mode-map [C-return] 'newline)
+
+(add-hook 'jabber-chat-mode-hook (lambda () (set-window-dedicated-p nil t)))
