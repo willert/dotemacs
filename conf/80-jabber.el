@@ -9,13 +9,15 @@
  jabber-invalid-certificate-servers (quote ("inaptitu.de"))
  jabber-chat-foreign-prompt-format "%n "
  jabber-chat-local-prompt-format "[%t] "
+ jabber-roster-line-format "  %-25n %u %-8s"
  jabber-history-enabled t
  jabber-use-global-history nil
  jabber-backlog-number 40
  jabber-backlog-days 30
  jabber-chat-buffer-show-avatar nil
  jabber-vcard-avatars-retrieve nil
- )
+ jabber-roster-show-title t
+)
 
 (set-face-attribute 'jabber-chat-prompt-foreign t :foreground "gold" :weight 'bold)
 (set-face-attribute 'jabber-chat-prompt-local   t :foreground "deep sky blue" :weight 'bold)
@@ -29,4 +31,11 @@
 
 (define-key jabber-chat-mode-map [C-return] 'newline)
 
-(add-hook 'jabber-chat-mode-hook (lambda () (set-window-dedicated-p nil t)))
+(defadvice jabber-chat-buffer-send (around advice-jabber-chat-buffer-send activate)
+  (interactive)
+  (let ((inhibit-read-only t))
+    (if (interactive-p)
+        (progn
+          (call-interactively (ad-get-orig-definition 'jabber-chat-buffer-send)))
+      ad-do-it)
+    ))

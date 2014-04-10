@@ -16,6 +16,8 @@
  '(jabber-chat-prompt-foreign ((t (:foreground "gold" :weight bold))))
  '(jabber-chat-prompt-local ((t (:foreground "deep sky blue" :weight bold))))
  '(jabber-rare-time-face ((t (:foreground "light green" :underline t))))
+ '(jabber-title-large ((t (:inherit variable-pitch :weight bold :height 1.0 :width ultra-expanded))))
+ '(jabber-title-medium ((t (:inherit variable-pitch :weight bold :height 1.0 :width expanded))))
  '(magit-diff-file-header ((t (:inherit magit-diff-hunk-header :box (:line-width 2 :color "#0b2626")))))
  '(magit-diff-hunk-header ((t (:slant italic :weight bold))))
  '(magit-item-highlight ((t (:background "dark slate gray"))))
