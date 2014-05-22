@@ -23,9 +23,13 @@
    'font-lock-builtin-face frame
    :foreground "dark magenta" :weight 'bold)
 
-;  (set-face-attribute
-;   'font-lock-keyword-face frame
-;   :foreground "Cyan1" :weight 'normal)
+  (set-face-attribute
+   'font-lock-keyword-face frame
+   :foreground "firebrick" :weight 'normal)
+
+  (set-face-attribute
+   'font-lock-type-face frame
+   :foreground "tomato" :weight 'normal)
 
   (set-face-attribute
    'font-lock-string-face frame
@@ -67,6 +71,14 @@
    'mode-line frame
    :inverse-video t)
 
+  (set-face-attribute
+   'button frame
+   :foreground "red1")
+
+  (set-face-attribute
+   'minibuffer-prompt frame
+   :foreground "red1")
+
   (set-cursor-color "Black")
 
   (setq default-frame-alist
@@ -76,6 +88,29 @@
   (setq ansi-color-names-vector
         ["black" "red" "green" "yellow" "blue" "magenta" "cyan" "white"])
   (setq ansi-color-map (ansi-color-make-color-map))
+
+  ; magit
+  (set-face-attribute
+   'magit-item-highlight frame
+   :background "gainsboro" :foreground nil :weight 'normal)
+
+  (set-face-attribute
+   'diff-removed frame
+   :background "OldLace" :foreground "red3" :weight 'normal)
+
+  (set-face-attribute
+   'diff-added frame
+   :background "#b8fbb8" :foreground "DarkGreen" :weight 'normal)
+
+  (set-face-attribute
+   'diff-context frame
+   :background "white" :foreground "DimGray")
+
+  (set-face-attribute
+   'magit-diff-file-header frame
+   :box nil)
+
+
 
   (setq frame-background-mode 'light)
   (sbw/adjust-terminal-colors frame)
