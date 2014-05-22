@@ -170,3 +170,6 @@
   (set (make-local-variable 'max-mini-window-height) 0.25)
 )
 (add-hook 'minibuffer-setup-hook 'sbw/allow-mini-window-expansion)
+
+(setq enable-recursive-minibuffers t)
+(minibuffer-depth-indicate-mode t)
