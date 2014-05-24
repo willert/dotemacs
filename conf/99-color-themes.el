@@ -200,3 +200,12 @@
   (setq frame-background-mode 'dark)
   (sbw/adjust-terminal-colors frame)
 )
+
+(cond
+ ((or (daemonp) window-system)
+
+  (sbw/color-theme-switch-to-nighttimes)
+  (add-hook 'after-make-frame-functions 'sbw/adjust-terminal-colors t)
+  (add-hook 'after-make-frame-functions 'sbw/color-theme-nighttimes)
+
+))
