@@ -1,5 +1,8 @@
 (jabber-activity-mode t) ; also autoloads jabber
 
+; disable notifications
+(setq jabber-alert-message-hooks (quote (jabber-message-scroll)))
+
 (setq
  jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
  jabber-alert-presence-hooks nil
