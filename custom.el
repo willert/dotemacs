@@ -4,7 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(csv-separators (quote (";" "~")))
- '(safe-local-variable-values (quote ((sbw/prove-project-directories . "t/ t/acceptance/") (compass-command . "grunt") (compass-task . "default")))))
+ '(safe-local-variable-values (quote ((compass-task . "compile") (compass-command . "compass") (sbw/prove-project-directories . "t/ t/acceptance/") (compass-command . "grunt") (compass-task . "default")))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
