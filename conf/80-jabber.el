@@ -10,7 +10,7 @@
  jabber-chat-fill-long-lines nil
  jabber-connection-ssl-program (quote gnutls)
  jabber-invalid-certificate-servers (quote ("inaptitu.de"))
- jabber-chat-foreign-prompt-format "%n "
+ jabber-chat-foreign-prompt-format "[%t] %n "
  jabber-chat-local-prompt-format "[%t] "
  jabber-roster-line-format "  %-25n %u %-8s"
  jabber-history-enabled t
