@@ -157,6 +157,7 @@ The `file-name' specifies the file name to search for."
       ((server-root (or
                      (plackup-server/find-upwards "Makefile.PL")
                      (plackup-server/find-upwards "dist.ini")
+                     (plackup-server/find-upwards "app.psgi")
                     )))
 
     ; try to find server root last
@@ -178,29 +179,31 @@ The `file-name' specifies the file name to search for."
         ((makefile (expand-file-name "Makefile.PL" plackup-server/root))
          (distfile (expand-file-name "dist.ini" plackup-server/root))
          (meta (if (file-exists-p makefile) makefile distfile)))
-      (with-temp-buffer
-        (insert-file-contents-literally meta)
-        (goto-char (point-min))
-        (if (string-match
-             "\\(^ *\\|; *\\)name *(? *\\('\\|\"\\)\\([a-zA-Z0-9:-]+\\)\\2"
-             (buffer-string))
-            (replace-regexp-in-string
-             "-" "::" (match-string 3 (buffer-string)))
-          ))
-      )
+       (if (file-readable-p meta)
+           (with-temp-buffer
+             (insert-file-contents-literally meta)
+             (goto-char (point-min))
+             (if (string-match
+                  "\\(^ *\\|; *\\)name *(? *\\('\\|\"\\)\\([a-zA-Z0-9:-]+\\)\\2"
+                  (buffer-string))
+                 (replace-regexp-in-string
+                  "-" "::" (match-string 3 (buffer-string)))
+               ))
+         ))
 
      (let
         ((makefile (expand-file-name "dist.ini" plackup-server/root)))
-      (with-temp-buffer
-        (insert-file-contents-literally makefile)
-        (goto-char (point-min))
-        (if (string-match
-             "name *= *\\([a-zA-Z0-9:-]+\\)"
-             (buffer-string))
-            (replace-regexp-in-string
-             "-" "::" (match-string 1 (buffer-string)))
-          ))
-      )
+       (if (file-readable-p makefile)
+           (with-temp-buffer
+             (insert-file-contents-literally makefile)
+             (goto-char (point-min))
+             (if (string-match
+                  "name *= *\\([a-zA-Z0-9:-]+\\)"
+                  (buffer-string))
+                 (replace-regexp-in-string
+                  "-" "::" (match-string 1 (buffer-string)))
+               ))
+         ))
 
     ))
   )
@@ -213,12 +216,12 @@ The `file-name' specifies the file name to search for."
 
     (assert server-root nil
             "Can't find plackup server root for %s" default-directory)
-    (assert server-module nil
-            "Can't guess server module for %s" server-root)
+    ; (assert server-module nil
+    ;        "Can't guess server module for %s" server-root)
 
     (let*
        ((script-prefix
-         (downcase (replace-regexp-in-string "::" "_" server-module)))
+         (downcase (replace-regexp-in-string "::" "_" (or server-module "app"))))
        (script-name (concat script-prefix ".psgi")))
 
       (car
@@ -286,14 +289,14 @@ get rid of any existing processes"
 
     (let*
         ((module-name (plackup-server/guess-server-module))
-         (process-name (concat module-name " Plackup Server"))
+         (process-name (if module-name (concat module-name " Plackup Server") "Plackup Server"))
          (commands-buffer-name (concat "* " process-name " *"))
          (buf (get-buffer commands-buffer-name))
          (psgi-app (plackup-server/guess-psgi-app))
          (commands-window nil)
          (local-args plackup-server/plackup-args))
 
-      (assert module-name nil "Failed to guess plackup module name")
+      ; (assert module-name nil "Failed to guess plackup module name")
       (assert psgi-app  nil "Failed to find plackup server script")
 
       (if buf
@@ -323,11 +326,6 @@ get rid of any existing processes"
                     (plackup-server/clear-comint-buffer)
                     ))
 
-
-      (if (file-executable-p (concat server-root "mist-run"))
-          (make-comint-in-buffer
-           process-name buf (concat server-root "mist-run") nil "wecare-plack" )
-
       (if (file-executable-p (concat server-root "/perl5/bin/wecare-plack"))
           (make-comint-in-buffer
            process-name buf (concat server-root "/perl5/bin/wecare-plack") nil )
@@ -347,7 +345,7 @@ get rid of any existing processes"
            "plackup" "-r" "-R" "etc"
            "-E" "development"
            "--access-log" "/dev/null"
-           psgi-app))))
+           psgi-app)))
 
       (compilation-minor-mode)
 
