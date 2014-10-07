@@ -10,7 +10,8 @@
 
 (global-set-key (kbd "C-l")  'goto-line)
 
-(global-set-key (kbd "C-x C-a") 'ack)
+(global-set-key (kbd "C-x C-a") 'ag)
+(global-set-key (kbd "C-x C-r") 'ag-regexp)
 
 (global-set-key (kbd "C-x c l") 'goto-last-change)
 (global-set-key (kbd "C-x c k") 'delete-current-buffer-file)

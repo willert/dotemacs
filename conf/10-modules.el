@@ -3,22 +3,26 @@
 (setq uniquify-buffer-name-style (quote post-forward))
 (setq uniquify-ignore-buffers-re "^\\*")
 
-; ack mode
-(require 'ack-emacs)
-;(setq
-; ack-command
-; (concat "ack " "--all --nogroup --no-color --with-filename "
-;         "--ignore-dir=blib --ignore-dir=contrib --ignore-dir=perl5 "))
+; ag mode
+(require 'ag)
+(setq ag-highlight-search t)
+(setq ag-reuse-window 't)
+
+(defadvice ag/dwim-at-point (around my-ag/dwim-at-point act)
+  "Don't prefill search string unless region is active."
+  (if (use-region-p)
+      ad-do-it
+    ""))
 
 ; yaml mode
 (require 'yaml-mode)
 
 (require 'goto-last-change)
 
-(require 'template)
-(setq template-default-directories (list (expand-file-name "~/.emacs.d/templates")))
-(setq template-auto-insert t)
-(template-initialize)
+; (require 'template)
+; (setq template-default-directories (list (expand-file-name "~/.emacs.d/templates")))
+; (setq template-auto-insert t)
+; (template-initialize)
 
 (require 'smooth-scrolling)
 (setq smooth-scroll-margin 8)
