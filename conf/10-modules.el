@@ -4,7 +4,7 @@
 (setq uniquify-ignore-buffers-re "^\\*")
 
 ; ack mode
-(require 'ack-emacs)
+; (require 'ack-emacs)
 ;(setq
 ; ack-command
 ; (concat "ack " "--all --nogroup --no-color --with-filename "
