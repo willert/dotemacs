@@ -19,14 +19,6 @@
 
 (require 'goto-last-change)
 
-; (require 'template)
-; (setq template-default-directories (list (expand-file-name "~/.emacs.d/templates")))
-; (setq template-auto-insert t)
-; (template-initialize)
-
-(require 'smooth-scrolling)
-(setq smooth-scroll-margin 8)
-
 (require 'transpose-window)
 
 (require 'blooper)
