@@ -91,6 +91,16 @@
 
   ; magit
   (set-face-attribute
+   'highlight frame
+   :background "gainsboro" :foreground nil :weight 'normal)
+  ; magit
+
+  (set-face-attribute
+   'region frame
+   :background "gainsboro" :foreground nil :weight 'normal)
+
+  ; magit
+  (set-face-attribute
    'magit-item-highlight frame
    :background "gainsboro" :foreground nil :weight 'normal)
 
