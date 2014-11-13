@@ -46,3 +46,15 @@
           (call-interactively (ad-get-orig-definition 'jabber-chat-buffer-send)))
       ad-do-it)
     ))
+
+
+(defun sbw/jabber-chat-with (user account) (interactive)
+       (let* ((jid account)
+              (entry (assoc jid jabber-account-list))
+              (alist (cdr entry))
+              (jc (or (jabber-find-connection jid)
+                      (jabber-connect (jabber-jid-user jid)
+                                      (jabber-jid-server jid)
+                                      (jabber-jid-resource jid)))
+                  ))
+         (jabber-chat-with jc user)))

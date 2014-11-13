@@ -30,6 +30,11 @@
 (global-set-key (kbd "C-x j RET") 'jabber-activity-switch-to)
 (global-set-key (kbd "C-x C-j RET") 'jabber-activity-switch-to)
 
+(global-set-key
+ (kbd "C-x C-j C-k")
+ (lambda () (interactive)
+   (sbw/jabber-chat-with "Катю Ша" "sebastian.willert@chat.facebook.com")))
+
 ;;; register handling
 (global-set-key (kbd "C-x C-p") 'copy-to-register)
 (global-set-key (kbd "C-x C-y")  'insert-register)
@@ -110,6 +115,7 @@
 (global-set-key (kbd "C-x r p") 'copy-rectangle-as-kill)
 
 (global-set-key (kbd "C-x RET RET") 'find-file-at-point)
+
 (global-set-key (kbd "C-x RET b"  ) 'browse-url-at-point)
 (global-set-key (kbd "C-x RET p"  ) 'sbw/find-project-root)
 (global-set-key (kbd "C-x RET s"  ) 'sbw/open-shell-in-dir)
