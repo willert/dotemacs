@@ -1,0 +1,1 @@
+(moz-controller-global-mode)
