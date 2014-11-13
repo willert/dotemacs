@@ -20,6 +20,10 @@
  jabber-chat-buffer-show-avatar nil
  jabber-vcard-avatars-retrieve nil
  jabber-roster-show-title t
+ jabber-roster-show-bindings nil
+ jabber-roster-show-title nil
+ jabber-show-offline-contacts nil
+ jabber-show-resources nil
 )
 
 (set-face-attribute 'jabber-chat-prompt-foreign t :foreground "gold" :weight 'bold)
