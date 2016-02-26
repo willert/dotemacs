@@ -90,6 +90,7 @@
 
 ;; make room for re-run
 (define-key compilation-minor-mode-map (kbd "C-o") nil)
+(define-key compilation-mode-map (kbd "C-o") nil)
 
 (global-set-key (kbd "C-c C-s") (lambda () (interactive) (call-interactively 'shell) ))
 (global-set-key (kbd "C-c C-s") (lambda () (interactive) (call-interactively 'shell) ))
