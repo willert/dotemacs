@@ -30,6 +30,10 @@
 (global-set-key (kbd "C-x j RET") 'jabber-activity-switch-to)
 (global-set-key (kbd "C-x C-j RET") 'jabber-activity-switch-to)
 
+; safer single window command
+(global-unset-key (kbd "C-x 1"))
+(global-set-key (kbd "C-x !") 'delete-other-windows)
+
 (global-set-key
  (kbd "C-x C-j C-k")
  (lambda () (interactive)
@@ -77,6 +81,7 @@
 (global-set-key (kbd "C-c C-e") emacs-configuration-map)
 
 ;;; prove related stuff
+
 (setq run-and-prove-map (make-sparse-keymap))
 (define-key run-and-prove-map (kbd "r") 'ps/rerun-file)
 (define-key run-and-prove-map (kbd "p") 'sbw/prove-project)
