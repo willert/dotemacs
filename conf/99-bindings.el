@@ -83,6 +83,9 @@
 (define-key run-and-prove-map (kbd "P") 'sbw/prove-whole-project)
 (global-set-key (kbd "C-o r") run-and-prove-map)
 
+;; make room for re-run
+(define-key compilation-minor-mode-map (kbd "C-o") nil)
+
 (global-set-key (kbd "C-c C-s") (lambda () (interactive) (call-interactively 'shell) ))
 (global-set-key (kbd "C-c C-s") (lambda () (interactive) (call-interactively 'shell) ))
 (defun sbw/shell-key-bindings ()
