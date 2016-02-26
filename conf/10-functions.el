@@ -275,11 +275,17 @@ See also: `copy-to-register-1', `insert-register'."
        "*compass: compile*")
       )))
 
-(defadvice scss-compile-maybe (before compile-scss-with-compass)
+(defadvice scss-compile (around compile-scss-with-compass)
   "compile Compass project"
-  (compass-compile)
-)
-(ad-activate 'scss-compile-maybe)
+  (let* ((compass-root-dir (upward-find-file "config.rb"))
+         (default-directory compass-root-dir))
+    (if compass-root-dir
+        (compass-compile)
+      ad-do-it
+      )
+    )
+  )
+(ad-activate 'scss-compile)
 
 
 (defun sbw/expand-dir-name (root &rest dirs)
