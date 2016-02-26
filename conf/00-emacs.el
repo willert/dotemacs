@@ -30,6 +30,10 @@
 (setq scroll-step 1 )
 (setq remote-shell-program '/usr/bin/ssh)
 
+;; disable auto-save and auto-backup
+(setq auto-save-default nil)
+(setq make-backup-files nil)
+
 (setq require-final-newline t)
 (setq next-line-add-newlines nil)
 
