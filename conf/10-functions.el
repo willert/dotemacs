@@ -335,3 +335,8 @@ else advance a line"
            (kill-buffer (current-buffer)))
        ))
     ))
+
+(defun sbw/kill-this-buffer ()
+  "Kill the current buffer."
+  (interactive)
+  (kill-buffer (current-buffer)))

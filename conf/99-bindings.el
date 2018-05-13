@@ -3,7 +3,7 @@
 
 (global-unset-key (kbd "C-x C-z"))
 
-(global-set-key (kbd "C-x k")   'kill-this-buffer)
+(global-set-key (kbd "C-x k")   'sbw/kill-this-buffer)
 (global-set-key (kbd "C-x C-k") 'kill-buffer)
 
 (global-set-key (kbd "C-x <down>")  'bury-buffer)
