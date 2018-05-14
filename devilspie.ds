@@ -1,2 +1,2 @@
-(if (is (window_class) "Emacs") (begin  (maximize) (undecorate) ))
-(if (is (window_class) "Emacs24") (begin  (maximize) (undecorate) ))
+(if (is (window_class) "Emacs")   (begin  (maximize) (undecorate) (wintype "normal") (undecorate)))
+(if (is (window_class) "Emacs24") (begin  (maximize) (undecorate) (wintype "normal") (undecorate)))
