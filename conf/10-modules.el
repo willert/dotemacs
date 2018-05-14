@@ -3,6 +3,10 @@
 (setq uniquify-buffer-name-style (quote post-forward))
 (setq uniquify-ignore-buffers-re "^\\*")
 
+;; nodejs
+(require 'npm-mode)
+(npm-global-mode)
+
 ;; ag mode
 (require 'ag)
 (setq ag-highlight-search t)
@@ -42,3 +46,5 @@
 
 ;; yagist
 (setq yagist-encrypt-risky-config t)
+
+(setq auto-mode-alist (cons '("\\.template$" . handlebars-mode) auto-mode-alist))
