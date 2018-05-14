@@ -12,7 +12,9 @@
     (handlebars-mode yasnippet yagist wrap-region twittering-mode scss-mode restclient oauth2 moz-controller markdown-mode magit kaesar jabber fringe-helper findr editorconfig csv-mode cperl-mode circe auto-complete ag)))
  '(safe-local-variable-values
    (quote
-    ((compass-command . "compass")
+    ((compass-task . "prepare-release")
+     (compass-task . "css")
+     (compass-command . "compass")
      (compass-task . "compile")
      (sbw/prove-project-directories . "t/ t/acceptance/")
      (compass-command . "grunt")
