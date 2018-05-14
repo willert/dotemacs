@@ -1,9 +1,9 @@
-; uniquify
+;; uniquify
 (require 'uniquify)
 (setq uniquify-buffer-name-style (quote post-forward))
 (setq uniquify-ignore-buffers-re "^\\*")
 
-; ag mode
+;; ag mode
 (require 'ag)
 (setq ag-highlight-search t)
 (setq ag-reuse-window 't)
@@ -14,7 +14,7 @@
       ad-do-it
     ""))
 
-; yaml mode
+;; yaml mode
 (require 'yaml-mode)
 
 (require 'goto-last-change)
@@ -25,20 +25,20 @@
 
 (require 'browse-kill-ring)
 
-; eshell
+;; eshell
 (setq eshell-cmpl-cycle-completions nil)
 
-; edit-server
+;; edit-server
 (require 'edit-server)
 (edit-server-start)
 
-; load wrap-region mode
+;; load wrap-region mode
 (require 'wrap-region)
 
-; magit mode
-; (require 'magit) ;; handled by ELPA
+;; magit mode
+;; (require 'magit) ;; handled by ELPA
 (setq magit-repo-dirs (quote ("~/Devel" "~/.emacs.d")))
 (setq magit-repo-dirs-depth 1)
 
-; yagist
+;; yagist
 (setq yagist-encrypt-risky-config t)
