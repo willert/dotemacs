@@ -98,13 +98,18 @@
   (define-key shell-mode-map (kbd "C-c C-s") nil)
   (define-key shell-mode-map (kbd "C-c l") 'sbw/clear-shell)
   )
-
 (add-hook 'shell-mode-hook 'sbw/shell-key-bindings)
+
 (defun sbw/comint-key-bindings ()
   (define-key comint-mode-map (kbd "C-c C-s") nil)
   (define-key comint-mode-map (kbd "C-c l") 'sbw/clear-shell)
   )
 (add-hook 'comint-mode-hook 'sbw/comint-key-bindings)
+
+(defun sbw/js2-key-bindings ()
+  (define-key js2-mode-map (kbd "M-j") nil)
+  )
+(add-hook 'js2-mode-hook 'sbw/js2-key-bindings)
 
 
 ;;; "project-like" global keybindings
