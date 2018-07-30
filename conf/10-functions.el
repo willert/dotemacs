@@ -277,14 +277,17 @@ See also: `copy-to-register-1', `insert-register'."
 
 (defadvice scss-compile (around compile-scss-with-compass)
   "compile Compass project"
-  (let* ((compass-root-dir (upward-find-file "config.rb"))
-         (default-directory compass-root-dir))
+  (let* ((compass-root-dir (upward-find-file "config.rb")))
     (if compass-root-dir
-        (compass-compile)
-      ad-do-it
-      )
-    )
-  )
+        (let* ((default-directory compass-root-dir)) (message "compass: compile") (compass-compile))
+      (let* ((gruntfile (upward-find-file "Gruntfile.js")))
+        (if gruntfile
+            (let* ((async-shell-command-buffer "rename-buffer"))
+              (message "grunt: compile")
+              (save-window-excursion (async-shell-command "grunt" "*grunt: compile*")))
+          ad-do-it
+          )))))
+
 (ad-activate 'scss-compile)
 
 
