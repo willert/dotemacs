@@ -83,7 +83,7 @@
 (winner-mode)
 
 ;; as suggested by http://www.method-combination.net/blog/archives/2011/03/11/speeding-up-emacs-saves.html
-(setq vc-handled-backends nil)
+(setq vc-handled-backends (quote (Git)))
 
 ;; If the *scratch* buffer is killed, recreate it automatically
 ;; FROM: Morten Welind
