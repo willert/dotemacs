@@ -115,13 +115,16 @@ ROOT defaults to the current buffer's project-root."
 (defun sbw/perl-project-minilla-release ()
   "Runs minila release for current project"
   (interactive)
-;;;  (compile (format "cd %s; ./mist-run minil release" (eproject-root)) t))
   (compile (format "cd %s; mist release --notest" (eproject-root)) t))
+
+(defun sbw/perl-project-minilla-local-release ()
+  "Runs minila release for current project"
+  (interactive)
+  (compile (format "cd %s; mist local_release" (eproject-root)) t))
 
 (defun sbw/perl-project-minilla-dist ()
   "Runs minila release for current project"
   (interactive)
-;;; (compile (format "cd %s; ./mist-run minil dist" (eproject-root)) t))
   (compile (format "cd %s; mist run minil dist" (eproject-root)) t))
 
 (defun sbw/perl-project-execute-local-init ()

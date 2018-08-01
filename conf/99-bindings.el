@@ -150,6 +150,7 @@
   (define-key eproject-mode-map (kbd "C-c p k") 'eproject-kill-project-buffers)
   (define-key eproject-mode-map (kbd "C-c p m") 'sbw/perl-project-mist-init)
   (define-key eproject-mode-map (kbd "C-c p r") 'sbw/perl-project-minilla-release)
+  (define-key eproject-mode-map (kbd "C-c p l") 'sbw/perl-project-minilla-local-release)
   (define-key eproject-mode-map (kbd "C-c p d") 'sbw/perl-project-minilla-dist)
   (define-key eproject-mode-map (kbd "C-c p o") 'eproject-open-all-project-files)
   (define-key eproject-mode-map (kbd "C-c p p") 'plackup-server/start-or-show-process)
