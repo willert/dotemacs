@@ -259,9 +259,3 @@
 (key-chord-define nxhtml-mode-map ",." "<%  %>\C-b\C-b\C-b")
 (key-chord-define nxhtml-mode-map "&&" "<&  &>\C-b\C-b\C-b")
 (key-chord-define nxhtml-mode-map "<>" "<%perl>  </%perl>\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b")
-
-;; moz-controller
-
-(global-set-key (kbd "C-S-<prior>") 'moz-controller-tab-previous)
-(global-set-key (kbd "C-S-<next>")  'moz-controller-tab-next)
-(global-set-key (kbd "C-S-r")  'moz-controller-page-refresh)
