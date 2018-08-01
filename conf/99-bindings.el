@@ -7,6 +7,7 @@
 (global-set-key (kbd "C-x C-k") 'kill-buffer)
 
 (global-set-key (kbd "C-x <down>")  'bury-buffer)
+(global-set-key (kbd "C-x C-b")  'ibuffer)
 
 (global-set-key (kbd "C-l")  'goto-line)
 

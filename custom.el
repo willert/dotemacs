@@ -4,6 +4,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(csv-separators (quote (";" "~")))
+ '(ibuffer-default-sorting-mode (quote filename/process))
+ '(ibuffer-expert t)
+ '(ibuffer-use-header-line nil)
  '(ido-show-dot-for-dired t)
  '(ido-use-filename-at-point (quote guess))
  '(ido-use-url-at-point nil)
