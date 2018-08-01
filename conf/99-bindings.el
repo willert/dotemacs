@@ -15,7 +15,7 @@
 
 (global-set-key (kbd "C-x c l") 'goto-last-change)
 (global-set-key (kbd "C-x c k") 'delete-current-buffer-file)
-(global-set-key (kbd "C-x c R") 'rename-current-buffer-file)
+(global-set-key (kbd "C-x c w") 'rename-current-buffer-file)
 (global-set-key (kbd "C-x c r") 'revert-buffer)
 (global-set-key (kbd "C-x c t") 'toggle-truncate-lines)
 
