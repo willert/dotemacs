@@ -125,7 +125,7 @@ ROOT defaults to the current buffer's project-root."
 (defun sbw/perl-project-minilla-dist ()
   "Runs minila release for current project"
   (interactive)
-  (compile (format "cd %s; mist run minil dist" (eproject-root)) t))
+  (compile (format "cd %s; mist build_dist --no-test" (eproject-root)) t))
 
 (defun sbw/perl-project-execute-local-init ()
   (message "Root: %s" (eproject-root))
