@@ -80,3 +80,27 @@
 (define-key ibuffer-mode-map (kbd "<down>") 'ibuffer-next-line)
 (define-key ibuffer-mode-map (kbd "C-<up>") 'ibuffer-previous-header)
 (define-key ibuffer-mode-map (kbd "C-<down>") 'ibuffer-next-header)
+
+;; Get rid of title and summary
+
+(defadvice ibuffer-update-title-and-summary (after remove-column-titles)
+  (save-excursion
+    (set-buffer "*Ibuffer*")
+    (toggle-read-only 0)
+    (goto-char 1)
+    (search-forward "-\n" nil t)
+    (delete-region 1 (point))
+    (let ((window-min-height 1))
+      ;; save a little screen estate
+      (shrink-window-if-larger-than-buffer))
+    (toggle-read-only)))
+
+(ad-activate 'ibuffer-update-title-and-summary)
+
+    (require 'ibuf-ext)
+
+(add-to-list 'ibuffer-never-show-predicates "^\\*Messages\\*$")
+(add-to-list 'ibuffer-never-show-predicates "^\\*Completions\\*$")
+(add-to-list 'ibuffer-never-show-predicates "^\\*magit-process\\*$")
+(add-to-list 'ibuffer-never-show-predicates "^\\*scratch\\*$")
+(add-to-list 'ibuffer-never-show-predicates "^\\*compass: compile\\*$")
