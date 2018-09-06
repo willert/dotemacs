@@ -4,7 +4,6 @@
   "Hooks which run on file write for programming modes"
   (prog1 nil
     (set-buffer-file-coding-system 'utf-8-unix)
-    (untabify-buffer)
     (delete-trailing-whitespace)))
 
 (defun sbw/prog-modes-mode-hook ()
