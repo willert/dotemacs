@@ -129,15 +129,15 @@
 
 (defun sbw/color-theme-switch-to-nighttimes ()
   (interactive)
-  (sbw/color-theme-nighttimes (selected-frame))
+  (sbw/color-theme-nighttimes nil)
 )
 
 (defun sbw/color-theme-nighttimes (frame)
 
   (set-face-attribute
    'default frame
-   :background "#0b2626" :foreground "#bbbbbb"
-   :inherit nil :stipple nil :inverse-video nil :box nil
+   :background "#091916" :foreground "#bbbbbb"
+   :stipple nil :inverse-video nil :box nil
    :strike-through nil :overline nil :underline nil)
 
   (set-face-attribute
