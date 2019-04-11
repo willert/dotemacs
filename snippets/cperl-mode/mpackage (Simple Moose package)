@@ -4,11 +4,7 @@
 # expand-env: ((package-name (sbw/default-perl-package-name)))
 # --
 package `package-name`;
-use 5.014;
-use utf8;
-
-use Moose;
-use namespace::autoclean;
+use env::boilerplate 'Moose';
 
 $0
 

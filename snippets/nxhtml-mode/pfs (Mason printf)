@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: pfs (Mason printf)
+# key: pfs
+# --
+% printf STDERR "$1\n", $2;

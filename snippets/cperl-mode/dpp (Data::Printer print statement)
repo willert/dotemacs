@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: dpp (Data::Printer print statement)
+# key: dpp
+# --
+use Data::Printer;
+p $0;

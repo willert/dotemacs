@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: method (Mason method block)
+# key: method
+# expand-env: ((yas-indent-line 'fixed))
+# --
+
+<%method $1( $2 )>
+  $0
+</%method>
