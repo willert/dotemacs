@@ -1,10 +1,5 @@
 (cond
  ((or (daemonp) window-system)
-  ; (set-face-attribute
-  ;  'default nil
-  ;  :family "DejaVu Sans Mono" :height 99
-  ;  :slant 'normal :weight 'normal :width 'normal)
-
 
   (require 'x-win)
 
@@ -16,6 +11,9 @@
     (make-directory (expand-file-name (concat emacs-dir "var")))
     (expand-file-name (concat emacs-dir "var/" basename))
     ))
+  (add-hook 'after-make-frame-functions
+            (lambda (frame)
+              (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 99)))
 
   (add-hook 'after-make-frame-functions
             (lambda (frame)
