@@ -3,9 +3,10 @@
 
   (require 'x-win)
 
-  (add-hook 'after-make-frame-functions
-            (lambda (frame)
-              (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 99)))
+  (defun sbw/set-x-win-face-attributes (frame)
+                  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 99))
+
+  (add-hook 'after-make-frame-functions 'sbw/set-x-win-face-attributes)
 
   (add-hook 'after-make-frame-functions
             (lambda (frame)
