@@ -5,7 +5,6 @@
   ;  :family "DejaVu Sans Mono" :height 99
   ;  :slant 'normal :weight 'normal :width 'normal)
 
-  ; (add-hook 'after-make-frame-functions 'sbw/run-devilspie t)
 
   (require 'x-win)
 
@@ -18,9 +17,13 @@
     (expand-file-name (concat emacs-dir "var/" basename))
     ))
 
-  ; (set-process-query-on-exit-flag
-  ;  (start-process
-  ;   "devilspie" "*devilspie*" "devilspie"
-  ;   (expand-file-name "~/.emacs.d/devilspie.ds"))
-  ;  nil)
+  (add-hook 'after-make-frame-functions
+            (lambda (frame)
+              (if (get-buffer "*devilspie*") nil
+                (set-process-query-on-exit-flag
+                 (start-process
+                  "devilspie" "*devilspie*" "devilspie"
+                  (expand-file-name "~/.emacs.d/devilspie.ds"))
+                 nil)
+                )))
 ))

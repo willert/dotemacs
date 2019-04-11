@@ -8,13 +8,6 @@
   (interactive)
   (untabify (point-min) (point-max)))
 
-(defun sbw/run-devilspie (new-frame)
-;   (shell-command
-;    (concat
-;     "devilspie " (expand-file-name "~/.emacs.d/devilspie.ds") "&"
-;     "( sleep 1 && ps -C devilspie -o pid --no-heading | xargs echo ) &" ))
-)
-
 (defun string-rectangle-kill ()
   (interactive)
   (string-rectangle (region-beginning) (region-end) ""))
