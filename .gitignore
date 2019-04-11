@@ -1,6 +1,7 @@
 .bzr
 .git
 *.elc
+*~
 /auto-save-list/
 /conf/private.el
 /old/
