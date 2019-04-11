@@ -90,9 +90,6 @@
     (goto-char 1)
     (search-forward "-\n" nil t)
     (delete-region 1 (point))
-    (let ((window-min-height 1))
-      ;; save a little screen estate
-      (shrink-window-if-larger-than-buffer))
     (toggle-read-only)))
 
 (ad-activate 'ibuffer-update-title-and-summary)
