@@ -28,7 +28,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#091916" :foreground "#bbbbbb" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 117 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
  '(diff-file-header ((t (:background "dark slate gray" :weight bold))))
  '(highlight ((t (:background "midnight blue"))))
  '(jabber-chat-prompt-foreign ((t (:foreground "gold" :weight bold))))
