@@ -37,6 +37,9 @@
 (setq require-final-newline t)
 (setq next-line-add-newlines nil)
 
+;; make the left fringe 6 pixels wide and the right disappear
+(fringe-mode '(8 . 8))
+
 ;; Makes things a little bit more consistent.
 (fset 'yes-or-no-p 'y-or-n-p)
 
