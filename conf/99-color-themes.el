@@ -197,6 +197,39 @@
    'mode-line frame
    :inverse-video nil)
 
+  (set-face-attribute
+   'magit-section-highlight
+   (selected-frame) :background "#0e2a2a")
+
+  (set-face-attribute
+   'magit-diff-context-highlight
+   (selected-frame) :background "#0e2a2a")
+
+  (set-face-attribute
+   'magit-diff-hunk-heading
+   (selected-frame)
+   :background "#0e2a2a" :foreground "#ffffff")
+
+  (set-face-attribute
+   'magit-diff-hunk-heading-selection
+   (selected-frame)
+   :background "#0e2a2a" :foreground "#ffffff")
+
+  (set-face-attribute
+   'magit-diff-hunk-heading-highlight
+   (selected-frame)
+   :background "#0e2a2a" :foreground "#ffffff")
+
+  (set-face-attribute
+   'magit-diff-added
+   (selected-frame)
+   :background "#335533" :foreground nil)
+
+  (set-face-attribute
+   'magit-diff-added-highlight
+   (selected-frame)
+   :background "#335533" :foreground nil)
+
   (set-cursor-color "Orchid")
 
   (setq default-frame-alist
