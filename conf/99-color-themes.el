@@ -230,6 +230,11 @@
    (selected-frame)
    :background "#335533" :foreground nil)
 
+  (set-face-attribute
+   'magit-hash
+   (selected-frame)
+   :background nil :foreground "LightSalmon")
+
   (set-cursor-color "Orchid")
 
   (setq default-frame-alist
