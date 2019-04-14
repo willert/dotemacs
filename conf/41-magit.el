@@ -9,3 +9,5 @@
             'sbw/magit-window-config nil :local))
 
 (add-hook 'magit-mode-hook 'sbw/magit-mode-hook)
+
+(setq magit-refs-show-commit-count "all")
