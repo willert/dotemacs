@@ -199,40 +199,40 @@
 
   (set-face-attribute
    'magit-section-highlight
-   (selected-frame) :background "#0e2a2a")
+   frame :background "#0e2a2a")
 
   (set-face-attribute
    'magit-diff-context-highlight
-   (selected-frame) :background "#0e2a2a")
+   frame :background "#0e2a2a")
 
   (set-face-attribute
    'magit-diff-hunk-heading
-   (selected-frame)
+   frame
    :background "#0e2a2a" :foreground "#ffffff")
 
   (set-face-attribute
    'magit-diff-hunk-heading-selection
-   (selected-frame)
+   frame
    :background "#0e2a2a" :foreground "#ffffff")
 
   (set-face-attribute
    'magit-diff-hunk-heading-highlight
-   (selected-frame)
+   frame
    :background "#0e2a2a" :foreground "#ffffff")
 
   (set-face-attribute
    'magit-diff-added
-   (selected-frame)
+   frame
    :background "#335533" :foreground nil)
 
   (set-face-attribute
    'magit-diff-added-highlight
-   (selected-frame)
+   frame
    :background "#335533" :foreground nil)
 
   (set-face-attribute
    'magit-hash
-   (selected-frame)
+   frame
    :background nil :foreground "LightSalmon")
 
   (set-cursor-color "Orchid")
