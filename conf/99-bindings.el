@@ -28,17 +28,17 @@
 
 (global-set-key (kbd "M-j") (lambda () (interactive) (join-line -1)))
 
-(global-set-key (kbd "C-x j RET") 'jabber-activity-switch-to)
-(global-set-key (kbd "C-x C-j RET") 'jabber-activity-switch-to)
+; (global-set-key (kbd "C-x j RET") 'jabber-activity-switch-to)
+; (global-set-key (kbd "C-x C-j RET") 'jabber-activity-switch-to)
+
+; (global-set-key
+;  (kbd "C-x C-j C-k")
+;  (lambda () (interactive)
+;    (sbw/jabber-chat-with "Катю Ша" "sebastian.willert@chat.facebook.com")))
 
 ; safer single window command
 (global-unset-key (kbd "C-x 1"))
 (global-set-key (kbd "C-x !") 'delete-other-windows)
-
-(global-set-key
- (kbd "C-x C-j C-k")
- (lambda () (interactive)
-   (sbw/jabber-chat-with "Катю Ша" "sebastian.willert@chat.facebook.com")))
 
 ;;; register handling
 (global-set-key (kbd "C-x C-p") 'copy-to-register)
