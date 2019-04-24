@@ -178,13 +178,15 @@ The `file-name' specifies the file name to search for."
      (let*
         ((makefile (expand-file-name "Makefile.PL" plackup-server/root))
          (distfile (expand-file-name "dist.ini" plackup-server/root))
-         (meta (if (file-exists-p makefile) makefile distfile)))
+         (minilfile (expand-file-name "minil.toml" plackup-server/root))
+         (meta (if (file-exists-p minilfile) minilfile
+                 (if (file-exists-p makefile) makefile distfile))))
        (if (file-readable-p meta)
            (with-temp-buffer
              (insert-file-contents-literally meta)
              (goto-char (point-min))
              (if (string-match
-                  "\\(^ *\\|; *\\)name *(? *\\('\\|\"\\)\\([a-zA-Z0-9:-]+\\)\\2"
+                  "\\(^ *\\|; *\\)name *=? *(? *\\('\\|\"\\)\\([a-zA-Z0-9:-]+\\)\\2"
                   (buffer-string))
                  (replace-regexp-in-string
                   "-" "::" (match-string 3 (buffer-string)))
