@@ -14,7 +14,7 @@
           stored.  Can also be a list of directories.  In that case,
           when used for bulk (re)loading of snippets (at startup or
           via `yas-reload-all'), directories appearing earlier in
-          the list shadow other dir's snippets.  Also, the first
+          the list override other dir's snippets.  Also, the first
           directory is taken as the default for storing the user's
           new snippets.
 
@@ -98,4 +98,4 @@
   `custom-set-variables' is executed in your .emacs file.
 
   For more information and detailed usage, refer to the project page:
-     http://github.com/capitaomorte/yasnippet
+     http://github.com/joaotavora/yasnippet
