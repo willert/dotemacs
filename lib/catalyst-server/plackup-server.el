@@ -376,18 +376,11 @@ get rid of any existing processes"
 
       (setq plackup-server/last-server-buffer buf)
 
-      ;; eproject--setup-local-variables works on file and dired buffers
-      ;; so lets pretend we are in dired mode instead of shell mode
-      (progn ; the guts of (eproject-maybe-turn-on)
-        (make-variable-buffer-local 'eproject-root)
-        (setq eproject-root project-root)
-        (eproject--init-attributes project-root project-type)
-        (eproject-mode 1)
-
-        ;; eproject--setup-local-variables works on file and dired buffers
+      (progn
+        ;; eproject-maybe-turn-on works on file and dired buffers
         ;; so lets pretend we are in dired mode instead of shell mode
-        (let ((major-mode 'dired-mode))
-          (eproject--setup-local-variables)))
+        (let ((major-mode 'dired-mode) (dired-directory server-root))
+          (eproject-maybe-turn-on)))
       )
 
 ))
