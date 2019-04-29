@@ -7,6 +7,9 @@
 (require 'npm-mode)
 (npm-global-mode)
 
+;; magit
+(require 'magit)
+
 ;; ag mode
 (require 'ag)
 (setq ag-highlight-search t)
