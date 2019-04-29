@@ -53,19 +53,18 @@
 
   (set-face-attribute
    'cperl-array-face frame
-   :background nil :foreground "red1" :weight 'normal)
+   :background (face-background 'default) :foreground "red1" :weight 'normal)
 
   (set-face-attribute
    'cperl-hash-face frame
-   :background nil :foreground "red1" :weight 'normal)
-
+   :background (face-background 'default) :foreground "red1" :weight 'normal)
   (set-face-attribute
    'flyspell-duplicate frame
-   :background nil :foreground nil :underline nil :slant 'italic :weight 'normal)
+   :background (face-background 'default) :foreground nil :underline nil :slant 'italic :weight 'normal)
 
   (set-face-attribute
    'flyspell-incorrect frame
-   :background nil :foreground nil :weight 'normal)
+   :background (face-background 'default) :foreground nil :weight 'normal)
 
   (set-face-attribute
    'mode-line frame
@@ -179,19 +178,19 @@
 
   (set-face-attribute
    'cperl-array-face frame
-   :background nil :foreground "LightGoldenrod" :weight 'normal)
+   :background (face-background 'default) :foreground "LightGoldenrod" :weight 'normal)
 
   (set-face-attribute
    'cperl-hash-face frame
-   :background nil :foreground "LightGoldenrod" :weight 'normal)
+   :background (face-background 'default) :foreground "LightGoldenrod" :weight 'normal)
 
   (set-face-attribute
    'flyspell-duplicate frame
-   :background nil :foreground nil :underline nil :slant 'italic :weight 'normal)
+   :background (face-background 'default) :foreground nil :underline nil :slant 'italic :weight 'normal)
 
   (set-face-attribute
    'flyspell-incorrect frame
-   :background nil :foreground nil :weight 'normal)
+   :background (face-background 'default) :foreground nil :weight 'normal)
 
   (set-face-attribute
    'mode-line frame
@@ -233,7 +232,7 @@
   (set-face-attribute
    'magit-hash
    frame
-   :background nil :foreground "LightSalmon")
+   :background (face-background 'default) :foreground "LightSalmon")
 
   (set-cursor-color "Orchid")
 
