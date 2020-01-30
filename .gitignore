@@ -28,3 +28,4 @@
 /var/
 /elpa/gnupg/
 /network-security.data
+/transient/history.el
