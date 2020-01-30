@@ -24,6 +24,8 @@
 ;; yaml mode
 (require 'yaml-mode)
 
+(popwin-mode 1)
+
 (require 'goto-last-change)
 
 (require 'transpose-window)

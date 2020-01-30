@@ -24,6 +24,9 @@
 
 (show-paren-mode t)
 
+; no automatic window splitting
+(setq pop-up-windows nil)
+
 (setq line-move-visual nil)
 (setq indent-tabs-mode nil)
 (setq backup-inhibited t)
