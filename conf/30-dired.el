@@ -7,7 +7,8 @@
 (setq dired-dwim-target t)
 
 ; dired-single
-(require 'dired-single)
+                                        ; ELPA: (require 'dired-single)
+
 (defun sbw/dired-init ()
   "Bunch of stuff to run for dired, either immediately or when it's
    loaded."

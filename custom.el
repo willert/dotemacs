@@ -10,9 +10,7 @@
  '(ido-show-dot-for-dired t)
  '(ido-use-filename-at-point (quote guess))
  '(ido-use-url-at-point nil)
- '(package-selected-packages
-   (quote
-    (popwin treemacs treemacs-icons-dired treemacs-magit treemacs-projectile handlebars-mode yasnippet yagist wrap-region twittering-mode scss-mode restclient oauth2 moz-controller markdown-mode magit kaesar jabber fringe-helper findr editorconfig csv-mode cperl-mode circe auto-complete ag)))
+ '(package-selected-packages (quote (twittering-mode moz-controller jabber circe)))
  '(safe-local-variable-values
    (quote
     ((compass-task . "prepare-release")

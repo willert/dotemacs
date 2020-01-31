@@ -150,27 +150,27 @@ or the thing at the point and its bounds if there is no region"
          )
     (browse-url (format "https://metacpan.org/module/%s?q=%s" enc enc))))
 
-(require 'xeu_elisp_util)
-
-(defun sbw/copy-to-register-x ()
-  "Copy current line or text selection to register 1.
-See also: `paste-from-register-1', `copy-to-register'."
-  (interactive)
-  (let* (
-         (bds (get-selection-or-unit 'line ))
-         (inputStr (elt bds 0) )
-         (p1 (elt bds 1) )
-         (p2 (elt bds 2) )
-         )
-    (copy-to-register ?1 p1 p2)
-    (message "copied to register 1: 「%s」." inputStr)
-))
-
-(defun sbw/paste-from-register-x ()
-  "Paste text from register 1.
-See also: `copy-to-register-1', `insert-register'."
-  (interactive)
-  (insert-register ?1))
+; (require 'xeu_elisp_util)
+; 
+; (defun sbw/copy-to-register-x ()
+;   "Copy current line or text selection to register 1.
+; See also: `paste-from-register-1', `copy-to-register'."
+;   (interactive)
+;   (let* (
+;          (bds (get-selection-or-unit 'line ))
+;          (inputStr (elt bds 0) )
+;          (p1 (elt bds 1) )
+;          (p2 (elt bds 2) )
+;          )
+;     (copy-to-register ?1 p1 p2)
+;     (message "copied to register 1: 「%s」." inputStr)
+; ))
+; 
+; (defun sbw/paste-from-register-x ()
+;   "Paste text from register 1.
+; See also: `copy-to-register-1', `insert-register'."
+;   (interactive)
+;   (insert-register ?1))
 
 
 (defun sbw/clear-shell ()

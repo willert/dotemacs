@@ -30,26 +30,23 @@
 
 (require 'transpose-window)
 
-(require 'blooper)
+; (require 'blooper)
 
-(require 'browse-kill-ring)
+; ELPA: (require 'browse-kill-ring)
 
 ;; eshell
 (setq eshell-cmpl-cycle-completions nil)
 
 ;; edit-server
-(require 'edit-server)
-(edit-server-start)
+; (require 'edit-server)
+; (edit-server-start)
 
 ;; load wrap-region mode
-(require 'wrap-region)
+; ELPA: (require 'wrap-region)
 
 ;; magit mode
-;; (require 'magit) ;; handled by ELPA
+; ELPA: (require 'magit)
 (setq magit-repo-dirs (quote ("~/Devel" "~/.emacs.d")))
 (setq magit-repo-dirs-depth 1)
-
-;; yagist
-(setq yagist-encrypt-risky-config t)
 
 (setq auto-mode-alist (cons '("\\.template$" . handlebars-mode) auto-mode-alist))
