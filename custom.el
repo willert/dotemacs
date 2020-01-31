@@ -12,7 +12,7 @@
  '(ido-use-url-at-point nil)
  '(package-selected-packages
    (quote
-    (handlebars-mode yasnippet yagist wrap-region twittering-mode scss-mode restclient oauth2 moz-controller markdown-mode magit kaesar jabber fringe-helper findr editorconfig csv-mode cperl-mode circe auto-complete ag)))
+    (popwin treemacs treemacs-icons-dired treemacs-magit treemacs-projectile handlebars-mode yasnippet yagist wrap-region twittering-mode scss-mode restclient oauth2 moz-controller markdown-mode magit kaesar jabber fringe-helper findr editorconfig csv-mode cperl-mode circe auto-complete ag)))
  '(safe-local-variable-values
    (quote
     ((compass-task . "prepare-release")
@@ -21,7 +21,9 @@
      (compass-task . "compile")
      (sbw/prove-project-directories . "t/ t/acceptance/")
      (compass-command . "grunt")
-     (compass-task . "default")))))
+     (compass-task . "default"))))
+ '(treemacs-position (quote left))
+ '(treemacs-width 60))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -29,6 +31,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(diff-file-header ((t (:background "dark slate gray" :weight bold))))
+ '(fringe ((t (:foreground "#dddddd"))))
  '(highlight ((t (:background "midnight blue"))))
  '(jabber-chat-prompt-foreign ((t (:foreground "gold" :weight bold))))
  '(jabber-chat-prompt-local ((t (:foreground "deep sky blue" :weight bold))))
@@ -42,5 +45,6 @@
  '(magit-diff-file-header ((t (:inherit magit-diff-hunk-header :box (:line-width 2 :color "#0b2626")))))
  '(magit-diff-hunk-header ((t (:slant italic :weight bold))))
  '(magit-item-highlight ((t (:background "dark slate gray"))))
+ '(treemacs-root-face ((t (:inherit font-lock-constant-face :weight bold))))
  '(whitespace-tab ((t (:foreground "#123838"))))
  '(whitespace-trailing ((t (:background "#093030")))))

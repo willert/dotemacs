@@ -1,3 +1,5 @@
+(global-set-key (kbd "M-`")     'treemacs )
+
 (global-set-key (kbd "C-p")     'kill-ring-save )
 (global-set-key (kbd "C-x u")   'kill-line-to-cursor )
 
@@ -260,3 +262,16 @@
 (key-chord-define nxhtml-mode-map ",." "<%  %>\C-b\C-b\C-b")
 (key-chord-define nxhtml-mode-map "&&" "<&  &>\C-b\C-b\C-b")
 (key-chord-define nxhtml-mode-map "<>" "<%perl>  </%perl>\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b")
+
+(defun sbw/kill-treemacs-before-creating-popwin-popup ()
+  (pcase (treemacs-current-visibility)
+    ('visible (delete-window (treemacs-get-local-window)))))
+
+(defun sbw/treemacs-key-bindings ()
+  (define-key treemacs-mode-map (kbd "C-g") `treemacs-quit))
+
+(defun sbw/init-treemacs-mode ()
+  (sbw/treemacs-key-bindings)
+  (add-hook 'popwin:before-popup-hook `sbw/kill-treemacs-before-creating-popwin-popup))
+
+(add-hook 'treemacs-mode-hook 'sbw/init-treemacs-mode)
