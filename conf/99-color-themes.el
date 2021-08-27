@@ -58,13 +58,14 @@
   (set-face-attribute
    'cperl-hash-face frame
    :background (face-background 'default) :foreground "red1" :weight 'normal)
-  (set-face-attribute
-   'flyspell-duplicate frame
-   :background (face-background 'default) :foreground nil :underline nil :slant 'italic :weight 'normal)
 
-  (set-face-attribute
-   'flyspell-incorrect frame
-   :background (face-background 'default) :foreground nil :weight 'normal)
+;;  (set-face-attribute
+;;   'flyspell-duplicate frame
+;;   :background (face-background 'default) :foreground nil :underline nil :slant 'italic :weight 'normal)
+;;
+;;  (set-face-attribute
+;;   'flyspell-incorrect frame
+;;   :background (face-background 'default) :foreground nil :weight 'normal)
 
   (set-face-attribute
    'mode-line frame
@@ -184,13 +185,13 @@
    'cperl-hash-face frame
    :background (face-background 'default) :foreground "LightGoldenrod" :weight 'normal)
 
-  (set-face-attribute
-   'flyspell-duplicate frame
-   :background (face-background 'default) :foreground nil :underline nil :slant 'italic :weight 'normal)
-
-  (set-face-attribute
-   'flyspell-incorrect frame
-   :background (face-background 'default) :foreground nil :weight 'normal)
+;;  (set-face-attribute
+;;   'flyspell-duplicate frame
+;;   :background (face-background 'default) :foreground nil :underline nil :slant 'italic :weight 'normal)
+;;
+;;  (set-face-attribute
+;;   'flyspell-incorrect frame
+;;   :background (face-background 'default) :foreground nil :weight 'normal)
 
   (set-face-attribute
    'mode-line frame

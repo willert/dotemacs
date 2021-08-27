@@ -30,14 +30,6 @@
 
 (global-set-key (kbd "M-j") (lambda () (interactive) (join-line -1)))
 
-; (global-set-key (kbd "C-x j RET") 'jabber-activity-switch-to)
-; (global-set-key (kbd "C-x C-j RET") 'jabber-activity-switch-to)
-
-; (global-set-key
-;  (kbd "C-x C-j C-k")
-;  (lambda () (interactive)
-;    (sbw/jabber-chat-with "Катю Ша" "sebastian.willert@chat.facebook.com")))
-
 ; safer single window command
 (global-unset-key (kbd "C-x 1"))
 (global-set-key (kbd "C-x !") 'delete-other-windows)
@@ -123,8 +115,9 @@
 (global-set-key (kbd "C-c p") project-related-map)
 
 
-;;; iswitchb
-(global-set-key (kbd "C-x b") 'iswitchb-buffer)
+;;; iswitchb replacement
+(ido-mode 'buffers)
+(global-set-key (kbd "C-x b") 'ido-switch-buffer)
 
 
 (global-set-key (kbd "C-x r t") 'string-rectangle)
@@ -258,10 +251,10 @@
   )
 (add-hook 'eshell-mode-hook 'sbw/eshell-key-bindings)
 
-(require 'key-chord)
-(key-chord-define nxhtml-mode-map ",." "<%  %>\C-b\C-b\C-b")
-(key-chord-define nxhtml-mode-map "&&" "<&  &>\C-b\C-b\C-b")
-(key-chord-define nxhtml-mode-map "<>" "<%perl>  </%perl>\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b")
+;;; (require 'key-chord)
+;;; (key-chord-define nxhtml-mode-map ",." "<%  %>\C-b\C-b\C-b")
+;;; (key-chord-define nxhtml-mode-map "&&" "<&  &>\C-b\C-b\C-b")
+;;; (key-chord-define nxhtml-mode-map "<>" "<%perl>  </%perl>\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b\C-b")
 
 (defun sbw/kill-treemacs-before-creating-popwin-popup ()
   (pcase (treemacs-current-visibility)

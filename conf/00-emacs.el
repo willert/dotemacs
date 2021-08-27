@@ -92,23 +92,25 @@
 
 ;; If the *scratch* buffer is killed, recreate it automatically
 ;; FROM: Morten Welind
-(save-excursion
-  (set-buffer (get-buffer-create "*scratch*"))
-  (lisp-interaction-mode)
-  (make-local-variable 'kill-buffer-query-functions)
-  (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer))
+(defun sbw/prepare-scratch-for-kill ()
+  (save-excursion
+    (set-buffer (get-buffer-create "*scratch*"))
+    (lisp-interaction-mode)
+    (make-local-variable 'kill-buffer-query-functions)
+    (add-hook 'kill-buffer-query-functions 'sbw/recreate-scratch-buffer)))
+(sbw/prepare-scratch-for-kill)
 
-(defun kill-scratch-buffer ()
+(defun sbw/recreate-scratch-buffer () (interactive)
   ;; The next line is just in case someone calls this manually
   (set-buffer (get-buffer-create "*scratch*"))
   ;; Kill the current (*scratch*) buffer
-  (remove-hook 'kill-buffer-query-functions 'kill-scratch-buffer)
+  (remove-hook 'kill-buffer-query-functions 'sbw/recreate-scratch-buffer)
   (kill-buffer (current-buffer))
   ;; Make a brand new *scratch* buffer
   (set-buffer (get-buffer-create "*scratch*"))
   (lisp-interaction-mode)
   (make-local-variable 'kill-buffer-query-functions)
-  (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer)
+  (add-hook 'kill-buffer-query-functions 'sbw/recreate-scratch-buffer)
   ;; Since we killed it, don't let caller do that.
   nil)
 

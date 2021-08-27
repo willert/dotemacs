@@ -27,6 +27,12 @@
   (add-hook 'before-save-hook 'sbw/progmodes-write-hooks nil t)
 )
 
+(defun sbw/save-verbatim () (interactive)
+  (setq require-final-newline nil)
+  (setq buffer-file-coding-system nil)
+  (remove-hook 'before-save-hook 'sbw/progmodes-write-hooks t)
+)
+
 (defun sbw/grunt-file-write-hooks ()
   "Hooks which run on file write for programming modes"
   (prog1 nil
@@ -46,5 +52,6 @@
 (add-hook 'js-mode-hook 'sbw/prog-modes-mode-hook)
 (add-hook 'js-mode-hook 'sbw/grunt-hook)
 (add-hook 'scss-mode-hook 'sbw/prog-modes-mode-hook)
+(add-hook 'scss-mode-hook 'sbw/grunt-hook)
 
 (add-hook 'nxhtml-mode-hook 'sbw/nxhtml-mode-hook)

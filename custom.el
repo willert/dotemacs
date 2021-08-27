@@ -10,7 +10,9 @@
  '(ido-show-dot-for-dired t)
  '(ido-use-filename-at-point (quote guess))
  '(ido-use-url-at-point nil)
- '(package-selected-packages (quote (twittering-mode moz-controller jabber circe)))
+ '(package-selected-packages
+   (quote
+    (evil-string-inflection flymake web-mode html5-schema ibuffer-vc tide company typescript-mode twittering-mode moz-controller jabber circe)))
  '(safe-local-variable-values
    (quote
     ((compass-task . "prepare-release")
@@ -43,6 +45,7 @@
  '(magit-diff-file-header ((t (:inherit magit-diff-hunk-header :box (:line-width 2 :color "#0b2626")))))
  '(magit-diff-hunk-header ((t (:slant italic :weight bold))))
  '(magit-item-highlight ((t (:background "dark slate gray"))))
+ '(mumamo-background-chunk-major ((t (:background "#091916"))))
  '(treemacs-root-face ((t (:inherit font-lock-constant-face :weight bold))))
  '(whitespace-tab ((t (:foreground "#123838"))))
  '(whitespace-trailing ((t (:background "#093030")))))
