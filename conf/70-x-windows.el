@@ -4,7 +4,7 @@
   (require 'x-win)
 
   (defun sbw/set-x-win-face-attributes (frame)
-                  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 99))
+                  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 175))
 
   (add-hook 'after-make-frame-functions 'sbw/set-x-win-face-attributes)
 
