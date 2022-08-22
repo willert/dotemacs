@@ -31,8 +31,7 @@
   "Hooks which run on file write for programming modes"
   (prog1 nil
     (if (upward-find-file "Gruntfile.js")
-        (let ((compass-command "grunt")
-              (compass-task "default"))
+        (let ((compass-command "grunt"))
           (compass-compile)))))
 
 (defun sbw/grunt-hook ()
@@ -46,5 +45,6 @@
 (add-hook 'js-mode-hook 'sbw/prog-modes-mode-hook)
 (add-hook 'js-mode-hook 'sbw/grunt-hook)
 (add-hook 'scss-mode-hook 'sbw/prog-modes-mode-hook)
+(add-hook 'scss-mode-hook 'sbw/grunt-hook)
 
 (add-hook 'nxhtml-mode-hook 'sbw/nxhtml-mode-hook)
