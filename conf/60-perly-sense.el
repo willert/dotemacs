@@ -60,10 +60,17 @@ Does 'perly_sense external_dir' give you a proper directory? (%s)" ps/external-d
 ;; The following colors work fine with a white X11
 ;; background. They may not look that great on a console with the
 ;; default color scheme.
-; (set-face-background 'flymake-errline "antique white")
-; (set-face-background 'flymake-warnline "lavender")
-(set-face-background 'dropdown-list-face "lightgrey")
-(set-face-background 'dropdown-list-selection-face "grey")
+(if (facep 'flymake-errline)
+    (set-face-background 'flymake-errline "antique white"))
+
+(if (facep 'flymake-warnline)
+    (set-face-background 'flymake-warnline "lavender"))
+
+(if (facep 'dropdown-list-face)
+    (set-face-background 'dropdown-list-face "lightgrey"))
+
+(if (facep 'dropdown-list-selection-face)
+    (set-face-background 'dropdown-list-selection-face "grey"))
 
 
 ;; ** Misc Config **
