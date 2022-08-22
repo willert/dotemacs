@@ -156,6 +156,7 @@ The `file-name' specifies the file name to search for."
   (let
       ((server-root (or
                      (plackup-server/find-upwards "Makefile.PL")
+                     (plackup-server/find-upwards "cpanfile")
                      (plackup-server/find-upwards "dist.ini")
                      (plackup-server/find-upwards "app.psgi")
                     )))
