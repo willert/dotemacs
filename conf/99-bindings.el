@@ -69,6 +69,18 @@
 (define-key emacs-lisp-mode-map (kbd "\C-ce") lisp-evaluation-map)
 (define-key lisp-interaction-mode-map (kbd "\C-ce") lisp-evaluation-map)
 
+(defadvice eval-buffer (before sbw/eval-buffer-message activate)
+  "Go to beginning of match."
+  (message "Evaluating current buffer"))
+
+(defadvice eval-region (before sbw/eval-region-message activate)
+  "Go to beginning of match."
+  (message "Evaluating current region"))
+
+(defadvice eval-defun (before sbw/eval-defun-message activate)
+  "Go to beginning of match."
+  (message "Evaluating current defun"))
+
 ;;; emasc config
 (setq emacs-configuration-map (make-sparse-keymap))
 (define-key emacs-configuration-map (kbd "b")
