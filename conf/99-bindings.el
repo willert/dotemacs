@@ -15,6 +15,7 @@
 (global-set-key (kbd "C-x C-r") 'ag-regexp)
 
 (global-set-key (kbd "C-x c l") 'goto-last-change)
+(global-set-key (kbd "C-x c g") 'magit-log-buffer-file)
 (global-set-key (kbd "C-x c k") 'delete-current-buffer-file)
 (global-set-key (kbd "C-x c w") 'rename-current-buffer-file)
 (global-set-key (kbd "C-x c r") 'revert-buffer)

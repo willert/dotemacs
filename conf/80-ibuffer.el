@@ -1,4 +1,5 @@
 ;; Enable default groups by default
+(require 'ibuffer)
 (add-hook 'ibuffer-mode-hook
           (lambda ()
             (ibuffer-vc-set-filter-groups-by-vc-root)))

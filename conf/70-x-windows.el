@@ -4,7 +4,7 @@
   (require 'x-win)
 
   (defun sbw/set-x-win-face-attributes (frame)
-                  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 99))
+    (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 159))
 
   (defun sbw/apply-devilspie-configuration (frame)
               (if (get-buffer "*devilspie*") nil

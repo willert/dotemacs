@@ -3,25 +3,25 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(csv-separators (quote (";" "~")))
- '(ibuffer-default-sorting-mode (quote filename/process))
+ '(css-electric-keys nil)
+ '(csv-separators '(";" "~"))
+ '(ediff-window-setup-function 'ediff-setup-windows-plain)
+ '(ibuffer-default-sorting-mode 'filename/process)
  '(ibuffer-expert t)
  '(ibuffer-use-header-line nil)
  '(ido-show-dot-for-dired t)
- '(ido-use-filename-at-point (quote guess))
+ '(ido-use-filename-at-point 'guess)
  '(ido-use-url-at-point nil)
  '(package-selected-packages
-   (quote
-    (handlebars-mode yasnippet yagist wrap-region twittering-mode scss-mode restclient oauth2 moz-controller markdown-mode magit kaesar jabber fringe-helper findr editorconfig csv-mode cperl-mode circe auto-complete ag)))
+   '(async magit transient handlebars-mode yasnippet yagist wrap-region twittering-mode scss-mode restclient oauth2 moz-controller markdown-mode kaesar jabber fringe-helper findr editorconfig csv-mode cperl-mode circe auto-complete))
  '(safe-local-variable-values
-   (quote
-    ((compass-task . "prepare-release")
+   '((compass-task . "prepare-release")
      (compass-task . "css")
      (compass-command . "compass")
      (compass-task . "compile")
      (sbw/prove-project-directories . "t/ t/acceptance/")
      (compass-command . "grunt")
-     (compass-task . "default")))))
+     (compass-task . "default"))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

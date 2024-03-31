@@ -1,7 +1,7 @@
 ;;; 40-eproject.el ---
 
 (require 'eproject)
-(require 'eproject-extras)
+;(require 'project-extras)
 (require 'findr)
 
 (define-project-type perl (generic)
@@ -20,7 +20,6 @@
                               m))
                            (t file))))
   :lib-base-path (lambda (prj-root)
-                   (message "Foo")
                    (let* ((root prj-root)
                          (lib (sbw/expand-dir-name root "lib"))
                          (env (car (findr "Env.pm" lib))))
@@ -128,7 +127,7 @@ ROOT defaults to the current buffer's project-root."
   (compile (format "cd %s; mist build_dist --no-test" (eproject-root)) t))
 
 (defun sbw/perl-project-execute-local-init ()
-  (message "Root: %s" (eproject-root))
+  ; (message "Root: %s" (eproject-root))
   (let ((init-file
          (replace-regexp-in-string
           "//+" "/"
