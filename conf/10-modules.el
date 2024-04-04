@@ -28,8 +28,6 @@
 
 (require 'transpose-window)
 
-(require 'blooper)
-
 (require 'browse-kill-ring)
 
 ;; eshell

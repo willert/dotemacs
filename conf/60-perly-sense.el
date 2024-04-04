@@ -25,6 +25,7 @@
 (setq ps/load-flymake nil)
 ;; Note: more flymake config below, after loading PerlySense
 
+(defun ps/command (command &optional options))
 
 ;; *** PerlySense load (don't touch) ***
 (setq ps/external-dir (shell-command-to-string "perly_sense external_dir"))
